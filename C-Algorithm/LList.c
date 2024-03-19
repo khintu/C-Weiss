@@ -1,0 +1,126 @@
+#include <stdlib.h>
+#include <c-algorithm.h>
+
+
+
+struct WLList* WCreateList(int (*CMP)(const void* x, const void* y), \
+													void* (*CTOR)(void* x), \
+													void (*DTOR)(void* x))
+{
+	struct WLList* p;
+
+	p = (struct WLList*)calloc(1, sizeof(struct WLList));
+	if (p)
+		p->CMP = CMP, p->CTOR = CTOR, p->DTOR = DTOR;
+	return p;
+}
+
+int WAddToList(struct WLList* l, void* data)
+{
+	struct LNode* p, *tmp;
+
+	for (p = l->head; p && p->next != NULL; p = p->next)
+		;
+	if ((tmp = (struct LNode*)calloc(1, sizeof(struct LNode))) == NULL)
+		return -1;
+	
+	if (p == NULL)
+		p = tmp, l->head = p;
+	else
+		p->next = tmp, p = tmp;
+
+	l->tail = p;
+	l->count++;
+	p->data = (*l->CTOR)(data);
+	return 0;
+}
+
+void WDeleteList(struct WLList* l)
+{
+	struct LNode* p, *tmp;
+
+	for (p = l->head; p; p = tmp)
+	{
+		(*l->DTOR)(p->data);
+		tmp = p->next;
+		free(p);
+		l->count--;
+	}
+	free(l);
+	return;
+}
+
+void* WFindInList(struct WLList* l, void* key)
+{
+	struct LNode* p;
+	for (p = l->head; p && (*l->CMP)(p->data, key) != 0; p = p->next)
+		;
+	return p ? p->data : NULL;
+}
+
+int WDeleteFromList(struct WLList* l, void* key)
+{
+	struct LNode* p, *prev;
+
+	for (prev = p = l->head; p && (*l->CMP)(p->data, key) != 0; prev = p, p = p->next)
+		;
+	if (p == NULL) /* not found */
+		return -1;
+
+	if (prev != p)
+		prev->next = p->next;
+	if (l->head == p)
+		l->head = p->next;
+	if (l->tail == p)
+		l->tail = prev;
+	(*l->DTOR)(p->data);
+	free(p);
+	l->count--;
+	return 0;
+}
+
+int WInsertToList(struct WLList* l, void* key, void* data)
+{
+	struct LNode* p, *tmp;
+	for (p = l->head; p && (*l->CMP)(p->data, key) != 0; p = p->next)
+		;
+	if (p == NULL) /* key not found */
+		return -1;
+
+	if ((tmp = (struct LNode*)calloc(1, sizeof(struct LNode))) == NULL)
+		return -1;
+	
+	tmp->data = (*l->CTOR)(data);
+	tmp->next = p->next;
+	p->next = tmp;
+	if (p == l->tail)
+		l->tail = tmp;
+	l->count++;
+	return 0;
+}
+
+int WPrependToList(struct WLList* l, void* data)
+{
+	struct LNode* tmp;
+	if ((tmp = (struct LNode*)calloc(1, sizeof(struct LNode))) == NULL)
+		return -1;
+	tmp->data = (*l->CTOR)(data);
+	if (l->head != NULL)
+		tmp->next = l->head;
+	l->head = tmp;
+	l->count++;
+	return 0;
+}
+
+int WAppendToList(struct WLList* l, void* data)
+{
+	struct LNode* tmp;
+	if ((tmp = (struct LNode*)calloc(1, sizeof(struct LNode))) == NULL)
+		return -1;
+	tmp->data = (*l->CTOR)(data);
+	if (l->tail != NULL)
+		l->tail->next = tmp;
+	l->tail = tmp;
+	l->count++;
+	return 0;
+}
