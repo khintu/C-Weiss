@@ -3,9 +3,10 @@
 
 
 #define ABS(x)	(x < 0)?(-(x)):(x)
+#define FALSE	0
+#define TRUE	1
 
-
-/* Linked List ADT */
+/* ---Linked List ADT--- */
 
 struct LNode {
 	void* data;
@@ -34,8 +35,10 @@ int WInsertToList(struct WLList* l, void* key, void *data);
 int WPrependToList(struct WLList* l, void* data);
 int WAppendToList(struct WLList* l, void* data);
 void WIteratorList(struct WLList* l, void (*ITR)(void*));
+void WSortList(struct WLList* l);
 
-/* Doubly Linked List ADT */
+
+/* ---Doubly Linked List ADT--- */
 
 struct DLNode {
 	void* data;
@@ -66,5 +69,6 @@ int WPrependToDList(struct WDLList* l, void* data);
 int WAppendToDList(struct WDLList* l, void* data);
 void WIteratorDList(struct WDLList* l, void (*ITR)(void*));
 void WRevIteratorDList(struct WDLList* l, void (*ITR)(void*));
+void WSortDList(struct WDLList* l);
 
 #endif /* C_ALGORITHM_H */

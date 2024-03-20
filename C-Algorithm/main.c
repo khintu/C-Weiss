@@ -36,6 +36,7 @@ int UnitTestWLList(int argc, char* argv[])
 	WInsertToList(lst, "UPTRON", "SFC");
 	WDeleteFromList(lst, "SFC");
 	printf("Find:%s\n", (char*)WFindInList(lst, "SFC"));
+	WSortList(lst);
 	WIteratorList(lst, iterator);
 	WDeleteList(lst);
 	return 0;
@@ -57,7 +58,8 @@ int UnitTestWDLList(int argc, char* argv[])
 	WInsertToDList(lst, "NEW DELHI", "USC");
 	WDeleteFromDList(lst, "LUCKNOW");
 	printf("Find:%s\n", (char*)WFindInDList(lst, "SFC"));
-	WRevIteratorDList(lst, iterator);
+	WSortDList(lst);
+	WIteratorDList(lst, iterator);
 	WDeleteDList(lst);
 	return 0;
 }

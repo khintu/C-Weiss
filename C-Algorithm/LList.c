@@ -133,3 +133,25 @@ void WIteratorList(struct WLList* l, void (*ITR)(void*))
 		(*ITR)(p->data);
 	return;
 }
+
+void WSortList(struct WLList* l)
+{
+	struct LNode* p;
+	int swap;
+	void* tmp;
+
+	do {
+		swap = FALSE;
+		for (p = l->head; p && p != l->tail; p = p->next)
+		{
+			if ((*l->CMP)(p->data, p->next->data) > 0)
+			{
+				swap = TRUE;
+				tmp = p->data;
+				p->data = p->next->data;
+				p->next->data = tmp;
+			}
+		}
+	} while (swap == TRUE);
+	return;
+}
