@@ -21,6 +21,9 @@
     <ClCompile Include="LList.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DLList.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="c-algorithm.h">

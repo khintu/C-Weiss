@@ -65,7 +65,7 @@ int WDeleteFromList(struct WLList* l, void* key)
 	for (prev = p = l->head; p && (*l->CMP)(p->data, key) != 0; prev = p, p = p->next)
 		;
 	if (p == NULL) /* not found */
-		return -1;
+		return -2;
 
 	if (prev != p)
 		prev->next = p->next;
@@ -85,7 +85,7 @@ int WInsertToList(struct WLList* l, void* key, void* data)
 	for (p = l->head; p && (*l->CMP)(p->data, key) != 0; p = p->next)
 		;
 	if (p == NULL) /* key not found */
-		return -1;
+		return -2;
 
 	if ((tmp = (struct LNode*)calloc(1, sizeof(struct LNode))) == NULL)
 		return -1;
@@ -123,4 +123,13 @@ int WAppendToList(struct WLList* l, void* data)
 	l->tail = tmp;
 	l->count++;
 	return 0;
+}
+
+void WIteratorList(struct WLList* l, void (*ITR)(void*))
+{
+	struct LNode* p;
+
+	for (p = l->head; p; p = p->next)
+		(*ITR)(p->data);
+	return;
 }
