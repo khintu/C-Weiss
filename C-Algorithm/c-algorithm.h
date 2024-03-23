@@ -15,7 +15,7 @@ struct LNode {
 };
 
 struct WLList {
-	int count;
+	unsigned count;
 	struct LNode* head;
 	struct LNode* tail;
 
@@ -41,7 +41,7 @@ void WSortList(struct WLList* l);
 /* ---Circular Linked List---*/
 
 struct WCLList {
-	int count;
+	unsigned count;
 	struct LNode* head;
 	struct LNode* tail;	/* Tail always points to head */
 
@@ -74,7 +74,7 @@ struct DLNode {
 };
 
 struct WDLList {
-	int count;
+	unsigned count;
 	struct DLNode* head;
 	struct DLNode* tail;
 
