@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <assert.h>
 #ifdef __WINDOWS__
 #include <Windows.h>
 #endif
@@ -39,6 +40,7 @@ int UnitTestWLList(int argc, char* argv[])
 	WDeleteFromList(lst, "ONE");
 	WDeleteFromList(lst, "TWO");
 	WDeleteFromList(lst, "THREE");
+	assert(lst->tail == NULL && lst->head == NULL);
 
 	WPrependToList(lst, "ONE");
 	WPrependToList(lst, "TWO");
@@ -46,6 +48,7 @@ int UnitTestWLList(int argc, char* argv[])
 	WDeleteFromList(lst, "ONE");
 	WDeleteFromList(lst, "TWO");
 	WDeleteFromList(lst, "THREE");
+	assert(lst->tail == NULL && lst->head == NULL);
 
 	WAppendToList(lst, "ONE");
 	WAppendToList(lst, "TWO");
@@ -53,6 +56,7 @@ int UnitTestWLList(int argc, char* argv[])
 	WDeleteFromList(lst, "ONE");
 	WDeleteFromList(lst, "TWO");
 	WDeleteFromList(lst, "THREE");
+	assert(lst->tail == NULL && lst->head == NULL);
 
 	WAddToList(lst, "ONE");
 	WInsertToList(lst, "ONE", "TWO");
@@ -60,6 +64,8 @@ int UnitTestWLList(int argc, char* argv[])
 	WDeleteFromList(lst, "ONE");
 	WDeleteFromList(lst, "TWO");
 	WDeleteFromList(lst, "THREE");
+	assert(lst->tail == NULL && lst->head == NULL);
+
 	printf("Find:%s\n", (char*)WFindInList(lst, "ONE"));
 	WSortList(lst);
 	WIteratorList(lst, iterator);
@@ -80,6 +86,7 @@ int UnitTestWDLList(int argc, char* argv[])
 	WDeleteFromDList(lst, "ONE");
 	WDeleteFromDList(lst, "TWO");
 	WDeleteFromDList(lst, "THREE");
+	assert(lst->tail == NULL && lst->head == NULL);
 
 	WAddToDList(lst, "ONE");
 	WAddToDList(lst, "TWO");
@@ -87,6 +94,7 @@ int UnitTestWDLList(int argc, char* argv[])
 	WDeleteFromDList(lst, "THREE");
 	WDeleteFromDList(lst, "TWO");
 	WDeleteFromDList(lst, "ONE");
+	assert(lst->tail == NULL && lst->head == NULL);
 
 	WPrependToDList(lst, "ONE");
 	WPrependToDList(lst, "TWO");
@@ -94,6 +102,7 @@ int UnitTestWDLList(int argc, char* argv[])
 	WDeleteFromDList(lst, "ONE");
 	WDeleteFromDList(lst, "TWO");
 	WDeleteFromDList(lst, "THREE");
+	assert(lst->tail == NULL && lst->head == NULL);
 
 	WPrependToDList(lst, "ONE");
 	WPrependToDList(lst, "TWO");
@@ -101,6 +110,7 @@ int UnitTestWDLList(int argc, char* argv[])
 	WDeleteFromDList(lst, "THREE");
 	WDeleteFromDList(lst, "TWO");
 	WDeleteFromDList(lst, "ONE");
+	assert(lst->tail == NULL && lst->head == NULL);
 
 	WAppendToDList(lst, "ONE");
 	WAppendToDList(lst, "TWO");
@@ -108,6 +118,7 @@ int UnitTestWDLList(int argc, char* argv[])
 	WDeleteFromDList(lst, "ONE");
 	WDeleteFromDList(lst, "TWO");
 	WDeleteFromDList(lst, "THREE");
+	assert(lst->tail == NULL && lst->head == NULL);
 
 	WAppendToDList(lst, "ONE");
 	WAppendToDList(lst, "TWO");
@@ -115,6 +126,7 @@ int UnitTestWDLList(int argc, char* argv[])
 	WDeleteFromDList(lst, "THREE");
 	WDeleteFromDList(lst, "TWO");
 	WDeleteFromDList(lst, "ONE");
+	assert(lst->tail == NULL && lst->head == NULL);
 
 	WAddToDList(lst, "ONE");
 	WInsertToDList(lst, "ONE", "TWO");
@@ -123,9 +135,9 @@ int UnitTestWDLList(int argc, char* argv[])
 	WDeleteFromDList(lst, "ONE");
 	WDeleteFromDList(lst, "TWO");
 	WDeleteFromDList(lst, "THREE");
-	
 	printf("Find:%s\n", (char*)WFindInDList(lst, "FOUR"));
 	WDeleteFromDList(lst, "FOUR");
+	assert(lst->tail == NULL && lst->head == NULL);
 
 	WAddToDList(lst, "ONE");
 	WInsertToDList(lst, "ONE", "TWO");
@@ -134,9 +146,10 @@ int UnitTestWDLList(int argc, char* argv[])
 	WDeleteFromDList(lst, "FOUR");
 	WDeleteFromDList(lst, "THREE");
 	WDeleteFromDList(lst, "TWO");
-
 	printf("Find:%s\n", (char*)WFindInDList(lst, "ONE"));
 	WDeleteFromDList(lst, "ONE");
+	assert(lst->tail == NULL && lst->head == NULL);
+
 	WSortDList(lst);
 	WIteratorDList(lst, iterator);
 	WDeleteDList(lst);
@@ -156,13 +169,31 @@ int UnitTestWCLList(int argc, char* argv[])
 	WDeleteFromCList(lst, "ONE");
 	WDeleteFromCList(lst, "TWO");
 	WDeleteFromCList(lst, "THREE");
-	
+	assert(lst->tail == NULL && lst->head == NULL);
+
+	WAddToCList(lst, "ONE");
+	WAddToCList(lst, "TWO");
+	WAddToCList(lst, "THREE");
+	WDeleteFromCList(lst, "THREE");
+	WDeleteFromCList(lst, "TWO");
+	WDeleteFromCList(lst, "ONE");
+	assert(lst->tail == NULL && lst->head == NULL);
+
 	WPrependToCList(lst, "ONE");
 	WPrependToCList(lst, "TWO");
 	WPrependToCList(lst, "THREE");
 	WDeleteFromCList(lst, "ONE");
 	WDeleteFromCList(lst, "TWO");
 	WDeleteFromCList(lst, "THREE");
+	assert(lst->tail == NULL && lst->head == NULL);
+
+	WPrependToCList(lst, "ONE");
+	WPrependToCList(lst, "TWO");
+	WPrependToCList(lst, "THREE");
+	WDeleteFromCList(lst, "THREE");
+	WDeleteFromCList(lst, "TWO");
+	WDeleteFromCList(lst, "ONE");
+	assert(lst->tail == NULL && lst->head == NULL);
 
 	WAppendToCList(lst, "ONE");
 	WAppendToCList(lst, "TWO");
@@ -170,14 +201,33 @@ int UnitTestWCLList(int argc, char* argv[])
 	WDeleteFromCList(lst, "ONE");
 	WDeleteFromCList(lst, "TWO");
 	WDeleteFromCList(lst, "THREE");
+	assert(lst->tail == NULL && lst->head == NULL);
+
+	WAppendToCList(lst, "ONE");
+	WAppendToCList(lst, "TWO");
+	WAppendToCList(lst, "THREE");
+	WDeleteFromCList(lst, "THREE");
+	WDeleteFromCList(lst, "TWO");
+	WDeleteFromCList(lst, "ONE");
+	assert(lst->tail == NULL && lst->head == NULL);
 
 	WAddToCList(lst, "ONE");
 	WInsertToCList(lst, "ONE", "TWO");
 	WInsertToCList(lst, "TWO", "THREE");
-	WDeleteFromCList(lst, "UPFC");
 	WDeleteFromCList(lst, "ONE");
 	WDeleteFromCList(lst, "TWO");
 	WDeleteFromCList(lst, "THREE");
+	assert(lst->tail == NULL && lst->head == NULL);
+
+	WAddToCList(lst, "ONE");
+	WInsertToCList(lst, "ONE", "TWO");
+	WInsertToCList(lst, "TWO", "THREE");
+	WInsertToCList(lst, "THREE", "FOUR");
+	WDeleteFromCList(lst, "FOUR");
+	WDeleteFromCList(lst, "THREE");
+	WDeleteFromCList(lst, "TWO");
+	WDeleteFromCList(lst, "ONE");
+	assert(lst->tail == NULL && lst->head == NULL);
 
 	printf("Find:%s\n", (char*)WFindInCList(lst, "ONE"));
 	WSortCList(lst);
