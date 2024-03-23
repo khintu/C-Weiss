@@ -1,6 +1,7 @@
 #ifndef C_ALGORITHM_H
 #define C_ALGORITHM_H
 
+/* C algorithms on Lists, Sets & Graphs */
 
 #define ABS(x)	(x < 0)?(-(x)):(x)
 #define FALSE	0
@@ -36,6 +37,32 @@ int WPrependToList(struct WLList* l, void* data);
 int WAppendToList(struct WLList* l, void* data);
 void WIteratorList(struct WLList* l, void (*ITR)(void*));
 void WSortList(struct WLList* l);
+
+/* ---Circular Linked List---*/
+
+struct WCLList {
+	int count;
+	struct LNode* head;
+	struct LNode* tail;	/* Tail always points to head */
+
+	/* Pointers to User defined functions */
+	int (*CMP)(const void* x, const void* y);
+	void* (*CTOR)(void* x);
+	void (*DTOR)(void* x);
+};
+
+struct WCLList* WCreateCList(int (*CMP)(const void* x, const void* y), \
+														void* (*CTOR)(void* x), \
+														void (*DTOR)(void* x));
+int WAddToCList(struct WCLList* l, void* data);
+void WDeleteCList(struct WCLList* l);
+void* WFindInCList(struct WCLList* l, void* key);
+int WDeleteFromCList(struct WCLList* l, void* key);
+int WInsertToCList(struct WCLList* l, void* key, void* data);
+int WPrependToCList(struct WCLList* l, void* data);
+int WAppendToCList(struct WCLList* l, void* data);
+void WIteratorCList(struct WCLList* l, void (*ITR)(void*), int Cycle);
+void WSortCList(struct WCLList* l);
 
 
 /* ---Doubly Linked List ADT--- */

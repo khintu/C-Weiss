@@ -133,6 +133,7 @@
     <ClCompile Include="DLList.c" />
     <ClCompile Include="LList.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="CLList.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="c-algorithm.h" />
