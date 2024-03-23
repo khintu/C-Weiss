@@ -114,6 +114,8 @@ int WPrependToDList(struct WDLList* l, void* data)
 	if (l->head != NULL)
 		tmp->next = l->head, l->head->prev = tmp;
 	l->head = tmp;
+	if (l->tail == NULL)
+		l->tail = tmp;
 	l->count++;
 	return 0;
 }
@@ -127,6 +129,8 @@ int WAppendToDList(struct WDLList* l, void* data)
 	if (l->tail != NULL)
 		l->tail->next = tmp, tmp->prev = l->tail;
 	l->tail = tmp;
+	if (l->head == NULL)
+		l->head = tmp;
 	l->count++;
 	return 0;
 }

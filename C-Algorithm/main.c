@@ -74,15 +74,69 @@ int UnitTestWDLList(int argc, char* argv[])
 	printf("Unit Test Doubly Linked List\n");
 
 	lst = WCreateDList(strcmp, ctor, dtor);
-	WAddToDList(lst, "UPTRON");
-	WAddToDList(lst, "UPFC");
-	WPrependToDList(lst, "LUCKNOW");
-	WAppendToDList(lst, "NEW DELHI");
-	WInsertToDList(lst, "UPTRON", "SFC");
-	WInsertToDList(lst, "LUCKNOW", "BIT");
-	WInsertToDList(lst, "NEW DELHI", "USC");
-	WDeleteFromDList(lst, "LUCKNOW");
-	printf("Find:%s\n", (char*)WFindInDList(lst, "SFC"));
+	WAddToDList(lst, "ONE");
+	WAddToDList(lst, "TWO");
+	WAddToDList(lst, "THREE");
+	WDeleteFromDList(lst, "ONE");
+	WDeleteFromDList(lst, "TWO");
+	WDeleteFromDList(lst, "THREE");
+
+	WAddToDList(lst, "ONE");
+	WAddToDList(lst, "TWO");
+	WAddToDList(lst, "THREE");
+	WDeleteFromDList(lst, "THREE");
+	WDeleteFromDList(lst, "TWO");
+	WDeleteFromDList(lst, "ONE");
+
+	WPrependToDList(lst, "ONE");
+	WPrependToDList(lst, "TWO");
+	WPrependToDList(lst, "THREE");
+	WDeleteFromDList(lst, "ONE");
+	WDeleteFromDList(lst, "TWO");
+	WDeleteFromDList(lst, "THREE");
+
+	WPrependToDList(lst, "ONE");
+	WPrependToDList(lst, "TWO");
+	WPrependToDList(lst, "THREE");
+	WDeleteFromDList(lst, "THREE");
+	WDeleteFromDList(lst, "TWO");
+	WDeleteFromDList(lst, "ONE");
+
+	WAppendToDList(lst, "ONE");
+	WAppendToDList(lst, "TWO");
+	WAppendToDList(lst, "THREE");
+	WDeleteFromDList(lst, "ONE");
+	WDeleteFromDList(lst, "TWO");
+	WDeleteFromDList(lst, "THREE");
+
+	WAppendToDList(lst, "ONE");
+	WAppendToDList(lst, "TWO");
+	WAppendToDList(lst, "THREE");
+	WDeleteFromDList(lst, "THREE");
+	WDeleteFromDList(lst, "TWO");
+	WDeleteFromDList(lst, "ONE");
+
+	WAddToDList(lst, "ONE");
+	WInsertToDList(lst, "ONE", "TWO");
+	WInsertToDList(lst, "TWO", "THREE");
+	WInsertToDList(lst, "THREE", "FOUR");
+	WDeleteFromDList(lst, "ONE");
+	WDeleteFromDList(lst, "TWO");
+	WDeleteFromDList(lst, "THREE");
+	
+	printf("Find:%s\n", (char*)WFindInDList(lst, "FOUR"));
+	WDeleteFromDList(lst, "FOUR");
+
+	WAddToDList(lst, "ONE");
+	WInsertToDList(lst, "ONE", "TWO");
+	WInsertToDList(lst, "TWO", "THREE");
+	WInsertToDList(lst, "THREE", "FOUR");
+	WDeleteFromDList(lst, "FOUR");
+	WDeleteFromDList(lst, "THREE");
+	WDeleteFromDList(lst, "TWO");
+
+	printf("Find:%s\n", (char*)WFindInDList(lst, "ONE"));
+	WDeleteFromDList(lst, "ONE");
 	WSortDList(lst);
 	WIteratorDList(lst, iterator);
 	WDeleteDList(lst);
@@ -136,9 +190,9 @@ int main(int argc, char* argv[])
 {
 	printf("Hello Weiss!!\n");
 	
-	//UnitTestWLList(argc, argv);
+	UnitTestWLList(argc, argv);
 	UnitTestWDLList(argc, argv);
-	//UnitTestWCLList(argc, argv);
+	UnitTestWCLList(argc, argv);
 
 	return 0;
 }
