@@ -12,7 +12,10 @@ struct WLStack* WCreateLStack(int (*CMP)(const void* x, const void* y), \
 		return NULL;
 
 	if ((stk->ll = WCreateList(CMP, CTOR, DTOR)) == NULL)
+	{
+		free(stk);
 		return NULL;
+	}
 
 	return stk;
 }

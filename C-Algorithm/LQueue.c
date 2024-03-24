@@ -7,11 +7,14 @@ struct WLQueue* WCreateLQueue(int (*CMP)(const void* x, const void* y), \
 {
 	struct WLQueue* que;
 
-	if ((que = (struct WLQueue*)calloc(1, sizeof * que)) == NULL)
+	if ((que = (struct WLQueue*)calloc(1, sizeof(struct WLQueue))) == NULL)
 		return NULL;
 
 	if ((que->ll = WCreateList(CMP, CTOR, DTOR)) == NULL)
+	{
+		free(que);
 		return NULL;
+	}
 
 	return que;
 }
