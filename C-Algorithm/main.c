@@ -74,6 +74,10 @@ int UnitTestWLList(int argc, char* argv[])
 	WIteratorList(lst, iterator);
 	WSortList(lst);
 	WIteratorList(lst, iterator);
+	WInsertToSortdList(lst, "FIVE");
+	WInsertToSortdList(lst, "ABC");
+	WInsertToSortdList(lst, "XYZ");
+	WIteratorList(lst, iterator);
 	WDeleteList(lst);
 	return 0;
 }
