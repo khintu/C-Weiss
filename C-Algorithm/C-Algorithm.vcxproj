@@ -132,6 +132,7 @@
   <ItemGroup>
     <ClCompile Include="DLList.c" />
     <ClCompile Include="LList.c" />
+    <ClCompile Include="LStack.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="CLList.c" />
   </ItemGroup>

@@ -66,7 +66,12 @@ int UnitTestWLList(int argc, char* argv[])
 	WDeleteFromList(lst, "THREE");
 	assert(lst->tail == NULL && lst->head == NULL);
 
+	WPrependToList(lst, "ONE");
+	WAppendToList(lst, "TWO");
+	WAddToList(lst, "THREE");
+	WInsertToList(lst, "THREE", "FOUR");
 	printf("Find:%s\n", (char*)WFindInList(lst, "ONE"));
+	WIteratorList(lst, iterator);
 	WSortList(lst);
 	WIteratorList(lst, iterator);
 	WDeleteList(lst);
@@ -150,6 +155,12 @@ int UnitTestWDLList(int argc, char* argv[])
 	WDeleteFromDList(lst, "ONE");
 	assert(lst->tail == NULL && lst->head == NULL);
 
+	WPrependToDList(lst, "ONE");
+	WAppendToDList(lst, "TWO");
+	WAddToDList(lst, "THREE");
+	WInsertToDList(lst, "THREE", "FOUR");
+	printf("Find:%s\n", (char*)WFindInDList(lst, "THREE"));
+	WIteratorDList(lst, iterator);
 	WSortDList(lst);
 	WIteratorDList(lst, iterator);
 	WDeleteDList(lst);
@@ -229,10 +240,44 @@ int UnitTestWCLList(int argc, char* argv[])
 	WDeleteFromCList(lst, "ONE");
 	assert(lst->tail == NULL && lst->head == NULL);
 
+	WPrependToCList(lst, "ONE");
+	WAppendToCList(lst, "TWO");
+	WAddToCList(lst, "THREE");
+	WInsertToCList(lst, "THREE", "FOUR");
 	printf("Find:%s\n", (char*)WFindInCList(lst, "ONE"));
+	WIteratorCList(lst, iterator, FALSE);
 	WSortCList(lst);
 	WIteratorCList(lst, iterator, FALSE);
 	WDeleteCList(lst);
+	return 0;
+}
+
+int UnitTestWLStack(int argc, char* argv[])
+{
+	printf("Unit Test List Stack\n");
+
+	struct WLStack* stk;
+
+	stk = WCreateLStack(strcmp, ctor, dtor);
+	printf("Stack Size: %d\n", WSizeOfLStack(stk));
+	WPushLStack(stk, "ONE");
+	printf("Stack Size: %d\n", WSizeOfLStack(stk));
+	WPushLStack(stk, "TWO");
+	printf("Stack Size: %d\n", WSizeOfLStack(stk));
+	WPushLStack(stk, "THREE");
+	printf("Stack Size: %d\n", WSizeOfLStack(stk));
+	WPushLStack(stk, "FOUR");
+	printf("Stack Size: %d\n", WSizeOfLStack(stk));
+	printf("Stack Top: %s\n", (char*)WTopLStack(stk));
+	free(WPopLStack(stk));
+	printf("Stack Top: %s\n", (char*)WTopLStack(stk));
+	free(WPopLStack(stk));
+	printf("Stack Top: %s\n", (char*)WTopLStack(stk));
+	free(WPopLStack(stk));
+	printf("Stack Top: %s\n", (char*)WTopLStack(stk));
+	free(WPopLStack(stk));
+	assert(WIsEmptyLStack(stk) == TRUE);
+	WDeleteLStack(stk);
 	return 0;
 }
 
@@ -243,6 +288,6 @@ int main(int argc, char* argv[])
 	UnitTestWLList(argc, argv);
 	UnitTestWDLList(argc, argv);
 	UnitTestWCLList(argc, argv);
-
+	UnitTestWLStack(argc, argv);
 	return 0;
 }

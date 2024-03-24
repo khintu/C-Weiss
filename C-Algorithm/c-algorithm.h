@@ -98,4 +98,21 @@ void WIteratorDList(struct WDLList* l, void (*ITR)(void*));
 void WRevIteratorDList(struct WDLList* l, void (*ITR)(void*));
 void WSortDList(struct WDLList* l);
 
+/* ---Stack ADT out of Linked List--- */
+
+ /* Let the head of the list be the entry/exit of stack */
+struct WLStack {
+	struct WLList *ll;
+};
+
+struct WLStack* WCreateLStack(int (*CMP)(const void* x, const void* y), \
+														 void* (*CTOR)(void* x), \
+														 void (*DTOR)(void* x));
+void WDeleteLStack(struct WLStack* stk);
+int WIsEmptyLStack(struct WLStack* stk);
+unsigned WSizeOfLStack(struct WLStack* stk);
+void* WTopLStack(struct WLStack* stk);
+int WPushLStack(struct WLStack* stk, void* key);
+void* WPopLStack(struct WLStack* stk);
+
 #endif /* C_ALGORITHM_H */
