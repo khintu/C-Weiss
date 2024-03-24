@@ -115,4 +115,22 @@ void* WTopLStack(struct WLStack* stk);
 int WPushLStack(struct WLStack* stk, void* key);
 void* WPopLStack(struct WLStack* stk);
 
+/* ---Queue ADT out of Linked List--- */
+
+ /* Let the head of the list be the exit of queue and tail be the entry */
+struct WLQueue {
+	struct WLList* ll;
+};
+
+struct WLQueue* WCreateLQueue(int (*CMP)(const void* x, const void* y), \
+															void* (*CTOR)(void* x), \
+															void (*DTOR)(void* x));
+void WDeleteLQueue(struct WLQueue* que);
+int WIsEmptyLQueue(struct WLQueue* que);
+unsigned WSizeOfLQueue(struct WLQueue* que);
+void* WHeadLQueue(struct WLQueue* que);
+void* WTailLQueue(struct WLQueue* que);
+int WEnqueueLQueue(struct WLQueue* que, void* key);
+void* WDequeueLQueue(struct WLQueue* que);
+
 #endif /* C_ALGORITHM_H */

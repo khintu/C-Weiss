@@ -281,13 +281,62 @@ int UnitTestWLStack(int argc, char* argv[])
 	return 0;
 }
 
+int UnitTestWLQueue(int argc, char* argv[])
+{
+	printf("Unit Test List Queue\n");
+
+	struct WLQueue* que;
+
+	que = WCreateLQueue(strcmp, ctor, dtor);
+	printf("Queue Size: %d\n", WSizeOfLQueue(que));
+	WEnqueueLQueue(que, "ONE");
+	printf("Queue Size: %d\n", WSizeOfLQueue(que));
+	WEnqueueLQueue(que, "TWO");
+	printf("Queue Size: %d\n", WSizeOfLQueue(que));
+	WEnqueueLQueue(que, "THREE");
+	printf("Queue Size: %d\n", WSizeOfLQueue(que));
+	WEnqueueLQueue(que, "FOUR");
+	printf("Queue Size: %d\n", WSizeOfLQueue(que));
+	printf("Queue Head: %s\n", (char*)WHeadLQueue(que));
+	free(WDequeueLQueue(que));
+	printf("Queue Head: %s\n", (char*)WHeadLQueue(que));
+	free(WDequeueLQueue(que));
+	printf("Queue Head: %s\n", (char*)WHeadLQueue(que));
+	free(WDequeueLQueue(que));
+	printf("Queue Head: %s\n", (char*)WHeadLQueue(que));
+	free(WDequeueLQueue(que));
+	assert(WIsEmptyLQueue(que) == TRUE);
+
+	printf("Queue Size: %d\n", WSizeOfLQueue(que));
+	WEnqueueLQueue(que, "ONE");
+	printf("Queue Tail: %s\n", (char*)WTailLQueue(que));
+	printf("Queue Size: %d\n", WSizeOfLQueue(que));
+	WEnqueueLQueue(que, "TWO");
+	printf("Queue Tail: %s\n", (char*)WTailLQueue(que));
+	printf("Queue Size: %d\n", WSizeOfLQueue(que));
+	WEnqueueLQueue(que, "THREE");
+	printf("Queue Tail: %s\n", (char*)WTailLQueue(que));
+	printf("Queue Size: %d\n", WSizeOfLQueue(que));
+	WEnqueueLQueue(que, "FOUR");
+	printf("Queue Tail: %s\n", (char*)WTailLQueue(que));
+	printf("Queue Size: %d\n", WSizeOfLQueue(que));
+	free(WDequeueLQueue(que));
+	free(WDequeueLQueue(que));
+	free(WDequeueLQueue(que));
+	free(WDequeueLQueue(que));
+	assert(WIsEmptyLQueue(que) == TRUE);
+
+	WDeleteLQueue(que);
+	return 0;
+}
+
 int main(int argc, char* argv[])
 {
 	printf("Hello Weiss!!\n");
-	
 	UnitTestWLList(argc, argv);
 	UnitTestWDLList(argc, argv);
 	UnitTestWCLList(argc, argv);
 	UnitTestWLStack(argc, argv);
+	UnitTestWLQueue(argc, argv);
 	return 0;
 }

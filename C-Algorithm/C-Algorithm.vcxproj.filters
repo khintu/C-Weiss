@@ -30,6 +30,9 @@
     <ClCompile Include="LStack.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LQueue.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="c-algorithm.h">
