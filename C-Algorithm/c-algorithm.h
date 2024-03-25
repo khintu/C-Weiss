@@ -4,6 +4,9 @@
 /* C algorithms on Lists, Sets & Graphs */
 
 #define ABS(x)	(x < 0)?(-(x)):(x)
+#define MIN(a, b)	((a) < (b) ? (a) : (b))
+#define MAX(a, b)	((a) > (b) ? (a) : (b))
+
 #define FALSE	0
 #define TRUE	1
 
@@ -139,5 +142,8 @@ void* WDequeueLQueue(struct WLQueue* que);
 
 void WMergeSortInt(int v[], int i, int j);
 void WMergeStepInt(int v[], int i, int m, int j);
+
+void WMergeSort(void* v[], int i, int j, int (*CMP)(const void* x, const void* y));
+void WMergeStep(void* v[], int i, int m, int j, int (*CMP)(const void* x, const void* y));
 
 #endif /* C_ALGORITHM_H */
