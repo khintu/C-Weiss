@@ -174,3 +174,25 @@ void WSortDList(struct WDLList* l)
 	} while (swap == TRUE);
 	return;
 }
+
+/* This algo inserts the data to the head of a sorted list,
+	then insertion into such a list is O(n) instead of O(n^2)
+	to keep the list sorted  */
+int WInsertToSortdDList(struct WDLList* l, void* data)
+{
+	int cond;
+	struct DLNode* p;
+	void* tmp;
+
+	if ((cond = WPrependToDList(l, data)) != 0)
+		return cond;
+	for (p = l->head; \
+		p && p != l->tail && ((*l->CMP)(p->data, p->next->data) > 0); \
+		p = p->next)
+	{
+		tmp = p->data;
+		p->data = p->next->data;
+		p->next->data = tmp;
+	}
+	return 0;
+}

@@ -64,7 +64,7 @@ int WPrependToCList(struct WCLList* l, void* data);
 int WAppendToCList(struct WCLList* l, void* data);
 void WIteratorCList(struct WCLList* l, void (*ITR)(void*), int Cycle);
 void WSortCList(struct WCLList* l);
-
+int WInsertToSortdCList(struct WCLList* l, void* data);
 
 /* ---Doubly Linked List ADT--- */
 
@@ -98,6 +98,7 @@ int WAppendToDList(struct WDLList* l, void* data);
 void WIteratorDList(struct WDLList* l, void (*ITR)(void*));
 void WRevIteratorDList(struct WDLList* l, void (*ITR)(void*));
 void WSortDList(struct WDLList* l);
+int WInsertToSortdDList(struct WDLList* l, void* data);
 
 /* ---Stack ADT out of Linked List--- */
 

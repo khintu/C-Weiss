@@ -181,6 +181,17 @@ int UnitTestWDLList(int argc, char* argv[])
 	WIteratorDList(lst, iterator);
 	WSortDList(lst);
 	WIteratorDList(lst, iterator);
+	WDeleteFromDList(lst, "FOUR");
+	WDeleteFromDList(lst, "THREE");
+	WDeleteFromDList(lst, "TWO");
+	WDeleteFromDList(lst, "ONE");
+	assert(lst->tail == NULL && lst->head == NULL);
+
+	WInsertToSortdDList(lst, "XYZ3");
+	WInsertToSortdDList(lst, "XYZ2");
+	WInsertToSortdDList(lst, "XYZ1");
+	WIteratorDList(lst, iterator);
+
 	WDeleteDList(lst);
 	return 0;
 }
@@ -266,6 +277,17 @@ int UnitTestWCLList(int argc, char* argv[])
 	WIteratorCList(lst, iterator, FALSE);
 	WSortCList(lst);
 	WIteratorCList(lst, iterator, FALSE);
+	WDeleteFromCList(lst, "FOUR");
+	WDeleteFromCList(lst, "THREE");
+	WDeleteFromCList(lst, "TWO");
+	WDeleteFromCList(lst, "ONE");
+	assert(lst->tail == NULL && lst->head == NULL);
+
+	WInsertToSortdCList(lst, "XYZ3");
+	WInsertToSortdCList(lst, "XYZ2");
+	WInsertToSortdCList(lst, "XYZ1");
+	WIteratorCList(lst, iterator, FALSE);
+
 	WDeleteCList(lst);
 	return 0;
 }
