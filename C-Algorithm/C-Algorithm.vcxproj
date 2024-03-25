@@ -130,6 +130,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ArraySorting.c" />
     <ClCompile Include="DLList.c" />
     <ClCompile Include="LList.c" />
     <ClCompile Include="LQueue.c" />

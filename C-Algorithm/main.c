@@ -370,13 +370,27 @@ int UnitTestWLQueue(int argc, char* argv[])
 	return 0;
 }
 
+int UnitTestWArrySort(int argc, char* argv[])
+{
+	int A[10] = { 44, 55,33,22,88,99,121,144,0,11 };
+	//int A[10] = { 44 };
+	WMergeSortInt(A, 0, 9);
+	for (int i = 0; i < 10; ++i)
+		printf("%d%c", A[i], (i % 10 != 9) ? ',' : '\n');
+	return 0;
+}
+
+
 int main(int argc, char* argv[])
 {
+#if 0
 	printf("Hello Weiss!!\n");
 	UnitTestWLList(argc, argv);
 	UnitTestWDLList(argc, argv);
 	UnitTestWCLList(argc, argv);
 	UnitTestWLStack(argc, argv);
 	UnitTestWLQueue(argc, argv);
+#endif
+	UnitTestWArrySort(argc, argv);
 	return 0;
 }

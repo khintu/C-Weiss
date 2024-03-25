@@ -135,4 +135,9 @@ void* WTailLQueue(struct WLQueue* que);
 int WEnqueueLQueue(struct WLQueue* que, void* key);
 void* WDequeueLQueue(struct WLQueue* que);
 
+/* ---Sorting Algorithms on Array--- */
+
+void WMergeSortInt(int v[], int i, int j);
+void WMergeStepInt(int v[], int i, int m, int j);
+
 #endif /* C_ALGORITHM_H */
