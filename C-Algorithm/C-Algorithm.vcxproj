@@ -133,6 +133,7 @@
     <ClCompile Include="ArraySorting.c" />
     <ClCompile Include="DLList.c" />
     <ClCompile Include="LList.c" />
+    <ClCompile Include="LPriorityQ.c" />
     <ClCompile Include="LQueue.c" />
     <ClCompile Include="LStack.c" />
     <ClCompile Include="main.c" />

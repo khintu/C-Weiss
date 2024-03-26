@@ -36,6 +36,9 @@
     <ClCompile Include="ArraySorting.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LPriorityQ.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="c-algorithm.h">

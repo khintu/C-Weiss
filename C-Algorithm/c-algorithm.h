@@ -138,6 +138,26 @@ void* WTailLQueue(struct WLQueue* que);
 int WEnqueueLQueue(struct WLQueue* que, void* key);
 void* WDequeueLQueue(struct WLQueue* que);
 
+/* ---Priority Queue ADT out of Linked List--- */
+
+ /* Let the head of the list be the exit of queue and tail be the entry,
+	 And the queue stays sorted with each enQ/deQ operation in increasing 
+	 order. */
+struct WPLQueue {
+	struct WDLList* dll;
+};
+
+struct WPLQueue* WCreatePLQueue(int (*CMP)(const void* x, const void* y), \
+															void* (*CTOR)(void* x), \
+															void (*DTOR)(void* x));
+void WDeletePLQueue(struct WPLQueue* que);
+int WIsEmptyPLQueue(struct WPLQueue* que);
+unsigned WSizeOfPLQueue(struct WPLQueue* que);
+void* WHeadPLQueue(struct WPLQueue* que);
+void* WTailPLQueue(struct WPLQueue* que);
+int WEnqueuePLQueue(struct WPLQueue* que, void* key);
+void* WDequeuePLQueue(struct WPLQueue* que);
+
 /* ---Sorting Algorithms on Array--- */
 
 void WMergeSortInt(int v[], int i, int j);

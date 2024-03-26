@@ -370,10 +370,59 @@ int UnitTestWLQueue(int argc, char* argv[])
 	return 0;
 }
 
+int UnitTestWPLQueue(int argc, char* argv[])
+{
+	printf("Unit Test Priority List Queue\n");
+
+	struct WPLQueue* pQ;
+
+	pQ = WCreatePLQueue(strcmp, ctor, dtor);
+	printf("Priority Queue Size: %d\n", WSizeOfPLQueue(pQ));
+	WEnqueuePLQueue(pQ, "ONE");
+	printf("Priority Queue Size: %d\n", WSizeOfPLQueue(pQ));
+	WEnqueuePLQueue(pQ, "TWO");
+	printf("Priority Queue Size: %d\n", WSizeOfPLQueue(pQ));
+	WEnqueuePLQueue(pQ, "THREE");
+	printf("Priority Queue Size: %d\n", WSizeOfPLQueue(pQ));
+	WEnqueuePLQueue(pQ, "FOUR");
+	printf("Priority Queue Size: %d\n", WSizeOfPLQueue(pQ));
+	printf("Priority Queue Head: %s\n", (char*)WHeadPLQueue(pQ));
+	free(WDequeuePLQueue(pQ));
+	printf("Priority Queue Head: %s\n", (char*)WHeadPLQueue(pQ));
+	free(WDequeuePLQueue(pQ));
+	printf("Priority Queue Head: %s\n", (char*)WHeadPLQueue(pQ));
+	free(WDequeuePLQueue(pQ));
+	printf("Priority Queue Head: %s\n", (char*)WHeadPLQueue(pQ));
+	free(WDequeuePLQueue(pQ));
+	assert(WIsEmptyPLQueue(pQ) == TRUE);
+
+	printf("Priority Queue Size: %d\n", WSizeOfPLQueue(pQ));
+	WEnqueuePLQueue(pQ, "ONE");
+	printf("Priority Queue Tail: %s\n", (char*)WTailPLQueue(pQ));
+	printf("Priority Queue Size: %d\n", WSizeOfPLQueue(pQ));
+	WEnqueuePLQueue(pQ, "TWO");
+	printf("Priority Queue Tail: %s\n", (char*)WTailPLQueue(pQ));
+	printf("Priority Queue Size: %d\n", WSizeOfPLQueue(pQ));
+	WEnqueuePLQueue(pQ, "THREE");
+	printf("Priority Queue Tail: %s\n", (char*)WTailPLQueue(pQ));
+	printf("Priority Queue Size: %d\n", WSizeOfPLQueue(pQ));
+	WEnqueuePLQueue(pQ, "FOUR");
+	printf("Queue Tail: %s\n", (char*)WTailPLQueue(pQ));
+	printf("Queue Size: %d\n", WSizeOfPLQueue(pQ));
+	free(WDequeuePLQueue(pQ));
+	free(WDequeuePLQueue(pQ));
+	free(WDequeuePLQueue(pQ));
+	free(WDequeuePLQueue(pQ));
+	assert(WIsEmptyPLQueue(pQ) == TRUE);
+
+	WDeletePLQueue(pQ);
+	return 0;
+}
+
 int UnitTestWArrySortInt(int argc, char* argv[])
 {
 	int A[10] = { 44, 55,33,22,88,99,121,144,0,11 };
-	//int A[10] = { 44 };
+	//int A[10] = { 1,1,2,3,44,0,0,3,1,2 };
 	WMergeSortInt(A, 0, 9);
 	for (int i = 0; i < 10; ++i)
 		printf("%d%c", A[i], (i % 10 != 9) ? ',' : '\n');
@@ -382,10 +431,10 @@ int UnitTestWArrySortInt(int argc, char* argv[])
 
 int UnitTestWArrySortStr(int argc, char* argv[])
 {
-	char* A[11] = { "121", "110", "99", "88", "77", "66", "55", "44", "33", "22", "11" };
-	WMergeSort(A, 0, 10, strcmp);
-	for (int i = 0; i < 11; ++i)
-		printf("%s%c", A[i], (i % 11 != 10) ? ',' : '\n');
+	char* A[10] = {"99", "88", "77", "66", "55", "44", "33", "22", "11", "0"};
+	WMergeSort(A, 0, 9, strcmp);
+	for (int i = 0; i < 10; ++i)
+		printf("%s%c", A[i], (i % 10 != 9) ? ',' : '\n');
 	return 0;
 }
 
@@ -397,6 +446,7 @@ int main(int argc, char* argv[])
 	UnitTestWCLList(argc, argv);
 	UnitTestWLStack(argc, argv);
 	UnitTestWLQueue(argc, argv);
+	UnitTestWPLQueue(argc, argv);
 	UnitTestWArrySortInt(argc, argv);
 	UnitTestWArrySortStr(argc, argv);
 	return 0;
