@@ -196,3 +196,40 @@ int WInsertToSortdDList(struct WDLList* l, void* data)
 	}
 	return 0;
 }
+
+/* QuickSort on DList */
+static void WSwapDLNode(struct DLNode* x, struct DLNode* y)
+{
+	void* tmp = x->data;
+	x->data = y->data;
+	y->data = tmp;
+	return;
+}
+
+static void WQuickSortDList1(struct WDLList* dll, struct DLNode* left, struct DLNode* right)
+{
+	struct DLNode* pivot, *i;
+
+	if (left == right || (left && left->prev == right) || (right && right->next == left))
+		return;
+
+	pivot = left;
+	for (i = left->next; i && i != right->next; i = i->next)
+	{
+		if (dll->CMP(i->data, left->data) < 0)
+		{
+			pivot = pivot->next;
+			WSwapDLNode(pivot, i);
+		}
+	}
+	WSwapDLNode(left, pivot);
+	WQuickSortDList1(dll, left, pivot->prev);
+	WQuickSortDList1(dll, pivot->next, right);
+	return;
+}
+
+void WQuickSortDList(struct WDLList* dll)
+{
+	WQuickSortDList1(dll, dll->head, dll->tail);
+	return;
+}

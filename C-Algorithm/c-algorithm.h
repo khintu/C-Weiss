@@ -102,6 +102,7 @@ void WIteratorDList(struct WDLList* l, void (*ITR)(void*));
 void WRevIteratorDList(struct WDLList* l, void (*ITR)(void*));
 void WSortDList(struct WDLList* l);
 int WInsertToSortdDList(struct WDLList* l, void* data);
+void WQuickSortDList(struct WDLList* dll);
 
 /* ---Stack ADT out of Linked List--- */
 

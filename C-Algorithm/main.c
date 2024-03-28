@@ -27,6 +27,11 @@ void iterator(char* key)
 	Sleep(500);
 }
 
+void iterator1(char* key)
+{
+	printf("%s,", key);
+}
+
 int UnitTestWLList(int argc, char* argv[])
 {
 	struct WLList* lst;
@@ -378,13 +383,13 @@ int UnitTestWPLQueue(int argc, char* argv[])
 
 	pQ = WCreatePLQueue(strcmp, ctor, dtor);
 	printf("Priority Queue Size: %d\n", WSizeOfPLQueue(pQ));
-	WEnqueuePLQueue(pQ, "ONE");
+	WEnqueuePLQueue(pQ, "XYZ1");
 	printf("Priority Queue Size: %d\n", WSizeOfPLQueue(pQ));
-	WEnqueuePLQueue(pQ, "TWO");
+	WEnqueuePLQueue(pQ, "XYZ2");
 	printf("Priority Queue Size: %d\n", WSizeOfPLQueue(pQ));
-	WEnqueuePLQueue(pQ, "THREE");
+	WEnqueuePLQueue(pQ, "XYZ3");
 	printf("Priority Queue Size: %d\n", WSizeOfPLQueue(pQ));
-	WEnqueuePLQueue(pQ, "FOUR");
+	WEnqueuePLQueue(pQ, "XYZ4");
 	printf("Priority Queue Size: %d\n", WSizeOfPLQueue(pQ));
 	printf("Priority Queue Head: %s\n", (char*)WHeadPLQueue(pQ));
 	free(WDequeuePLQueue(pQ));
@@ -397,18 +402,22 @@ int UnitTestWPLQueue(int argc, char* argv[])
 	assert(WIsEmptyPLQueue(pQ) == TRUE);
 
 	printf("Priority Queue Size: %d\n", WSizeOfPLQueue(pQ));
-	WEnqueuePLQueue(pQ, "ONE");
+	WEnqueuePLQueue(pQ, "XYZ4");
+	printf("Priority Queue Head: %s\n", (char*)WHeadPLQueue(pQ));
 	printf("Priority Queue Tail: %s\n", (char*)WTailPLQueue(pQ));
 	printf("Priority Queue Size: %d\n", WSizeOfPLQueue(pQ));
-	WEnqueuePLQueue(pQ, "TWO");
+	WEnqueuePLQueue(pQ, "XYZ3");
+	printf("Priority Queue Head: %s\n", (char*)WHeadPLQueue(pQ));
 	printf("Priority Queue Tail: %s\n", (char*)WTailPLQueue(pQ));
 	printf("Priority Queue Size: %d\n", WSizeOfPLQueue(pQ));
-	WEnqueuePLQueue(pQ, "THREE");
+	WEnqueuePLQueue(pQ, "XYZ2");
+	printf("Priority Queue Head: %s\n", (char*)WHeadPLQueue(pQ));
 	printf("Priority Queue Tail: %s\n", (char*)WTailPLQueue(pQ));
 	printf("Priority Queue Size: %d\n", WSizeOfPLQueue(pQ));
-	WEnqueuePLQueue(pQ, "FOUR");
-	printf("Queue Tail: %s\n", (char*)WTailPLQueue(pQ));
-	printf("Queue Size: %d\n", WSizeOfPLQueue(pQ));
+	WEnqueuePLQueue(pQ, "XYZ1");
+	printf("Priority Queue Head: %s\n", (char*)WHeadPLQueue(pQ));
+	printf("Priority Queue Tail: %s\n", (char*)WTailPLQueue(pQ));
+	printf("Priority Queue Size: %d\n", WSizeOfPLQueue(pQ));
 	free(WDequeuePLQueue(pQ));
 	free(WDequeuePLQueue(pQ));
 	free(WDequeuePLQueue(pQ));
@@ -438,6 +447,19 @@ int UnitTestWArrySortStr(int argc, char* argv[])
 	return 0;
 }
 
+int UnitTestWDLListQuickSortStr(int argc, char* argv[])
+{
+	//char* A[10] = { "99", "88", "77", "66", "55", "44", "33", "22", "11", "0" };
+	char* A[11] = { "0", "12", "11", "22", "22", "55", "11", "33", "22", "11", "0" };
+	struct WDLList* dll = WCreateDList(strcmp, ctor, dtor);
+	for (int i = 0; i < 11; ++i)
+		WAppendToDList(dll, A[i]);
+	WQuickSortDList(dll);
+	WIteratorDList(dll, iterator1);
+	WDeleteDList(dll);
+	return 0;
+}
+
 int main(int argc, char* argv[])
 {
 	printf("Hello Weiss!!\n");
@@ -449,5 +471,6 @@ int main(int argc, char* argv[])
 	UnitTestWPLQueue(argc, argv);
 	UnitTestWArrySortInt(argc, argv);
 	UnitTestWArrySortStr(argc, argv);
+	UnitTestWDLListQuickSortStr(argc, argv);
 	return 0;
 }
