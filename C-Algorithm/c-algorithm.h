@@ -167,4 +167,12 @@ void WMergeStepInt(int v[], int i, int m, int j);
 void WMergeSort(void* v[], int i, int j, int (*CMP)(const void* x, const void* y));
 void WMergeStep(void* v[], int i, int m, int j, int (*CMP)(const void* x, const void* y));
 
+void WMaxHeapifyInt(int v[], int Len, int indx);
+void WBuildMaxHeapInt(int v[], int Len, int* heapSize);
+void WHeapSortInt(int v[], int Len);
+
+void WMaxHeapify(void* v[], int Len, int indx, int (*CMP)(const void* x, const void* y));
+void WBuildMaxHeap(void* v[], int Len, int* heapSize, int (*CMP)(const void* x, const void* y));
+void WHeapSort(void* v[], int Len, int (*CMP)(const void* x, const void* y));
+
 #endif /* C_ALGORITHM_H */

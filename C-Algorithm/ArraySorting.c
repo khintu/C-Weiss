@@ -114,3 +114,118 @@ void WMergeStep(void* v[], int i, int m, int j, int (*CMP)(const void* x, const 
 	free(R);
 	return;
 }
+
+/* HeapSort algorithm O(nlgn) */
+
+#define WPARENT(i)	((i) >> 1)	/* i/2 */
+#define WLEFT(i)		(((i) << 1) | 0x01) /* 2i + 1 */
+#define WRIGHT(i)		(((i) << 1) + 0x02) /* 2i + 2 */
+#define WSWAPV(x, y)	{\
+												tmp = v[(y)];\
+												v[(y)] = v[(x)];\
+												v[(x)] = tmp;\
+											}
+
+/* MaxHeap property A[PARENT(i)] >= A[i] */
+void WMaxHeapifyInt(int v[], int Len, int indx)
+{
+	int tmp, largest, l, r;
+	l = WLEFT(indx);
+	r = WRIGHT(indx);
+	if (l < Len && v[l] > v[indx])
+		largest = l;
+	else
+		largest = indx;
+	if (r < Len && v[r] > v[largest])
+		largest = r;
+	if (largest != indx)
+	{
+		WSWAPV(indx, largest);
+		WMaxHeapifyInt(v, Len, largest);
+	}
+	return;
+}
+
+/* Convert array from unordered to MAX-HEAP binary tree 
+   with each level greater than the subsequent one in value
+*/
+void WBuildMaxHeapInt(int v[], int Len, int *heapSize)
+{
+	int i;
+	*heapSize = Len;
+	for (i = Len/2 - 1; i >= 0; --i)
+	{
+		WMaxHeapifyInt(v, *heapSize, i);
+	}
+	return;
+}
+
+/* Keep moving root (MAX VALUE) from heap to end of 
+   array as you continue to heapify and pop from top 
+	 of heap and add in decreasing order to the array
+*/
+void WHeapSortInt(int v[], int Len)
+{
+	int tmp, i, heapSize;
+	WBuildMaxHeapInt(v, Len, &heapSize);
+	for (i = Len - 1; i >= 1 ; --i)
+	{
+		WSWAPV(0, i);
+		heapSize -= 1;
+		WMaxHeapifyInt(v, heapSize, 0);
+	}
+	return;
+}
+
+/* MaxHeap property A[PARENT(i)] >= A[i] */
+void WMaxHeapify(void* v[], int Len, int indx, int (*CMP)(const void* x, const void* y))
+{
+	void* tmp;
+	int largest, l, r;
+	l = WLEFT(indx);
+	r = WRIGHT(indx);
+	if (l < Len && (*CMP)(v[l], v[indx]) > 0)
+		largest = l;
+	else
+		largest = indx;
+	if (r < Len && (*CMP)(v[r], v[largest]) > 0)
+		largest = r;
+	if (largest != indx)
+	{
+		WSWAPV(indx, largest);
+		WMaxHeapify(v, Len, largest, CMP);
+	}
+	return;
+}
+
+/* Convert array from unordered to MAX-HEAP binary tree
+	 with each level greater than the subsequent one in value
+*/
+void WBuildMaxHeap(void* v[], int Len, int* heapSize, int (*CMP)(const void* x, const void* y))
+{
+	int i;
+	*heapSize = Len;
+	for (i = Len / 2 - 1; i >= 0; --i)
+	{
+		WMaxHeapify(v, *heapSize, i, CMP);
+	}
+	return;
+}
+
+/* Keep moving root (MAX VALUE) from heap to end of
+	 array as you continue to heapify and pop from top
+	 of heap and add in decreasing order to the array
+*/
+void WHeapSort(void* v[], int Len, int (*CMP)(const void* x, const void* y))
+{
+	void* tmp;
+	int i, heapSize;
+	WBuildMaxHeap(v, Len, &heapSize, CMP); /* O(n) */
+	for (i = Len - 1; i >= 1; --i) /* O(n) */
+	{
+		WSWAPV(0, i);
+		heapSize -= 1;
+		WMaxHeapify(v, heapSize, 0, CMP); /* O(lgn) */
+	}
+	return;
+}

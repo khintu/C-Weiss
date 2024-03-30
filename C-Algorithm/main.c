@@ -24,7 +24,7 @@ void dtor(char* s)
 void iterator(char* key)
 {
 	printf("I:%s\n", key);
-	Sleep(500);
+	Sleep(125);
 }
 
 void iterator1(char* key)
@@ -433,6 +433,7 @@ int UnitTestWArrySortInt(int argc, char* argv[])
 	int A[10] = { 44, 55,33,22,88,99,121,144,0,11 };
 	//int A[10] = { 1,1,2,3,44,0,0,3,1,2 };
 	WMergeSortInt(A, 0, 9);
+	WHeapSortInt(A, 10);
 	for (int i = 0; i < 10; ++i)
 		printf("%d%c", A[i], (i % 10 != 9) ? ',' : '\n');
 	return 0;
@@ -442,6 +443,7 @@ int UnitTestWArrySortStr(int argc, char* argv[])
 {
 	char* A[10] = {"99", "88", "77", "66", "55", "44", "33", "22", "11", "0"};
 	WMergeSort(A, 0, 9, strcmp);
+	WHeapSort(A, 10, strcmp);
 	for (int i = 0; i < 10; ++i)
 		printf("%s%c", A[i], (i % 10 != 9) ? ',' : '\n');
 	return 0;
