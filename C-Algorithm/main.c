@@ -4,6 +4,8 @@
 #include <assert.h>
 #ifdef __WINDOWS__
 #include <Windows.h>
+#elif __LINUX__
+#include <unistd.h>
 #endif
 #include <c-algorithm.h>
 
@@ -24,12 +26,18 @@ void dtor(char* s)
 void iterator(char* key)
 {
 	printf("I:%s\n", key);
+#ifdef __WINDOWS__
 	Sleep(125);
+#elif __LINUX__
+	usleep(1000 * 125);
+#endif
+	return;
 }
 
 void iterator1(char* key)
 {
 	printf("%s,", key);
+	return;
 }
 
 int UnitTestWLList(int argc, char* argv[])
@@ -446,13 +454,16 @@ UnitTestWPAQueue(int argc, char* argv[])
 	tmp = WHeapExtractMaxPAQueue(pQ);
 	printf("PAQ Extract: %s\n", tmp);
 	free(tmp);
+	tmp = WHeapExtractMaxPAQueue(pQ);
+	printf("PAQ Extract: %s\n", tmp);
+	free(tmp);
 	printf("PAQ Max: %s\n", (char*)WMaximumPAQueue(pQ));
 	WMaxHeapInsertPAQueue(pQ, "XYZ0");
 	WMaxHeapInsertPAQueue(pQ, "XYZ1");
+	WMaxHeapInsertPAQueue(pQ, "XYZ2");
 	WMaxHeapInsertPAQueue(pQ, "XYZ3");
 	WMaxHeapInsertPAQueue(pQ, "XYZ4");
 	WMaxHeapInsertPAQueue(pQ, "XYZ5");
-	WMaxHeapInsertPAQueue(pQ, "XYZ6");
 	printf("PAQ Max: %s\n", (char*)WMaximumPAQueue(pQ));
 	WDeletePAQueue(pQ);
 	return 0;
