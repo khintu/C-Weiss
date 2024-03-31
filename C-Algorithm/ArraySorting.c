@@ -221,11 +221,97 @@ void WHeapSort(void* v[], int Len, int (*CMP)(const void* x, const void* y))
 	void* tmp;
 	int i, heapSize;
 	WBuildMaxHeap(v, Len, &heapSize, CMP); /* O(n) */
-	for (i = Len - 1; i >= 1; --i) /* O(n) */
+	for (i = Len - 1; i >= 1; --i) /* O(n-1) */
 	{
 		WSWAPV(0, i);
 		heapSize -= 1;
 		WMaxHeapify(v, heapSize, 0, CMP); /* O(lgn) */
 	}
 	return;
+}
+
+/* ---Array/MaxHeap Priority Queue--- */
+
+struct WPAQueue* WCreatePAQueue(unsigned Len, \
+																int (*CMP)(const void* x, const void* y), \
+																void* (*CTOR)(void* x), \
+																void (*DTOR)(void* x))
+{
+	struct WPAQueue* pQ;
+
+	if ((pQ = (struct WPAQueue*) calloc(1, sizeof(struct WPAQueue))) == NULL)
+		return NULL;
+
+	pQ->Length = Len;
+	pQ->CMP = CMP;
+	pQ->CTOR = CTOR;
+	pQ->DTOR = DTOR;
+
+	if ((pQ->array = (void**)calloc(Len, sizeof(void*))) == NULL)
+	{
+		free(pQ);
+		return NULL;
+	}
+	return pQ;
+}
+
+void WDeletePAQueue(struct WPAQueue* pQ)
+{
+	int i;
+	for (i = 0; i < pQ->heapSize; ++i)
+	{
+		pQ->DTOR(pQ->array[i]);
+	}
+	free(pQ->array);
+	free(pQ);
+	return;
+}
+
+void* WMaximumPAQueue(struct WPAQueue* pQ)
+{
+	return pQ->array[0];
+}
+
+void* WHeapExtractMaxPAQueue(struct WPAQueue* pQ)
+{
+	void* max;
+
+	if (pQ->heapSize < 1)
+		return NULL;
+	max = pQ->CTOR(pQ->array[0]);
+	pQ->DTOR(pQ->array[0]);
+	pQ->array[0] = pQ->array[pQ->heapSize - 1]; /* move last leaf to root */
+	pQ->array[pQ->heapSize - 1] = NULL;
+	pQ->heapSize--; /* Reduce heapSize by 1 to make for the root extraction */
+	WMaxHeapify(pQ->array, pQ->heapSize, 0, pQ->CMP); /* Re-enforce max-heap property with new root */
+	return max;
+}
+
+int WHeapIncKeyPAQueue(struct WPAQueue* pQ, int idx, void* key)
+{
+	void* tmp;
+	if (pQ->array[idx] && (pQ->CMP(key, pQ->array[idx]) < 0))
+		return -3; /* key is smaller than current key */
+
+	if (pQ->array[idx])
+		pQ->DTOR(pQ->array[idx]); /* Delete current key at idx */
+	pQ->array[idx] = pQ->CTOR(key); /* Update new key to Max-Heap */
+	while (idx > 0 && pQ->CMP(pQ->array[WPARENT(idx)], pQ->array[idx]) < 0) /* traverse Max-Heap property path */
+	{
+		tmp = pQ->array[WPARENT(idx)]; /* exchange new key with smaller parent key */
+		pQ->array[WPARENT(idx)] = pQ->array[idx];
+		pQ->array[idx] = tmp;
+		idx = WPARENT(idx); /* move upwards the binary heap levels */
+	}
+	return 0;
+}
+
+int WMaxHeapInsertPAQueue(struct WPAQueue* pQ, void* key)
+{
+	if (pQ->heapSize >= pQ->Length)
+		return -1; /* no memory for insert operation */
+
+	pQ->heapSize++;
+	//pQ->array[pQ->heapSize - 1] = NULL;
+	return WHeapIncKeyPAQueue(pQ, pQ->heapSize - 1, key);
 }

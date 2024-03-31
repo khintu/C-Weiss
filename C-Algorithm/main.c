@@ -428,6 +428,36 @@ int UnitTestWPLQueue(int argc, char* argv[])
 	return 0;
 }
 
+UnitTestWPAQueue(int argc, char* argv[])
+{
+	printf("Unit Test MaxHeap Priority Array Queue\n");
+
+	struct WPAQueue* pQ;
+	char* tmp;
+	pQ = WCreatePAQueue(5, strcmp, ctor, dtor);
+	WMaxHeapInsertPAQueue(pQ, "XYZ1");
+	printf("PAQ Max: %s\n", (char*)WMaximumPAQueue(pQ));
+	WMaxHeapInsertPAQueue(pQ, "XYZ2");
+	printf("PAQ Max: %s\n", (char*)WMaximumPAQueue(pQ));
+	WHeapIncKeyPAQueue(pQ, 1, "XYZ0");
+	printf("PAQ IncKey: %s\n", (char*)WMaximumPAQueue(pQ));
+	WHeapIncKeyPAQueue(pQ, 1, "XYZ3");
+	printf("PAQ IncKey: %s\n", (char*)WMaximumPAQueue(pQ));
+	tmp = WHeapExtractMaxPAQueue(pQ);
+	printf("PAQ Extract: %s\n", tmp);
+	free(tmp);
+	printf("PAQ Max: %s\n", (char*)WMaximumPAQueue(pQ));
+	WMaxHeapInsertPAQueue(pQ, "XYZ0");
+	WMaxHeapInsertPAQueue(pQ, "XYZ1");
+	WMaxHeapInsertPAQueue(pQ, "XYZ3");
+	WMaxHeapInsertPAQueue(pQ, "XYZ4");
+	WMaxHeapInsertPAQueue(pQ, "XYZ5");
+	WMaxHeapInsertPAQueue(pQ, "XYZ6");
+	printf("PAQ Max: %s\n", (char*)WMaximumPAQueue(pQ));
+	WDeletePAQueue(pQ);
+	return 0;
+}
+
 int UnitTestWArrySortInt(int argc, char* argv[])
 {
 	int A[10] = { 44, 55,33,22,88,99,121,144,0,11 };
@@ -471,6 +501,7 @@ int main(int argc, char* argv[])
 	UnitTestWLStack(argc, argv);
 	UnitTestWLQueue(argc, argv);
 	UnitTestWPLQueue(argc, argv);
+	UnitTestWPAQueue(argc, argv);
 	UnitTestWArrySortInt(argc, argv);
 	UnitTestWArrySortStr(argc, argv);
 	UnitTestWDLListQuickSortStr(argc, argv);

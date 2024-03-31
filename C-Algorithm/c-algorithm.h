@@ -3,7 +3,7 @@
 
 /* C algorithms on Lists, Sets & Graphs */
 
-#define ABS(x)	(x < 0)?(-(x)):(x)
+#define ABS(x)	((x) < 0)?(-(x)):(x)
 #define MIN(a, b)	((a) < (b) ? (a) : (b))
 #define MAX(a, b)	((a) > (b) ? (a) : (b))
 
@@ -158,6 +158,28 @@ void* WHeadPLQueue(struct WPLQueue* que);
 void* WTailPLQueue(struct WPLQueue* que);
 int WEnqueuePLQueue(struct WPLQueue* que, void* key);
 void* WDequeuePLQueue(struct WPLQueue* que);
+
+/* ---Priority Queue ADT on Arrays---*/
+
+struct WPAQueue {
+	int heapSize; /* MaxHeap tree length */
+	int Length; /* Array length */
+	void** array;  /* dynamically created array of void* for heap */
+
+	int (*CMP)(const void* x, const void* y);
+	void* (*CTOR)(void* x);
+	void (*DTOR)(void* x);
+};
+
+struct WPAQueue* WCreatePAQueue(unsigned Len,\
+																int (*CMP)(const void* x, const void* y), \
+																void* (*CTOR)(void* x), \
+																void (*DTOR)(void* x));
+void WDeletePAQueue(struct WPAQueue* pQ);
+void* WMaximumPAQueue(struct WPAQueue* pQ);
+void* WHeapExtractMaxPAQueue(struct WPAQueue* pQ);
+int WHeapIncKeyPAQueue(struct WPAQueue* pQ, int idx, void* key);
+int WMaxHeapInsertPAQueue(struct WPAQueue* pQ, void* key);
 
 /* ---Sorting Algorithms on Array--- */
 
