@@ -132,6 +132,7 @@
   <ItemGroup>
     <ClCompile Include="ArraySorting.c" />
     <ClCompile Include="DLList.c" />
+    <ClCompile Include="HashMap.c" />
     <ClCompile Include="LList.c" />
     <ClCompile Include="LPriorityQ.c" />
     <ClCompile Include="LQueue.c" />
@@ -141,6 +142,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="c-algorithm.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Makefile" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

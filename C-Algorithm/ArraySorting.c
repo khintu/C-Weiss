@@ -232,7 +232,7 @@ void WHeapSort(void* v[], int Len, int (*CMP)(const void* x, const void* y))
 
 /* ---Array/MaxHeap Priority Queue--- */
 
-struct WPAQueue* WCreatePAQueue(unsigned Len, \
+struct WPAQueue* WCreatePAQueue(int Len, \
 																int (*CMP)(const void* x, const void* y), \
 																void* (*CTOR)(void* x), \
 																void (*DTOR)(void* x))

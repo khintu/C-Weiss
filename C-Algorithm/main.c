@@ -9,6 +9,13 @@
 #endif
 #include <c-algorithm.h>
 
+struct UnitRec
+{
+	char* stmt;
+	int count;
+	float pay;
+};
+
 char* ctor(char* s)
 {
 	char* p;
@@ -20,6 +27,25 @@ char* ctor(char* s)
 void dtor(char* s)
 {
 	free(s);
+	return;
+}
+
+struct UnitRec* ctorRec(struct UnitRec* ur)
+{
+	struct UnitRec* r;
+	if ((r = (struct UnitRec*)malloc(sizeof * r)) != NULL)
+	{
+		r->stmt = ctor(ur->stmt);
+		r->count = ur->count;
+		r->pay = ur->pay;
+	}
+	return r;
+}
+
+void dtorRec(struct UnitRec* ur)
+{
+	dtor(ur->stmt);
+	free(ur);
 	return;
 }
 
@@ -503,6 +529,37 @@ int UnitTestWDLListQuickSortStr(int argc, char* argv[])
 	return 0;
 }
 
+int hashFn(const char* key)
+{
+	int i, hash;
+	for (i = 0, hash = 0; key[i] != NUL; ++i)
+		hash += 31 + key[i];
+	return hash;
+}
+
+UnitTestWHashMap(int argc, char* argv[])
+{
+	struct UnitRec ur;
+	struct WHashMap* hmap;
+
+	hmap = WCreateHashMap(5, hashFn, strcmp, ctor, dtor, ctor, dtor);
+	WInsertKeyValHashMap(hmap, "Praveen", "Masters of the Universe");
+	printf("HashMap: %s\n", (char*)WSearchKeyHashMap(hmap, "Praveen"));
+	WInsertKeyValHashMap(hmap, "Praveen", "Zero of the Universe");
+	printf("HashMap: %s\n", (char*)WSearchKeyHashMap(hmap, "Praveen"));
+	WDeleteKeyHashMap(hmap, "Praveen");
+	WDeleteHashMap(hmap);
+
+	hmap = WCreateHashMap(5, hashFn, strcmp, ctor, dtor, ctorRec, dtorRec);
+	ur.stmt = "'Veggie Lovers' is Good";
+	ur.count = 1;
+	ur.pay = 1600.0f;
+	WInsertKeyValHashMap(hmap, "Praveen", &ur);
+	printf("HashMap: %s\n", ((struct UnitRec*)WSearchKeyHashMap(hmap, "Praveen"))->stmt);
+	WDeleteHashMap(hmap);
+	return 0;
+}
+
 int main(int argc, char* argv[])
 {
 	printf("Hello Weiss!!\n");
@@ -516,5 +573,6 @@ int main(int argc, char* argv[])
 	UnitTestWArrySortInt(argc, argv);
 	UnitTestWArrySortStr(argc, argv);
 	UnitTestWDLListQuickSortStr(argc, argv);
+	UnitTestWHashMap(argc, argv);
 	return 0;
 }

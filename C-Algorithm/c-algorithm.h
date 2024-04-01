@@ -9,6 +9,7 @@
 
 #define FALSE	0
 #define TRUE	1
+#define NUL	((char)'\0')
 
 /* ---Linked List ADT--- */
 
@@ -159,7 +160,7 @@ void* WTailPLQueue(struct WPLQueue* que);
 int WEnqueuePLQueue(struct WPLQueue* que, void* key);
 void* WDequeuePLQueue(struct WPLQueue* que);
 
-/* ---Priority Queue ADT on Arrays---*/
+/* ---Priority Queue ADT on Arrays--- */
 
 struct WPAQueue {
 	int heapSize; /* MaxHeap tree length */
@@ -171,7 +172,7 @@ struct WPAQueue {
 	void (*DTOR)(void* x);
 };
 
-struct WPAQueue* WCreatePAQueue(unsigned Len,\
+struct WPAQueue* WCreatePAQueue(int Len,\
 																int (*CMP)(const void* x, const void* y), \
 																void* (*CTOR)(void* x), \
 																void (*DTOR)(void* x));
@@ -180,6 +181,38 @@ void* WMaximumPAQueue(struct WPAQueue* pQ);
 void* WHeapExtractMaxPAQueue(struct WPAQueue* pQ);
 int WHeapIncKeyPAQueue(struct WPAQueue* pQ, int idx, void* key);
 int WMaxHeapInsertPAQueue(struct WPAQueue* pQ, void* key);
+
+/* ---Hash Map/Dictionary ADT--- */
+
+struct ChainItem
+{
+	void* key;
+	void* value;
+	struct ChainItem* next;
+};
+
+struct WHashMap
+{
+	struct ChainItem** table; /* dynamically allocated array of chains */
+	int tabSize;							/* Size of universal key set */
+	int (*KEYCMP)(const void*, const void*);
+	void* (*CTORK)(void* x); /* Constructor/Destructor for key/value */
+	void (*DTORK)(void* x);
+	void* (*CTORV)(void* x);
+	void (*DTORV)(void* x);
+	int (*HASHFN)(const void*); /* Hash value from a hash function */
+};
+
+struct WHashMap* WCreateHashMap(int tabSize, int (*HASHFN)(const void*), \
+																int (*KCMP)(const void*, const void*), \
+																void* (*CTORK)(void*), \
+																void (*DTORK)(void*), \
+																void* (*CTORV)(void*), \
+																void (*DTORV)(void*));
+void WDeleteHashMap(struct WHashMap*);
+void* WSearchKeyHashMap(struct WHashMap*, void *key);
+int WInsertKeyValHashMap(struct WHashMap* hmap, void* key, void* val);
+void WDeleteKeyHashMap(struct WHashMap* hmap, void* key);
 
 /* ---Sorting Algorithms on Array--- */
 
