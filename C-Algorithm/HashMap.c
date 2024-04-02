@@ -67,12 +67,14 @@ void* WSearchKeyHashMap(struct WHashMap* hmap, void* key)
 
 int WInsertKeyValHashMap(struct WHashMap* hmap, void* key, void* val)
 {
-	struct ChainItem* ch, *prev;
-	if ((ch = hmap->table[WHASHFUNC(key)]) == NULL)
+	struct ChainItem* ch, *prev, *nch;
+	
+	if ((nch = (struct ChainItem*)calloc(1, sizeof(struct ChainItem))) == NULL)
+		return -1;
+
+	if ((ch = hmap->table[WHASHFUNC(key)]) == NULL) /* Add new chain and key */
 	{
-		if ((ch = (struct ChainItem*)calloc(1, sizeof(struct ChainItem))) == NULL)
-			return -1;
-		hmap->table[WHASHFUNC(key)] = ch;
+		hmap->table[WHASHFUNC(key)] = ch = nch;
 		ch->key = hmap->CTORK(key);
 		ch->value = hmap->CTORV(val);
 	}
@@ -88,9 +90,7 @@ int WInsertKeyValHashMap(struct WHashMap* hmap, void* key, void* val)
 			}
 		}
 		/* Add new value for key */
-		if ((ch = (struct ChainItem*)calloc(1, sizeof(struct ChainItem))) == NULL)
-			return -1;
-		prev->next = ch;
+		prev->next = ch = nch;
 		ch->key = hmap->CTORK(key);
 		ch->value = hmap->CTORV(val);
 	}
@@ -100,20 +100,21 @@ int WInsertKeyValHashMap(struct WHashMap* hmap, void* key, void* val)
 void WDeleteKeyHashMap(struct WHashMap* hmap, void* key)
 {
 	struct ChainItem* ch, *prev;
-	int count, c;
+
 	if ((ch = hmap->table[WHASHFUNC(key)]) != NULL)
 	{
-		for (prev = ch, count = 0; \
-				 ch != NULL && (c = hmap->KEYCMP(key, ch->key)) != 0;\
-				 count++, prev = ch, ch = ch->next)
+		for (prev = ch; \
+				 ch != NULL && hmap->KEYCMP(key, ch->key) != 0;\
+				 prev = ch, ch = ch->next)
 			;
-		if (ch != NULL && c == 0)
+		if (ch != NULL) /* Found the key, caliberate the chain */
 		{
-			if (count == 0)
-				hmap->table[WHASHFUNC(key)] = NULL;
 			hmap->DTORK(ch->key);
 			hmap->DTORV(ch->value);
-			prev->next = ch->next;
+			if (hmap->table[WHASHFUNC(key)] == ch) /* Chain head deletion case */
+				hmap->table[WHASHFUNC(key)] = ch->next;
+			else
+				prev->next = ch->next;
 			free(ch);
 		}
 	}

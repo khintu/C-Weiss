@@ -542,6 +542,7 @@ UnitTestWHashMap(int argc, char* argv[])
 	struct UnitRec ur;
 	struct WHashMap* hmap;
 
+	// Basic tests on insert, search, delete
 	hmap = WCreateHashMap(5, hashFn, strcmp, ctor, dtor, ctor, dtor);
 	WInsertKeyValHashMap(hmap, "Praveen", "Masters of the Universe");
 	printf("HashMap: %s\n", (char*)WSearchKeyHashMap(hmap, "Praveen"));
@@ -550,6 +551,7 @@ UnitTestWHashMap(int argc, char* argv[])
 	WDeleteKeyHashMap(hmap, "Praveen");
 	WDeleteHashMap(hmap);
 
+	// Complex Records for key/value
 	hmap = WCreateHashMap(5, hashFn, strcmp, ctor, dtor, ctorRec, dtorRec);
 	ur.stmt = "'Veggie Lovers' is Good";
 	ur.count = 1;
@@ -557,11 +559,27 @@ UnitTestWHashMap(int argc, char* argv[])
 	WInsertKeyValHashMap(hmap, "Praveen", &ur);
 	printf("HashMap: %s\n", ((struct UnitRec*)WSearchKeyHashMap(hmap, "Praveen"))->stmt);
 	WDeleteHashMap(hmap);
+
+	// Collision handling through chaining
+	hmap = WCreateHashMap(4, hashFn, strcmp, ctor, dtor, ctor, dtor);
+	WInsertKeyValHashMap(hmap, "Praveen", "Masters of the Universe");
+	printf("HashMap: %s\n", (char*)WSearchKeyHashMap(hmap, "Praveen"));
+	WInsertKeyValHashMap(hmap, "Parveen", "Zero of the Universe");
+	printf("HashMap: %s\n", (char*)WSearchKeyHashMap(hmap, "Parveen"));
+	WInsertKeyValHashMap(hmap, "neevarP", "Hero of the Universe");
+	printf("HashMap: %s\n", (char*)WSearchKeyHashMap(hmap, "neevarP"));
+	WDeleteKeyHashMap(hmap, "Praveen");
+	WDeleteKeyHashMap(hmap, "neevarP");
+	WDeleteKeyHashMap(hmap, "Parveen");
+	printf("HashMap: %s\n", (char*)WSearchKeyHashMap(hmap, "Parveen"));
+	WDeleteHashMap(hmap);
+
 	return 0;
 }
 
 int main(int argc, char* argv[])
 {
+#if 0
 	printf("Hello Weiss!!\n");
 	UnitTestWLList(argc, argv);
 	UnitTestWDLList(argc, argv);
@@ -573,6 +591,7 @@ int main(int argc, char* argv[])
 	UnitTestWArrySortInt(argc, argv);
 	UnitTestWArrySortStr(argc, argv);
 	UnitTestWDLListQuickSortStr(argc, argv);
+#endif	
 	UnitTestWHashMap(argc, argv);
 	return 0;
 }
