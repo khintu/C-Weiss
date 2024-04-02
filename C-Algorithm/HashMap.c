@@ -86,6 +86,7 @@ int WInsertKeyValHashMap(struct WHashMap* hmap, void* key, void* val)
 			{
 				hmap->DTORV(ch->value);
 				ch->value = hmap->CTORV(val);
+				free(nch); /* new node not needed, free */
 				return 0;
 			}
 		}
