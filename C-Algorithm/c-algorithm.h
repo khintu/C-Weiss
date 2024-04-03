@@ -11,6 +11,8 @@
 #define TRUE	1
 #define NUL	((char)'\0')
 
+typedef int (*WCMPFP)(const void* x, const void* y);
+
 /* ---Linked List ADT--- */
 
 struct LNode {
@@ -160,7 +162,7 @@ void* WTailPLQueue(struct WPLQueue* que);
 int WEnqueuePLQueue(struct WPLQueue* que, void* key);
 void* WDequeuePLQueue(struct WPLQueue* que);
 
-/* ---Priority Queue ADT on Arrays--- */
+/* ---Priority Queue ADT on Arrays(Binary Heap)--- */
 
 struct WPAQueue {
 	int heapSize; /* MaxHeap tree length */
@@ -212,7 +214,35 @@ struct WHashMap* WCreateHashMap(int tabSize, int (*HASHFN)(const void*), \
 void WDeleteHashMap(struct WHashMap*);
 void* WSearchKeyHashMap(struct WHashMap*, void *key);
 int WInsertKeyValHashMap(struct WHashMap* hmap, void* key, void* val);
-void WDeleteKeyHashMap(struct WHashMap* hmap, void* key);
+int WDeleteKeyHashMap(struct WHashMap* hmap, void* key);
+
+/* ---Binary Search Tree ADT--- */
+
+struct BSTNode
+{
+	void* data; /* key ADT */
+	struct BSTNode* parent, *left, *right; /* pointers to parent, left & right subtrees */
+};
+
+struct WBSTree
+{
+	struct BSTNode* tree;  /* root node */
+	int count;						 /* number of nodes in tree */
+
+	int (*CMP)(const void* x, const void* y); /* key comparison fp */
+	void* (*CTOR)(void* x);  /* Key ADT user-defined c'tor & d'tor */
+	void (*DTOR)(void* x);
+};
+
+struct WBSTree* WCreateBST(int (*CMP)(const void* x, const void* y),
+													void* (*CTOR)(void* x),
+													void (*DTOR)(void* x));
+void WDeleteBST(struct WBSTree* bst);
+void* WMinimumBST(struct WBSTree* bst);
+void* WMaximumBST(struct WBSTree* bst);
+void* WSearchKeyBST(struct WBSTree* bst, void* key);
+int WInsertKeyBST(struct WBSTree* bst, void* key);
+int WDeleteKeyBST(struct WBSTree* bst, void* key);
 
 /* ---Sorting Algorithms on Array--- */
 

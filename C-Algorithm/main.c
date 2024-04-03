@@ -497,12 +497,12 @@ UnitTestWPAQueue(int argc, char* argv[])
 
 int UnitTestWArrySortInt(int argc, char* argv[])
 {
-	int A[10] = { 44, 55,33,22,88,99,121,144,0,11 };
+	int A[11] = { 44, 55,33,22,88,99,121,144,0,11,77 };
 	//int A[10] = { 1,1,2,3,44,0,0,3,1,2 };
-	WMergeSortInt(A, 0, 9);
-	WHeapSortInt(A, 10);
-	for (int i = 0; i < 10; ++i)
-		printf("%d%c", A[i], (i % 10 != 9) ? ',' : '\n');
+	WMergeSortInt(A, 0, 10);
+	WHeapSortInt(A, 11);
+	for (int i = 0; i < 11; ++i)
+		printf("%d%c", A[i], (i % 11 != 10) ? ',' : '\n');
 	return 0;
 }
 
@@ -525,6 +525,7 @@ int UnitTestWDLListQuickSortStr(int argc, char* argv[])
 		WAppendToDList(dll, A[i]);
 	WQuickSortDList(dll);
 	WIteratorDList(dll, iterator1);
+	putchar('\n');
 	WDeleteDList(dll);
 	return 0;
 }
@@ -557,7 +558,12 @@ UnitTestWHashMap(int argc, char* argv[])
 	ur.count = 1;
 	ur.pay = 1600.0f;
 	WInsertKeyValHashMap(hmap, "Praveen", &ur);
+	ur.stmt = "'Corn Lovers' is Good";
+	ur.count = 6;
+	ur.pay = 1200.0f;
+	WInsertKeyValHashMap(hmap, "Praveen2", &ur);
 	printf("HashMap: %s\n", ((struct UnitRec*)WSearchKeyHashMap(hmap, "Praveen"))->stmt);
+	printf("HashMap: %s\n", ((struct UnitRec*)WSearchKeyHashMap(hmap, "Praveen2"))->stmt);
 	WDeleteHashMap(hmap);
 
 	// Collision handling through chaining
@@ -577,6 +583,19 @@ UnitTestWHashMap(int argc, char* argv[])
 	return 0;
 }
 
+int UnitTestWBST(int argc, char* argv[])
+{
+	struct WBSTree* bst;
+
+	bst = WCreateBST((WCMPFP)strcmp, ctor, dtor);
+	WInsertKeyBST(bst, "XYZ1");
+	WInsertKeyBST(bst, "XYZ2");
+	WInsertKeyBST(bst, "XYZ3");
+	WInsertKeyBST(bst, "XYZ4");
+	WDeleteBST(bst);
+	return 0;
+}
+
 int main(int argc, char* argv[])
 {
 #if 0
@@ -591,7 +610,8 @@ int main(int argc, char* argv[])
 	UnitTestWArrySortInt(argc, argv);
 	UnitTestWArrySortStr(argc, argv);
 	UnitTestWDLListQuickSortStr(argc, argv);
-#endif	
 	UnitTestWHashMap(argc, argv);
+#endif
+	UnitTestWBST(argc, argv);
 	return 0;
 }

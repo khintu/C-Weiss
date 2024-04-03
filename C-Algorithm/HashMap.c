@@ -98,7 +98,7 @@ int WInsertKeyValHashMap(struct WHashMap* hmap, void* key, void* val)
 	return 0;
 }
 
-void WDeleteKeyHashMap(struct WHashMap* hmap, void* key)
+int WDeleteKeyHashMap(struct WHashMap* hmap, void* key)
 {
 	struct ChainItem* ch, *prev;
 
@@ -117,7 +117,8 @@ void WDeleteKeyHashMap(struct WHashMap* hmap, void* key)
 			else
 				prev->next = ch->next;
 			free(ch);
+			return 0;
 		}
 	}
-	return;
+	return -1;
 }
