@@ -597,10 +597,11 @@ int UnitTestWBST(int argc, char* argv[])
 	WInsertKeyBST(bst, "XYZ7");
 	WInsertKeyBST(bst, "XYZ8");
 	WInsertKeyBST(bst, "XYZ9");
+	WInsertKeyBST(bst, "XYZ4");
 	WIteratorBST(bst, iterator1);
 	putchar('\n');
 	WDeleteKeyBST(bst, "XYZ2");
-	WDeleteKeyBST(bst, "XYZ3");
+	WDeleteKeyBST(bst, "XYZ4");
 	WIteratorBST(bst, iterator1);
 	putchar('\n');
 	printf("BST Max: %s\n", (char*)WMaximumBST(bst));
@@ -613,7 +614,6 @@ int UnitTestWBST(int argc, char* argv[])
 
 int main(int argc, char* argv[])
 {
-#if 0
 	printf("Hello Weiss!!\n");
 	UnitTestWLList(argc, argv);
 	UnitTestWDLList(argc, argv);
@@ -626,7 +626,6 @@ int main(int argc, char* argv[])
 	UnitTestWArrySortStr(argc, argv);
 	UnitTestWDLListQuickSortStr(argc, argv);
 	UnitTestWHashMap(argc, argv);
-#endif
 	UnitTestWBST(argc, argv);
 	return 0;
 }
