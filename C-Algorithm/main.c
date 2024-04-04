@@ -462,7 +462,7 @@ int UnitTestWPLQueue(int argc, char* argv[])
 	return 0;
 }
 
-UnitTestWPAQueue(int argc, char* argv[])
+int UnitTestWPAQueue(int argc, char* argv[])
 {
 	printf("Unit Test MaxHeap Priority Array Queue\n");
 
@@ -509,8 +509,8 @@ int UnitTestWArrySortInt(int argc, char* argv[])
 int UnitTestWArrySortStr(int argc, char* argv[])
 {
 	char* A[10] = {"99", "88", "77", "66", "55", "44", "33", "22", "11", "0"};
-	WMergeSort(A, 0, 9, (WCMPFP)strcmp);
-	WHeapSort(A, 10, (WCMPFP)strcmp);
+	WMergeSort((void**)A, 0, 9, (WCMPFP)strcmp);
+	WHeapSort((void**)A, 10, (WCMPFP)strcmp);
 	for (int i = 0; i < 10; ++i)
 		printf("%s%c", A[i], (i % 10 != 9) ? ',' : '\n');
 	return 0;
@@ -538,7 +538,7 @@ int hashFn(const char* key)
 	return hash;
 }
 
-UnitTestWHashMap(int argc, char* argv[])
+int UnitTestWHashMap(int argc, char* argv[])
 {
 	struct UnitRec ur;
 	struct WHashMap* hmap;
