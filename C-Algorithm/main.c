@@ -592,6 +592,21 @@ int UnitTestWBST(int argc, char* argv[])
 	WInsertKeyBST(bst, "XYZ2");
 	WInsertKeyBST(bst, "XYZ3");
 	WInsertKeyBST(bst, "XYZ4");
+	WInsertKeyBST(bst, "XYZ5");
+	WInsertKeyBST(bst, "XYZ6");
+	WInsertKeyBST(bst, "XYZ7");
+	WInsertKeyBST(bst, "XYZ8");
+	WInsertKeyBST(bst, "XYZ9");
+	WIteratorBST(bst, iterator1);
+	putchar('\n');
+	WDeleteKeyBST(bst, "XYZ2");
+	WDeleteKeyBST(bst, "XYZ3");
+	WIteratorBST(bst, iterator1);
+	putchar('\n');
+	printf("BST Max: %s\n", (char*)WMaximumBST(bst));
+	printf("BST Min: %s\n", (char*)WMinimumBST(bst));
+	printf("BST Find: %s\n", (char*)WSearchKeyBST(bst, "XYZ2"));
+	printf("BST Find: %s\n", (char*)WSearchKeyBST(bst, "XYZ4"));
 	WDeleteBST(bst);
 	return 0;
 }

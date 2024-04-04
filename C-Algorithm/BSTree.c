@@ -21,6 +21,7 @@ static void PostOrderWalkAndDelete(struct WBSTree* bst, struct BSTNode* b)
 	{
 		PostOrderWalkAndDelete(bst, b->left);
 		PostOrderWalkAndDelete(bst, b->right);
+		bst->DTOR(b->data);
 		free(b);
 		bst->count--;
 	}
@@ -177,6 +178,7 @@ int WDeleteKeyBST(struct WBSTree* bst, void* key)
 	struct BSTNode* z, *y;
 	if ((z = SearchKeyNode(bst, key)) == NULL)
 		return -2; /* key not found */
+	
 	if (z->left == NULL)
 		TransplantSubtrees(bst, z, z->right);
 	else if (z->right == NULL)
@@ -198,4 +200,21 @@ int WDeleteKeyBST(struct WBSTree* bst, void* key)
 	bst->count--;
 	free(z);
 	return 0;
+}
+
+static void InorderTreeWalk(struct BSTNode* b, void (*ITR)(void*))
+{
+	if (b != NULL)
+	{
+		InorderTreeWalk(b->left, ITR);
+		(*ITR)(b->data);
+		InorderTreeWalk(b->right, ITR);
+	}
+	return;
+}
+
+void WIteratorBST(struct WBSTree* bst, void (*ITR)(void*))
+{
+	InorderTreeWalk(bst->tree, ITR);
+	return;
 }

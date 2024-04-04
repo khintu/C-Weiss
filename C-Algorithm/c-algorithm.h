@@ -215,6 +215,7 @@ void WDeleteHashMap(struct WHashMap*);
 void* WSearchKeyHashMap(struct WHashMap*, void *key);
 int WInsertKeyValHashMap(struct WHashMap* hmap, void* key, void* val);
 int WDeleteKeyHashMap(struct WHashMap* hmap, void* key);
+void WIteratorBST(struct WBSTree* bst, void (*ITR)(void*));
 
 /* ---Binary Search Tree ADT--- */
 
