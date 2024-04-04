@@ -12,6 +12,8 @@
 #define NUL	((char)'\0')
 
 typedef int (*WCMPFP)(const void* x, const void* y);
+typedef void* (*WCTRFP)(void* x);
+typedef void (*WDTRFP)(void* x);
 
 /* ---Linked List ADT--- */
 

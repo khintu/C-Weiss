@@ -72,7 +72,7 @@ int UnitTestWLList(int argc, char* argv[])
 
 	printf("Unit Test Linked List\n");
 
-	lst = WCreateList(strcmp, ctor, dtor);
+	lst = WCreateList((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
 	WAddToList(lst, "ONE");
 	WAddToList(lst, "TWO");
 	WAddToList(lst, "THREE");
@@ -110,13 +110,13 @@ int UnitTestWLList(int argc, char* argv[])
 	WAddToList(lst, "THREE");
 	WInsertToList(lst, "THREE", "FOUR");
 	printf("Find:%s\n", (char*)WFindInList(lst, "ONE"));
-	WIteratorList(lst, iterator);
+	WIteratorList(lst, (void (*)(void*))iterator);
 	WSortList(lst);
-	WIteratorList(lst, iterator);
+	WIteratorList(lst, (void (*)(void*))iterator);
 	WInsertToSortdList(lst, "FIVE");
 	WInsertToSortdList(lst, "ABC");
 	WInsertToSortdList(lst, "XYZ");
-	WIteratorList(lst, iterator);
+	WIteratorList(lst, (void (*)(void*))iterator);
 	WDeleteFromList(lst, "ONE");
 	WDeleteFromList(lst, "TWO");
 	WDeleteFromList(lst, "THREE");
@@ -129,7 +129,7 @@ int UnitTestWLList(int argc, char* argv[])
 	WInsertToSortdList(lst, "XYZ3");
 	WInsertToSortdList(lst, "XYZ2");
 	WInsertToSortdList(lst, "XYZ1");
-	WIteratorList(lst, iterator);
+	WIteratorList(lst, (void (*)(void*))iterator);
 
 	WDeleteList(lst);
 	return 0;
@@ -141,7 +141,7 @@ int UnitTestWDLList(int argc, char* argv[])
 
 	printf("Unit Test Doubly Linked List\n");
 
-	lst = WCreateDList(strcmp, ctor, dtor);
+	lst = WCreateDList((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
 	WAddToDList(lst, "ONE");
 	WAddToDList(lst, "TWO");
 	WAddToDList(lst, "THREE");
@@ -217,9 +217,9 @@ int UnitTestWDLList(int argc, char* argv[])
 	WAddToDList(lst, "THREE");
 	WInsertToDList(lst, "THREE", "FOUR");
 	printf("Find:%s\n", (char*)WFindInDList(lst, "THREE"));
-	WIteratorDList(lst, iterator);
+	WIteratorDList(lst, (void (*)(void*))iterator);
 	WSortDList(lst);
-	WIteratorDList(lst, iterator);
+	WIteratorDList(lst, (void (*)(void*))iterator);
 	WDeleteFromDList(lst, "FOUR");
 	WDeleteFromDList(lst, "THREE");
 	WDeleteFromDList(lst, "TWO");
@@ -229,7 +229,7 @@ int UnitTestWDLList(int argc, char* argv[])
 	WInsertToSortdDList(lst, "XYZ3");
 	WInsertToSortdDList(lst, "XYZ2");
 	WInsertToSortdDList(lst, "XYZ1");
-	WIteratorDList(lst, iterator);
+	WIteratorDList(lst, (void (*)(void*))iterator);
 
 	WDeleteDList(lst);
 	return 0;
@@ -241,7 +241,7 @@ int UnitTestWCLList(int argc, char* argv[])
 
 	printf("Unit Test Circular Linked List\n");
 
-	lst = WCreateCList(strcmp, ctor, dtor);
+	lst = WCreateCList((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
 	WAddToCList(lst, "ONE");
 	WAddToCList(lst, "TWO");
 	WAddToCList(lst, "THREE");
@@ -313,9 +313,9 @@ int UnitTestWCLList(int argc, char* argv[])
 	WAddToCList(lst, "THREE");
 	WInsertToCList(lst, "THREE", "FOUR");
 	printf("Find:%s\n", (char*)WFindInCList(lst, "ONE"));
-	WIteratorCList(lst, iterator, FALSE);
+	WIteratorCList(lst, (void (*)(void*))iterator, FALSE);
 	WSortCList(lst);
-	WIteratorCList(lst, iterator, FALSE);
+	WIteratorCList(lst, (void (*)(void*))iterator, FALSE);
 	WDeleteFromCList(lst, "FOUR");
 	WDeleteFromCList(lst, "THREE");
 	WDeleteFromCList(lst, "TWO");
@@ -325,7 +325,7 @@ int UnitTestWCLList(int argc, char* argv[])
 	WInsertToSortdCList(lst, "XYZ3");
 	WInsertToSortdCList(lst, "XYZ2");
 	WInsertToSortdCList(lst, "XYZ1");
-	WIteratorCList(lst, iterator, FALSE);
+	WIteratorCList(lst, (void (*)(void*))iterator, FALSE);
 
 	WDeleteCList(lst);
 	return 0;
@@ -337,7 +337,7 @@ int UnitTestWLStack(int argc, char* argv[])
 
 	struct WLStack* stk;
 
-	stk = WCreateLStack(strcmp, ctor, dtor);
+	stk = WCreateLStack((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
 	printf("Stack Size: %d\n", WSizeOfLStack(stk));
 	WPushLStack(stk, "ONE");
 	printf("Stack Size: %d\n", WSizeOfLStack(stk));
@@ -366,7 +366,7 @@ int UnitTestWLQueue(int argc, char* argv[])
 
 	struct WLQueue* que;
 
-	que = WCreateLQueue(strcmp, ctor, dtor);
+	que = WCreateLQueue((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
 	printf("Queue Size: %d\n", WSizeOfLQueue(que));
 	WEnqueueLQueue(que, "ONE");
 	printf("Queue Size: %d\n", WSizeOfLQueue(que));
@@ -415,7 +415,7 @@ int UnitTestWPLQueue(int argc, char* argv[])
 
 	struct WPLQueue* pQ;
 
-	pQ = WCreatePLQueue(strcmp, ctor, dtor);
+	pQ = WCreatePLQueue((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
 	printf("Priority Queue Size: %d\n", WSizeOfPLQueue(pQ));
 	WEnqueuePLQueue(pQ, "XYZ1");
 	printf("Priority Queue Size: %d\n", WSizeOfPLQueue(pQ));
@@ -468,7 +468,7 @@ UnitTestWPAQueue(int argc, char* argv[])
 
 	struct WPAQueue* pQ;
 	char* tmp;
-	pQ = WCreatePAQueue(5, strcmp, ctor, dtor);
+	pQ = WCreatePAQueue(5, (WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
 	WMaxHeapInsertPAQueue(pQ, "XYZ1");
 	printf("PAQ Max: %s\n", (char*)WMaximumPAQueue(pQ));
 	WMaxHeapInsertPAQueue(pQ, "XYZ2");
@@ -509,8 +509,8 @@ int UnitTestWArrySortInt(int argc, char* argv[])
 int UnitTestWArrySortStr(int argc, char* argv[])
 {
 	char* A[10] = {"99", "88", "77", "66", "55", "44", "33", "22", "11", "0"};
-	WMergeSort(A, 0, 9, strcmp);
-	WHeapSort(A, 10, strcmp);
+	WMergeSort(A, 0, 9, (WCMPFP)strcmp);
+	WHeapSort(A, 10, (WCMPFP)strcmp);
 	for (int i = 0; i < 10; ++i)
 		printf("%s%c", A[i], (i % 10 != 9) ? ',' : '\n');
 	return 0;
@@ -520,11 +520,11 @@ int UnitTestWDLListQuickSortStr(int argc, char* argv[])
 {
 	//char* A[10] = { "99", "88", "77", "66", "55", "44", "33", "22", "11", "0" };
 	char* A[11] = { "0", "12", "11", "22", "22", "55", "11", "33", "22", "11", "0" };
-	struct WDLList* dll = WCreateDList(strcmp, ctor, dtor);
+	struct WDLList* dll = WCreateDList((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
 	for (int i = 0; i < 11; ++i)
 		WAppendToDList(dll, A[i]);
 	WQuickSortDList(dll);
-	WIteratorDList(dll, iterator1);
+	WIteratorDList(dll, (void (*)(void*))iterator1);
 	putchar('\n');
 	WDeleteDList(dll);
 	return 0;
@@ -544,7 +544,7 @@ UnitTestWHashMap(int argc, char* argv[])
 	struct WHashMap* hmap;
 
 	// Basic tests on insert, search, delete
-	hmap = WCreateHashMap(5, hashFn, strcmp, ctor, dtor, ctor, dtor);
+	hmap = WCreateHashMap(5, (int (*)(const void*))hashFn, (WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor, (WCTRFP)ctor, (WDTRFP)dtor);
 	WInsertKeyValHashMap(hmap, "Praveen", "Masters of the Universe");
 	printf("HashMap: %s\n", (char*)WSearchKeyHashMap(hmap, "Praveen"));
 	WInsertKeyValHashMap(hmap, "Praveen", "Zero of the Universe");
@@ -553,7 +553,7 @@ UnitTestWHashMap(int argc, char* argv[])
 	WDeleteHashMap(hmap);
 
 	// Complex Records for key/value
-	hmap = WCreateHashMap(5, hashFn, strcmp, ctor, dtor, ctorRec, dtorRec);
+	hmap = WCreateHashMap(5, (int (*)(const void*))hashFn, (WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor, (WCTRFP)ctorRec, (WDTRFP)dtorRec);
 	ur.stmt = "'Veggie Lovers' is Good";
 	ur.count = 1;
 	ur.pay = 1600.0f;
@@ -567,7 +567,7 @@ UnitTestWHashMap(int argc, char* argv[])
 	WDeleteHashMap(hmap);
 
 	// Collision handling through chaining
-	hmap = WCreateHashMap(4, hashFn, strcmp, ctor, dtor, ctor, dtor);
+	hmap = WCreateHashMap(4, (int (*)(const void*))hashFn, (WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor, (WCTRFP)ctor, (WDTRFP)dtor);
 	WInsertKeyValHashMap(hmap, "Praveen", "Masters of the Universe");
 	printf("HashMap: %s\n", (char*)WSearchKeyHashMap(hmap, "Praveen"));
 	WInsertKeyValHashMap(hmap, "Parveen", "Zero of the Universe");
@@ -587,7 +587,7 @@ int UnitTestWBST(int argc, char* argv[])
 {
 	struct WBSTree* bst;
 
-	bst = WCreateBST((WCMPFP)strcmp, ctor, dtor);
+	bst = WCreateBST((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
 	WInsertKeyBST(bst, "XYZ1");
 	WInsertKeyBST(bst, "XYZ2");
 	WInsertKeyBST(bst, "XYZ3");
@@ -598,11 +598,11 @@ int UnitTestWBST(int argc, char* argv[])
 	WInsertKeyBST(bst, "XYZ8");
 	WInsertKeyBST(bst, "XYZ9");
 	WInsertKeyBST(bst, "XYZ4");
-	WIteratorBST(bst, iterator1);
+	WIteratorBST(bst, (void (*)(void*))iterator1);
 	putchar('\n');
 	WDeleteKeyBST(bst, "XYZ2");
 	WDeleteKeyBST(bst, "XYZ4");
-	WIteratorBST(bst, iterator1);
+	WIteratorBST(bst, (void (*)(void*))iterator1);
 	putchar('\n');
 	printf("BST Max: %s\n", (char*)WMaximumBST(bst));
 	printf("BST Min: %s\n", (char*)WMinimumBST(bst));
