@@ -609,6 +609,29 @@ int UnitTestWBST(int argc, char* argv[])
 	printf("BST Find: %s\n", (char*)WSearchKeyBST(bst, "XYZ2"));
 	printf("BST Find: %s\n", (char*)WSearchKeyBST(bst, "XYZ4"));
 	WDeleteBST(bst);
+
+	bst = WCreateBST((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
+	WInsertKeyBST(bst, "XYZ6");
+	WInsertKeyBST(bst, "XYZ5");
+	WInsertKeyBST(bst, "XYZ7");
+	WInsertKeyBST(bst, "XYZ4");
+	WInsertKeyBST(bst, "XYZ3");
+	WInsertKeyBST(bst, "XYZ8");
+	WInsertKeyBST(bst, "XYZ4");
+	WInsertKeyBST(bst, "XYZ2");
+	WInsertKeyBST(bst, "XYZ9");
+	WInsertKeyBST(bst, "XYZ1");
+	WIteratorBST(bst, (void (*)(void*))iterator1);
+	putchar('\n');
+	WDeleteKeyBST(bst, "XYZ2");
+	WDeleteKeyBST(bst, "XYZ4");
+	WIteratorBST(bst, (void (*)(void*))iterator1);
+	putchar('\n');
+	printf("BST Max: %s\n", (char*)WMaximumBST(bst));
+	printf("BST Min: %s\n", (char*)WMinimumBST(bst));
+	printf("BST Find: %s\n", (char*)WSearchKeyBST(bst, "XYZ2"));
+	printf("BST Find: %s\n", (char*)WSearchKeyBST(bst, "XYZ4"));
+	WDeleteBST(bst);
 	return 0;
 }
 
