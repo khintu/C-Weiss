@@ -244,6 +244,7 @@ void* WMaximumBST(struct WBSTree* bst);
 void* WSearchKeyBST(struct WBSTree* bst, void* key);
 int WInsertKeyBST(struct WBSTree* bst, void* key);
 int WDeleteKeyBST(struct WBSTree* bst, void* key);
+void WIteratorBST(struct WBSTree* bst, void (*ITR)(void*));
 
 /* ---Sorting Algorithms on Array--- */
 
