@@ -140,6 +140,7 @@
     <ClCompile Include="LStack.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="CLList.c" />
+    <ClCompile Include="RBTree.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="c-algorithm.h" />

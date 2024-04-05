@@ -45,6 +45,9 @@
     <ClCompile Include="BSTree.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RBTree.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="c-algorithm.h">

@@ -247,6 +247,42 @@ int WInsertKeyBST(struct WBSTree* bst, void* key);
 int WDeleteKeyBST(struct WBSTree* bst, void* key);
 void WIteratorBST(struct WBSTree* bst, void (*ITR)(void*));
 
+/* ---Red-Black Tree (balanced Binary Search Tree) ADT--- */
+
+enum { /* Color of nodes in RBTree */
+	WRBCLR_RED = 1,
+	WRBCLR_BLACK
+};
+
+struct RBTNode
+{
+	void* data; /* key ADT */
+	int color;  /* Color of node */
+	struct RBTNode* parent, * left, * right; /* pointers to parent, left & right subtrees */
+};
+
+struct WRBTree
+{
+	struct RBTNode* tree;  /* root node */
+	struct RBTNode* nil;   /* NIL node, all leaves & roots parent */
+	int count;						 /* number of nodes in tree */
+
+	int (*CMP)(const void* x, const void* y); /* key comparison fp */
+	void* (*CTOR)(void* x);  /* Key ADT user-defined c'tor & d'tor */
+	void (*DTOR)(void* x);
+};
+
+struct WRBTree* WCreateRBT(int (*CMP)(const void* x, const void* y),
+													void* (*CTOR)(void* x),
+													void (*DTOR)(void* x));
+void WDeleteRBT(struct WRBTree* rbt);
+void* WMinimumRBT(struct WRBTree* rbt);
+void* WMaximumRBT(struct WRBTree* rbt);
+void* WSearchKeyRBT(struct WRBTree* rbt, void* key);
+int WInsertKeyRBT(struct WRBTree* rbt, void* key);
+int WDeleteKeyRBT(struct WRBTree* rbt, void* key);
+void WIteratorRBT(struct WRBTree* rbt, void (*ITR)(void*));
+
 /* ---Sorting Algorithms on Array--- */
 
 void WMergeSortInt(int v[], int i, int j);
