@@ -15,6 +15,14 @@ typedef int (*WCMPFP)(const void* x, const void* y);
 typedef void* (*WCTRFP)(void* x);
 typedef void (*WDTRFP)(void* x);
 
+/* Error conditions returned by some of the APIs */
+enum {
+	WESUCCESS = 0,
+	WENOMEMORY = -1,
+	WEKEYNOTFND = -2,
+	WEINCKEYLESS = -3
+};
+
 /* ---Linked List ADT--- */
 
 struct LNode {

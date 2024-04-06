@@ -635,8 +635,31 @@ int UnitTestWBST(int argc, char* argv[])
 	return 0;
 }
 
+int UnitTestWRBT(int argc, char* argv[])
+{
+	struct WRBTree* rbt;
+
+	rbt = WCreateRBT((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
+	printf("RBT Find: %s\n", (char*)WSearchKeyRBT(rbt, "XYZ2"));
+	WInsertKeyRBT(rbt, "XYZ1");
+	WInsertKeyRBT(rbt, "XYZ2");
+	WInsertKeyRBT(rbt, "XYZ3");
+	WInsertKeyRBT(rbt, "XYZ4");
+	WInsertKeyRBT(rbt, "XYZ5");
+	WInsertKeyRBT(rbt, "XYZ6");
+	WInsertKeyRBT(rbt, "XYZ7");
+	WInsertKeyRBT(rbt, "XYZ8");
+	WInsertKeyRBT(rbt, "XYZ9");
+	printf("RBT Find: %s\n", (char*)WSearchKeyRBT(rbt, "XYZ2"));
+	WIteratorRBT(rbt, (void (*)(void*))iterator1);
+	putchar('\n');
+	WDeleteRBT(rbt);
+	return 0;
+}
+
 int main(int argc, char* argv[])
 {
+#if 0
 	printf("Hello Weiss!!\n");
 	UnitTestWLList(argc, argv);
 	UnitTestWDLList(argc, argv);
@@ -650,5 +673,7 @@ int main(int argc, char* argv[])
 	UnitTestWDLListQuickSortStr(argc, argv);
 	UnitTestWHashMap(argc, argv);
 	UnitTestWBST(argc, argv);
+#endif
+	UnitTestWRBT(argc, argv);
 	return 0;
 }
