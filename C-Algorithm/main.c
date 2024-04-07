@@ -588,6 +588,8 @@ int UnitTestWBST(int argc, char* argv[])
 	struct WBSTree* bst;
 
 	bst = WCreateBST((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
+	printf("BST Max: %s\n", (char*)WMaximumBST(bst));
+	printf("BST Min: %s\n", (char*)WMinimumBST(bst));
 	WInsertKeyBST(bst, "XYZ1");
 	WInsertKeyBST(bst, "XYZ2");
 	WInsertKeyBST(bst, "XYZ3");
@@ -611,6 +613,8 @@ int UnitTestWBST(int argc, char* argv[])
 	WDeleteBST(bst);
 
 	bst = WCreateBST((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
+	printf("BST Max: %s\n", (char*)WMaximumBST(bst));
+	printf("BST Min: %s\n", (char*)WMinimumBST(bst));
 	WInsertKeyBST(bst, "XYZ6");
 	WInsertKeyBST(bst, "XYZ5");
 	WInsertKeyBST(bst, "XYZ7");
@@ -641,6 +645,8 @@ int UnitTestWRBT(int argc, char* argv[])
 
 	rbt = WCreateRBT((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
 	printf("RBT Find: %s\n", (char*)WSearchKeyRBT(rbt, "XYZ2"));
+	printf("RBT Max: %s\n", (char*)WMaximumRBT(rbt));
+	printf("RBT Min: %s\n", (char*)WMinimumRBT(rbt));
 	WInsertKeyRBT(rbt, "XYZ1");
 	WInsertKeyRBT(rbt, "XYZ2");
 	WInsertKeyRBT(rbt, "XYZ3");
@@ -650,6 +656,8 @@ int UnitTestWRBT(int argc, char* argv[])
 	WInsertKeyRBT(rbt, "XYZ7");
 	WInsertKeyRBT(rbt, "XYZ8");
 	WInsertKeyRBT(rbt, "XYZ9");
+	printf("RBT Max: %s\n", (char*)WMaximumRBT(rbt));
+	printf("RBT Min: %s\n", (char*)WMinimumRBT(rbt));
 	printf("RBT Find: %s\n", (char*)WSearchKeyRBT(rbt, "XYZ2"));
 	WIteratorRBT(rbt, (void (*)(void*))iterator1);
 	putchar('\n');

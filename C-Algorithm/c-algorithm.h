@@ -1,7 +1,10 @@
 #ifndef C_ALGORITHM_H
 #define C_ALGORITHM_H
 
-/* C algorithms on Lists, Sets & Graphs */
+/*
+	 C algorithms on Lists, Sets & Graphs.
+	 All APIs, ADTs & Algos are pointer based with generic types ie. 'void*'
+*/
 
 #define ABS(x)	((x) < 0)?(-(x)):(x)
 #define MIN(a, b)	((a) < (b) ? (a) : (b))

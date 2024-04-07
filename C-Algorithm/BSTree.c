@@ -58,7 +58,7 @@ void* WSearchKeyBST(struct WBSTree* bst, void* key)
 
 static struct BSTNode* MinimumOfNode(struct BSTNode* x)
 {
-	while (x->left != NULL)
+	while (x && x->left != NULL)
 	{
 		x = x->left;
 	}
@@ -73,7 +73,7 @@ void* WMinimumBST(struct WBSTree* bst)
 
 static struct BSTNode* MaximumOfNode(struct BSTNode* x)
 {
-	while (x->right != NULL)
+	while (x && x->right != NULL)
 	{
 		x = x->right;
 	}

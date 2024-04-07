@@ -19,7 +19,7 @@ struct WRBTree* WCreateRBT(int (*CMP)(const void* x, const void* y),
 		return NULL;
 	}
 	rbt->nil->color = WRBCLR_BLACK; /* T.Nil is not included in the node count of T */
-	rbt->tree = rbt->nil; /* Choosing to initialize empty tree with T.Nil */
+	rbt->tree = rbt->nil; /* Choosing to initialize empty tree with T.Nil instead of NULL */
 	return rbt;
 }
 
@@ -211,4 +211,34 @@ void* WSearchKeyRBT(struct WRBTree* rbt, void* key)
 	struct RBTNode* x;
 	x = SearchKeyNode(rbt, key);
 	return (x != rbt->nil) ? x->data : NULL;
+}
+
+static struct RBTNode* MinimumOfNode(struct WRBTree* rbt, struct RBTNode* x)
+{
+	while (x != rbt->nil && x->left != rbt->nil)
+	{
+		x = x->left;
+	}
+	return x;
+}
+
+void* WMinimumRBT(struct WRBTree* rbt)
+{
+	struct RBTNode* x;
+	return ((x = MinimumOfNode(rbt, rbt->tree)) != rbt->nil) ? x->data : NULL;
+}
+
+static struct RBTNode* MaximumOfNode(struct WRBTree* rbt, struct RBTNode* x)
+{
+	while (x != rbt->nil && x->right != rbt->nil)
+	{
+		x = x->right;
+	}
+	return x;
+}
+
+void* WMaximumRBT(struct WRBTree* rbt)
+{
+	struct RBTNode* x;
+	return ((x = MaximumOfNode(rbt, rbt->tree)) != rbt->nil) ? x->data : NULL;
 }
