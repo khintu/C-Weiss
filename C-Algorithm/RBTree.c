@@ -332,7 +332,7 @@ int WDeleteKeyRBT(struct WRBTree* rbt, void* key)
 	struct RBTNode* z, *y, *x;
 	int y_original_color;
 
-	if ((z = WSearchKeyRBT(rbt, key)) == NULL)
+	if ((z = SearchKeyNode(rbt, key)) == NULL)
 		return -2; /* Key not found */
 
 	y = z;
