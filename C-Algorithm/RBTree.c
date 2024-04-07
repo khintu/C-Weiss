@@ -242,3 +242,133 @@ void* WMaximumRBT(struct WRBTree* rbt)
 	struct RBTNode* x;
 	return ((x = MaximumOfNode(rbt, rbt->tree)) != rbt->nil) ? x->data : NULL;
 }
+
+static void TransplantSubtrees(struct WRBTree* rbt, struct RBTNode* u, struct RBTNode* v)
+{
+	if (u->parent == rbt->nil)
+		rbt->tree = v;
+	else if (u == u->parent->left)
+		u->parent->left = v;
+	else
+		u->parent->right = v;
+	v->parent = u->parent;
+	return;
+}
+
+static void DeleteKeyFixup(struct WRBTree* rbt, struct RBTNode* x)
+{
+	struct RBTNode* w;
+	while (x != rbt->tree && x->color == WRBCLR_BLACK)
+	{
+		if (x == x->parent->left)
+		{
+			w = x->parent->right;
+			if (w->color == WRBCLR_RED)
+			{
+				w->color = WRBCLR_BLACK;
+				x->parent->color = WRBCLR_RED;
+				LeftRotateNode(rbt, x->parent);
+				w = x->parent->right;
+			}
+			if (w->left->color == WRBCLR_BLACK && w->right->color == WRBCLR_BLACK)
+			{
+				w->color = WRBCLR_RED;
+				x = x->parent;
+			}
+			else
+			{
+				if (w->right->color == WRBCLR_BLACK)
+				{
+					w->left->color = WRBCLR_BLACK;
+					w->color = WRBCLR_RED;
+					RightRotateNode(rbt, w);
+					w = x->parent->right;
+				}
+				w->color = x->parent->color;
+				x->parent->color = WRBCLR_BLACK;
+				w->right->color = WRBCLR_BLACK;
+				LeftRotateNode(rbt, x->parent);
+				x = rbt->tree;
+			}
+		}
+		else // exchange right with left including rotations
+		{
+			w = x->parent->left;
+			if (w->color == WRBCLR_RED)
+			{
+				w->color = WRBCLR_BLACK;
+				x->parent->color = WRBCLR_RED;
+				RightRotateNode(rbt, x->parent);
+				w = x->parent->left;
+			}
+			if (w->right->color == WRBCLR_BLACK && w->left->color == WRBCLR_BLACK)
+			{
+				w->color = WRBCLR_RED;
+				x = x->parent;
+			}
+			else
+			{
+				if (w->left->color == WRBCLR_BLACK)
+				{
+					w->right->color = WRBCLR_BLACK;
+					w->color = WRBCLR_RED;
+					LeftRotateNode(rbt, w);
+					w = x->parent->left;
+				}
+				w->color = x->parent->color;
+				x->parent->color = WRBCLR_BLACK;
+				w->left->color = WRBCLR_BLACK;
+				RightRotateNode(rbt, x->parent);
+				x = rbt->tree;
+			}
+		}
+	}
+	x->color = WRBCLR_BLACK;
+	return;
+}
+
+int WDeleteKeyRBT(struct WRBTree* rbt, void* key)
+{
+	struct RBTNode* z, *y, *x;
+	int y_original_color;
+
+	if ((z = WSearchKeyRBT(rbt, key)) == NULL)
+		return -2; /* Key not found */
+
+	y = z;
+	y_original_color = y->color;
+	if (z->left == rbt->nil)
+	{
+		x = z->right;
+		TransplantSubtrees(rbt, z, z->right);
+	}
+	else if (z->right == rbt->nil)
+	{
+		x = z->left;
+		TransplantSubtrees(rbt, z, z->left);
+	}
+	else
+	{
+		y = MinimumOfNode(rbt, z->right);
+		y_original_color = y->color;
+		x = y->right;
+		if (y->parent == z)
+			x->parent = y;
+		else
+		{
+			TransplantSubtrees(rbt, y, y->right);
+			y->right = z->right;
+			y->right->parent = y;
+		}
+		TransplantSubtrees(rbt, z, y);
+		y->left = z->left;
+		y->left->parent = y;
+		y->color = z->color;
+	}
+	if (y_original_color == WRBCLR_BLACK)
+		DeleteKeyFixup(rbt, x);
+	rbt->DTOR(z->data);
+	rbt->count--;
+	free(z);
+	return 0;
+}
