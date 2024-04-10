@@ -648,7 +648,6 @@ int UnitTestWRBT(int argc, char* argv[])
 	printf("RBT Max: %s\n", (char*)WMaximumRBT(rbt));
 	printf("RBT Min: %s\n", (char*)WMinimumRBT(rbt));
 	WInsertKeyRBT(rbt, "XYZ1");
-#if 0
 	WInsertKeyRBT(rbt, "XYZ2");
 	WInsertKeyRBT(rbt, "XYZ3");
 	WInsertKeyRBT(rbt, "XYZ4");
@@ -657,9 +656,15 @@ int UnitTestWRBT(int argc, char* argv[])
 	WInsertKeyRBT(rbt, "XYZ7");
 	WInsertKeyRBT(rbt, "XYZ8");
 	WInsertKeyRBT(rbt, "XYZ9");
-#endif
-	printf("RBT Find: %s\n", (char*)WSearchKeyRBT(rbt, "XYZ1"));
+	WDeleteKeyRBT(rbt, "XYZ5");
+	WDeleteKeyRBT(rbt, "XYZ4");
 	WDeleteKeyRBT(rbt, "XYZ1");
+	WDeleteKeyRBT(rbt, "XYZ2");
+	WDeleteKeyRBT(rbt, "XYZ3");
+	WDeleteKeyRBT(rbt, "XYZ6");
+	WDeleteKeyRBT(rbt, "XYZ7");
+	WDeleteKeyRBT(rbt, "XYZ8");
+	WDeleteKeyRBT(rbt, "XYZ9");
 	printf("RBT Max: %s\n", (char*)WMaximumRBT(rbt));
 	printf("RBT Min: %s\n", (char*)WMinimumRBT(rbt));
 	printf("RBT Find: %s\n", (char*)WSearchKeyRBT(rbt, "XYZ2"));
@@ -671,7 +676,6 @@ int UnitTestWRBT(int argc, char* argv[])
 
 int main(int argc, char* argv[])
 {
-#if 0
 	printf("Hello Weiss!!\n");
 	UnitTestWLList(argc, argv);
 	UnitTestWDLList(argc, argv);
@@ -685,7 +689,6 @@ int main(int argc, char* argv[])
 	UnitTestWDLListQuickSortStr(argc, argv);
 	UnitTestWHashMap(argc, argv);
 	UnitTestWBST(argc, argv);
-#endif
 	UnitTestWRBT(argc, argv);
 	return 0;
 }
