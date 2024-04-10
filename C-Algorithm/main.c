@@ -7,6 +7,7 @@
 #elif __LINUX__
 #include <unistd.h>
 #endif
+#include <time.h>
 #include <c-algorithm.h>
 
 struct UnitRec
@@ -671,7 +672,8 @@ int UnitTestWRBT(int argc, char* argv[])
 
 int main(int argc, char* argv[])
 {
-#if 0
+	clock_t t1, t2;
+	t1 = clock();
 	printf("Hello Weiss!!\n");
 	UnitTestWLList(argc, argv);
 	UnitTestWDLList(argc, argv);
@@ -685,7 +687,9 @@ int main(int argc, char* argv[])
 	UnitTestWDLListQuickSortStr(argc, argv);
 	UnitTestWHashMap(argc, argv);
 	UnitTestWBST(argc, argv);
-#endif
 	UnitTestWRBT(argc, argv);
+	// ---Runtime Analysis ---
+	t2 = clock();
+	printf("Runtime = %ld - %ld = %ld\n", t2, t1, t2 - t1);
 	return 0;
 }

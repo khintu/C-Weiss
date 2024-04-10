@@ -1,6 +1,6 @@
 TARGET=algo
 TARGET_SO=algo.so
-LIBS=-L. -l:$(TARGET_SO) -lm
+LIBS=-L. -l:$(TARGET_SO)
 CC=gcc
 CFLAGS=-g -I. -fsigned-char -fPIC -std=c17 -D__LINUX__
 LFLAGS=-Wall

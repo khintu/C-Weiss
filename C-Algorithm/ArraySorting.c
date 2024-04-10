@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <alloca.h>
 #include <c-algorithm.h>
 
 /* When we enter this func we are sure that it is 
@@ -10,11 +11,10 @@ void WMergeStepInt(int v[], int i, int m, int j)
 
 	nL = m - i + 1;
 	nR = j - m; /* j - (m+1) + 1 */
-	if ((L = (int*)malloc(sizeof(int) * nL)) == NULL)
+	if ((L = (int*)alloca(sizeof(int) * nL)) == NULL)
 		return;
-	if ((R = (int*)malloc(sizeof(int) * nR)) == NULL)
+	if ((R = (int*)alloca(sizeof(int) * nR)) == NULL)
 	{
-		free(L);
 		return;
 	}
 
@@ -40,8 +40,6 @@ void WMergeStepInt(int v[], int i, int m, int j)
 				v[I] = L[l++];
 		}
 	}
-	free(L);
-	free(R);
 	return;
 }
 
@@ -80,11 +78,10 @@ void WMergeStep(void* v[], int i, int m, int j, int (*CMP)(const void* x, const 
 
 	nL = m - i + 1;
 	nR = j - m; /* j - (m+1) + 1 */
-	if ((L = (void**)malloc(sizeof(void*) * nL)) == NULL)
+	if ((L = (void**)alloca(sizeof(void*) * nL)) == NULL)
 		return;
-	if ((R = (void**)malloc(sizeof(void*) * nR)) == NULL)
+	if ((R = (void**)alloca(sizeof(void*) * nR)) == NULL)
 	{
-		free(L);
 		return;
 	}
 
@@ -110,8 +107,6 @@ void WMergeStep(void* v[], int i, int m, int j, int (*CMP)(const void* x, const 
 				v[I] = L[l++];
 		}
 	}
-	free(L);
-	free(R);
 	return;
 }
 
