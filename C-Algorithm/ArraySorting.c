@@ -14,9 +14,7 @@ void WMergeStepInt(int v[], int i, int m, int j)
 	if ((L = (int*)alloca(sizeof(int) * nL)) == NULL)
 		return;
 	if ((R = (int*)alloca(sizeof(int) * nR)) == NULL)
-	{
 		return;
-	}
 
 	for (l = 0; l < nL; ++l)
 		L[l] = v[i + l];
@@ -81,9 +79,7 @@ void WMergeStep(void* v[], int i, int m, int j, int (*CMP)(const void* x, const 
 	if ((L = (void**)alloca(sizeof(void*) * nL)) == NULL)
 		return;
 	if ((R = (void**)alloca(sizeof(void*) * nR)) == NULL)
-	{
 		return;
-	}
 
 	for (l = 0; l < nL; ++l)
 		L[l] = v[i + l];
