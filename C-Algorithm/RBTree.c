@@ -327,13 +327,10 @@ static void DeleteKeyFixup(struct WRBTree* rbt, struct RBTNode* x)
 	return;
 }
 
-int WDeleteKeyRBT(struct WRBTree* rbt, void* key)
+static void DeleteNode(struct WRBTree* rbt, struct RBTNode* z)
 {
-	struct RBTNode* z, *y, *x;
+	struct RBTNode * y, * x;
 	int y_original_color;
-
-	if ((z = SearchKeyNode(rbt, key)) == NULL)
-		return -2; /* Key not found */
 
 	y = z;
 	y_original_color = y->color;
@@ -370,5 +367,16 @@ int WDeleteKeyRBT(struct WRBTree* rbt, void* key)
 	rbt->DTOR(z->data);
 	rbt->count--;
 	free(z);
+	return;
+}
+
+int WDeleteKeyRBT(struct WRBTree* rbt, void* key)
+{
+	struct RBTNode* z;
+
+	if ((z = SearchKeyNode(rbt, key)) == NULL)
+		return -2; /* Key not found */
+
+	DeleteNode(rbt, z);
 	return 0;
 }

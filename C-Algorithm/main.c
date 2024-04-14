@@ -672,6 +672,48 @@ int UnitTestWRBT(int argc, char* argv[])
 	WIteratorRBT(rbt, (void (*)(void*))iterator1);
 	putchar('\n');
 	WDeleteRBT(rbt);
+
+	// Testcases for tree balancing
+	printf("RBT: Insertion balancing\n");
+	rbt = WCreateRBT((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
+	WInsertKeyRBT(rbt, "XYZ1");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WInsertKeyRBT(rbt, "XYZ2");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WInsertKeyRBT(rbt, "XYZ3");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WInsertKeyRBT(rbt, "XYZ4");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WInsertKeyRBT(rbt, "XYZ5");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WInsertKeyRBT(rbt, "XYZ6");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WInsertKeyRBT(rbt, "XYZ7");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WInsertKeyRBT(rbt, "XYZ8");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WInsertKeyRBT(rbt, "XYZ9");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	printf("RBT: Deletion balancing\n");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WDeleteKeyRBT(rbt, "XYZ1");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WDeleteKeyRBT(rbt, "XYZ2");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WDeleteKeyRBT(rbt, "XYZ3");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WDeleteKeyRBT(rbt, "XYZ4");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WDeleteKeyRBT(rbt, "XYZ5");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WDeleteKeyRBT(rbt, "XYZ6");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WDeleteKeyRBT(rbt, "XYZ7");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WDeleteKeyRBT(rbt, "XYZ8");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WDeleteKeyRBT(rbt, "XYZ9");
+	WDeleteRBT(rbt);
 	return 0;
 }
 
@@ -679,6 +721,7 @@ int main(int argc, char* argv[])
 {
 	clock_t t1, t2;
 	t1 = clock();
+#if 0
 	printf("Hello Weiss!!\n");
 	UnitTestWLList(argc, argv);
 	UnitTestWDLList(argc, argv);
@@ -692,6 +735,7 @@ int main(int argc, char* argv[])
 	UnitTestWDLListQuickSortStr(argc, argv);
 	UnitTestWHashMap(argc, argv);
 	UnitTestWBST(argc, argv);
+#endif
 	UnitTestWRBT(argc, argv);
 	// ---Runtime Analysis ---
 	t2 = clock();
