@@ -720,7 +720,9 @@ int UnitTestWRBT(int argc, char* argv[])
 
 int UnitTestWSet(int argc, char* argv[])
 {
-	struct WSet* a, * b, * u;
+	struct WSet* a, * b, * c;
+
+	printf("Set: Union, Intersection & Minus operations\n");
 	a = WCreateSet((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
 	b = WCreateSet((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
 	WInsertKeySet(a, "A");
@@ -730,14 +732,20 @@ int UnitTestWSet(int argc, char* argv[])
 	WInsertKeySet(b, "D");
 	WInsertKeySet(b, "E");
 	WInsertKeySet(b, "F");
-	WUnionOfSet(a, b, &u);
-	WDeleteSet(u);
-	WIntersectionOfSet(a, b, &u);
-	WIteratorSet(u, (void (*)(void*))iterator1);
+	WUnionOfSet(a, b, &c);
+	WIteratorSet(c, (void (*)(void*))iterator1);
+	putchar('\n');
+	WDeleteSet(c);
+	WIntersectionOfSet(a, b, &c);
+	WIteratorSet(c, (void (*)(void*))iterator1);
+	putchar('\n');
+	WDeleteSet(c);
+	WMinusOfSet(a, b, &c);
+	WIteratorSet(c, (void (*)(void*))iterator1);
 	putchar('\n');
 	WDeleteSet(a);
 	WDeleteSet(b);
-	WDeleteSet(u);
+	WDeleteSet(c);
 	return 0;
 }
 
@@ -745,7 +753,6 @@ int main(int argc, char* argv[])
 {
 	clock_t t1, t2;
 	t1 = clock();
-#if 0
 	printf("Hello Weiss!!\n");
 	UnitTestWLList(argc, argv);
 	UnitTestWDLList(argc, argv);
@@ -760,7 +767,6 @@ int main(int argc, char* argv[])
 	UnitTestWHashMap(argc, argv);
 	UnitTestWBST(argc, argv);
 	UnitTestWRBT(argc, argv);
-#endif
 	UnitTestWSet(argc, argv);
 	// ---Runtime Analysis ---
 	t2 = clock();

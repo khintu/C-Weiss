@@ -79,7 +79,7 @@ static int IterateOnTreeI(struct WRBTree* s, struct WRBTree* t, struct RBTNode* 
 	{
 		if ((c = IterateOnTreeI(s, t, x->left, i)) != 0)
 			return c;
-		/* Skip keys that are already in u, keeping set keys unique */
+		/* Skip keys that are already in i, keeping set keys unique */
 		if (WSearchKeyRBT(i, x->data) == NULL)
 		{
 			if (WSearchKeyRBT(t, x->data) != NULL)
@@ -105,7 +105,38 @@ int WIntersectionOfSet(struct WSet* s, struct WSet* t, struct WSet** i)
 	return 0;
 }
 
-int WMinusOfSet(struct WSet* s, struct WSet* t, struct WSet** m);
+static int IterateOnTreeM(struct WRBTree* s, struct WRBTree* t, struct RBTNode* x, struct WRBTree* m)
+{
+	int c;
+	if (x != s->nil)
+	{
+		if ((c = IterateOnTreeM(s, t, x->left, m)) != 0)
+			return c;
+		/* Skip keys that are already in m, keeping set keys unique */
+		if (WSearchKeyRBT(m, x->data) == NULL)
+		{
+			if (WSearchKeyRBT(t, x->data) == NULL)
+			{
+				if ((c = WInsertKeyRBT(m, x->data)) != 0)
+					return c;
+			}
+		}
+		if ((c = IterateOnTreeM(s, t, x->right, m)) != 0)
+			return c;
+	}
+	return 0;
+}
+
+int WMinusOfSet(struct WSet* s, struct WSet* t, struct WSet** m)
+{
+	int c;
+	if ((*m = WCreateSet(s->rbt->CMP, s->rbt->CTOR, s->rbt->DTOR)) == NULL)
+		return -1;
+
+	if ((c = IterateOnTreeM(s->rbt, t->rbt, s->rbt->tree, (*m)->rbt)) != 0)
+		return c;
+	return 0;
+}
 
 void  WIteratorSet(struct WSet* set, void (*ITR)(void*))
 {
