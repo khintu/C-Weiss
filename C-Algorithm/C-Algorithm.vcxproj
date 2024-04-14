@@ -141,6 +141,7 @@
     <ClCompile Include="main.c" />
     <ClCompile Include="CLList.c" />
     <ClCompile Include="RBTree.c" />
+    <ClCompile Include="Set.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="c-algorithm.h" />

@@ -718,6 +718,26 @@ int UnitTestWRBT(int argc, char* argv[])
 	return 0;
 }
 
+int UnitTestWSet(int argc, char* argv[])
+{
+	struct WSet* a, * b, * u;
+	a = WCreateSet((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
+	b = WCreateSet((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
+	WInsertKeySet(a, "A");
+	WInsertKeySet(a, "B");
+	WInsertKeySet(a, "C");
+	WInsertKeySet(b, "D");
+	WInsertKeySet(b, "E");
+	WInsertKeySet(b, "F");
+	WUnionOfSet(a, b, &u);
+	WIteratorSet(u, (void (*)(void*))iterator1);
+	putchar('\n');
+	WDeleteSet(a);
+	WDeleteSet(b);
+	WDeleteSet(u);
+	return 0;
+}
+
 int main(int argc, char* argv[])
 {
 	clock_t t1, t2;
@@ -736,8 +756,9 @@ int main(int argc, char* argv[])
 	UnitTestWDLListQuickSortStr(argc, argv);
 	UnitTestWHashMap(argc, argv);
 	UnitTestWBST(argc, argv);
-#endif
 	UnitTestWRBT(argc, argv);
+#endif
+	UnitTestWSet(argc, argv);
 	// ---Runtime Analysis ---
 	t2 = clock();
 	printf("Runtime = %ld - %ld = %ld\n", t2, t1, t2 - t1);
