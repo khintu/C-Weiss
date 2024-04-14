@@ -648,6 +648,7 @@ int UnitTestWRBT(int argc, char* argv[])
 	printf("RBT Find: %s\n", (char*)WSearchKeyRBT(rbt, "XYZ2"));
 	printf("RBT Max: %s\n", (char*)WMaximumRBT(rbt));
 	printf("RBT Min: %s\n", (char*)WMinimumRBT(rbt));
+	WDeleteKeyRBT(rbt, "XYZ9"); // testcase for key not found
 	WInsertKeyRBT(rbt, "XYZ1");
 	WInsertKeyRBT(rbt, "XYZ2");
 	WInsertKeyRBT(rbt, "XYZ3");
