@@ -726,10 +726,13 @@ int UnitTestWSet(int argc, char* argv[])
 	WInsertKeySet(a, "A");
 	WInsertKeySet(a, "B");
 	WInsertKeySet(a, "C");
+	WInsertKeySet(a, "D");
 	WInsertKeySet(b, "D");
 	WInsertKeySet(b, "E");
 	WInsertKeySet(b, "F");
 	WUnionOfSet(a, b, &u);
+	WDeleteSet(u);
+	WIntersectionOfSet(a, b, &u);
 	WIteratorSet(u, (void (*)(void*))iterator1);
 	putchar('\n');
 	WDeleteSet(a);

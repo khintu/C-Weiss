@@ -38,12 +38,12 @@ int WDeleteKeySet(struct WSet* set, void* key)
 	return WDeleteKeyRBT(set->rbt, key);
 }
 
-static int IterateOnTree(struct WRBTree* s, struct RBTNode* x, struct WRBTree* u)
+static int IterateOnTreeU(struct WRBTree* s, struct RBTNode* x, struct WRBTree* u)
 {
 	int c;
 	if (x != s->nil)
 	{
-		if ((c = IterateOnTree(s, x->left, u)) != 0)
+		if ((c = IterateOnTreeU(s, x->left, u)) != 0)
 			return c;
 		/* Skip keys that are already in u, keeping set keys unique */
 		if (WSearchKeyRBT(u, x->data) == NULL)
@@ -51,31 +51,60 @@ static int IterateOnTree(struct WRBTree* s, struct RBTNode* x, struct WRBTree* u
 			if ((c = WInsertKeyRBT(u, x->data)) != 0)
 				return c;
 		}
-		if ((c = IterateOnTree(s, x->right, u)) != 0)
+		if ((c = IterateOnTreeU(s, x->right, u)) != 0)
 			return c;
 	}
 	return 0;
 }
 
-static int UnionOfSets(struct WRBTree* s, struct WRBTree* t, struct WRBTree* u)
+int WUnionOfSet(struct WSet* s, struct WSet* t, struct WSet** u)
 {
 	int c;
-	if ((c = IterateOnTree(s, s->tree, u)) != 0)
+
+	if ((*u = WCreateSet(s->rbt->CMP, s->rbt->CTOR, s->rbt->DTOR)) == NULL)
+		return -1;
+
+	if ((c = IterateOnTreeU(s->rbt, s->rbt->tree, (*u)->rbt)) != 0)
 		return c;
-	if ((c = IterateOnTree(t, t->tree, u)) != 0)
+	if ((c = IterateOnTreeU(t->rbt, t->rbt->tree, (*u)->rbt)) != 0)
+		return c;
+
+	return 0;
+}
+
+static int IterateOnTreeI(struct WRBTree* s, struct WRBTree* t, struct RBTNode* x, struct WRBTree* i)
+{
+	int c;
+	if (x != s->nil)
+	{
+		if ((c = IterateOnTreeI(s, t, x->left, i)) != 0)
+			return c;
+		/* Skip keys that are already in u, keeping set keys unique */
+		if (WSearchKeyRBT(i, x->data) == NULL)
+		{
+			if (WSearchKeyRBT(t, x->data) != NULL)
+			{
+				if ((c = WInsertKeyRBT(i, x->data)) != 0)
+					return c;
+			}
+		}
+		if ((c = IterateOnTreeI(s, t, x->right, i)) != 0)
+			return c;
+	}
+	return 0;
+}
+
+int WIntersectionOfSet(struct WSet* s, struct WSet* t, struct WSet** i)
+{
+	int c;
+	if ((*i = WCreateSet(s->rbt->CMP, s->rbt->CTOR, s->rbt->DTOR)) == NULL)
+		return -1;
+
+	if ((c = IterateOnTreeI(s->rbt, t->rbt, s->rbt->tree, (*i)->rbt)) != 0)
 		return c;
 	return 0;
 }
 
-int WUnionOfSet(struct WSet* s, struct WSet* t, struct WSet** u)
-{
-	if ((*u = WCreateSet(s->rbt->CMP, s->rbt->CTOR, s->rbt->DTOR)) == NULL)
-		return -1;
-
-	return UnionOfSets(s->rbt, t->rbt, (*u)->rbt);
-}
-
-int WIntersectionOfSet(struct WSet* s, struct WSet* t, struct WSet** i);
 int WMinusOfSet(struct WSet* s, struct WSet* t, struct WSet** m);
 
 void  WIteratorSet(struct WSet* set, void (*ITR)(void*))
