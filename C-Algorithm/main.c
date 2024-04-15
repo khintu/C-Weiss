@@ -648,6 +648,7 @@ int UnitTestWRBT(int argc, char* argv[])
 	printf("RBT Find: %s\n", (char*)WSearchKeyRBT(rbt, "XYZ2"));
 	printf("RBT Max: %s\n", (char*)WMaximumRBT(rbt));
 	printf("RBT Min: %s\n", (char*)WMinimumRBT(rbt));
+	WDeleteKeyRBT(rbt, "XYZ9"); // testcase for key not found
 	WInsertKeyRBT(rbt, "XYZ1");
 	WInsertKeyRBT(rbt, "XYZ2");
 	WInsertKeyRBT(rbt, "XYZ3");
@@ -672,6 +673,79 @@ int UnitTestWRBT(int argc, char* argv[])
 	WIteratorRBT(rbt, (void (*)(void*))iterator1);
 	putchar('\n');
 	WDeleteRBT(rbt);
+
+	// Testcases for tree balancing
+	printf("RBT: Insertion balancing\n");
+	rbt = WCreateRBT((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
+	WInsertKeyRBT(rbt, "XYZ1");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WInsertKeyRBT(rbt, "XYZ2");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WInsertKeyRBT(rbt, "XYZ3");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WInsertKeyRBT(rbt, "XYZ4");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WInsertKeyRBT(rbt, "XYZ5");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WInsertKeyRBT(rbt, "XYZ6");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WInsertKeyRBT(rbt, "XYZ7");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WInsertKeyRBT(rbt, "XYZ8");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WInsertKeyRBT(rbt, "XYZ9");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	printf("RBT: Deletion balancing\n");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WDeleteKeyRBT(rbt, "XYZ1");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WDeleteKeyRBT(rbt, "XYZ2");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WDeleteKeyRBT(rbt, "XYZ3");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WDeleteKeyRBT(rbt, "XYZ4");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WDeleteKeyRBT(rbt, "XYZ5");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WDeleteKeyRBT(rbt, "XYZ6");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WDeleteKeyRBT(rbt, "XYZ7");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WDeleteKeyRBT(rbt, "XYZ8");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WDeleteKeyRBT(rbt, "XYZ9");
+	WDeleteRBT(rbt);
+	return 0;
+}
+
+int UnitTestWSet(int argc, char* argv[])
+{
+	struct WSet* a, * b, * c;
+
+	printf("Set: Union, Intersection & Minus operations\n");
+	a = WCreateSet((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
+	b = WCreateSet((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
+	WInsertKeySet(a, "A");
+	WInsertKeySet(a, "B");
+	WInsertKeySet(a, "C");
+	WInsertKeySet(a, "D");
+	WInsertKeySet(b, "D");
+	WInsertKeySet(b, "E");
+	WInsertKeySet(b, "F");
+	WUnionOfSet(a, b, &c);
+	WIteratorSet(c, (void (*)(void*))iterator1);
+	putchar('\n');
+	WDeleteSet(c);
+	WIntersectionOfSet(a, b, &c);
+	WIteratorSet(c, (void (*)(void*))iterator1);
+	putchar('\n');
+	WDeleteSet(c);
+	WMinusOfSet(a, b, &c);
+	WIteratorSet(c, (void (*)(void*))iterator1);
+	putchar('\n');
+	WDeleteSet(a);
+	WDeleteSet(b);
+	WDeleteSet(c);
 	return 0;
 }
 
@@ -693,6 +767,7 @@ int main(int argc, char* argv[])
 	UnitTestWHashMap(argc, argv);
 	UnitTestWBST(argc, argv);
 	UnitTestWRBT(argc, argv);
+	UnitTestWSet(argc, argv);
 	// ---Runtime Analysis ---
 	t2 = clock();
 	printf("Runtime = %ld - %ld = %ld\n", t2, t1, t2 - t1);

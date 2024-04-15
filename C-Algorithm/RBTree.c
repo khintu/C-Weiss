@@ -88,7 +88,7 @@ static void RightRotateNode(struct WRBTree* rbt, struct RBTNode* y)
 	return;
 }
 
-static void InsertKeyFixup(struct WRBTree* rbt, struct RBTNode* z)
+static void InsertNodeFixup(struct WRBTree* rbt, struct RBTNode* z)
 {
 	struct RBTNode* y; /* z's uncle */
 
@@ -143,19 +143,15 @@ static void InsertKeyFixup(struct WRBTree* rbt, struct RBTNode* z)
 	return;
 }
 
-int WInsertKeyRBT(struct WRBTree* rbt, void* key)
+static void InsertNode(struct WRBTree* rbt, struct RBTNode* z)
 {
-	struct RBTNode* y, *x, *z;
-
-	if ((z = (struct RBTNode*)calloc(1, sizeof(struct RBTNode))) == NULL)
-		return -1;
-	z->data = (*rbt->CTOR)(key);
+	struct RBTNode* y, * x;
 	y = rbt->nil;
 	x = rbt->tree;
 	while (x != rbt->nil)
 	{
 		y = x;
-		if ((*rbt->CMP)(key, x->data) < 0)
+		if ((*rbt->CMP)(z->data, x->data) < 0)
 			x = x->left;
 		else
 			x = x->right;
@@ -163,14 +159,25 @@ int WInsertKeyRBT(struct WRBTree* rbt, void* key)
 	z->parent = y;
 	if (y == rbt->nil)
 		rbt->tree = z; /* Empty tree case */
-	else if ((*rbt->CMP)(key, y->data) < 0)
+	else if ((*rbt->CMP)(z->data, y->data) < 0)
 		y->left = z;
 	else
 		y->right = z;
 	z->left = rbt->nil;
 	z->right = rbt->nil;
 	z->color = WRBCLR_RED;
-	InsertKeyFixup(rbt, z);
+	InsertNodeFixup(rbt, z);
+	return;
+}
+
+int WInsertKeyRBT(struct WRBTree* rbt, void* key)
+{
+	struct RBTNode *z;
+
+	if ((z = (struct RBTNode*)calloc(1, sizeof(struct RBTNode))) == NULL)
+		return -1;
+	z->data = (*rbt->CTOR)(key);
+	InsertNode(rbt, z);
 	rbt->count++;
 	return 0;
 }
@@ -255,7 +262,7 @@ static void TransplantSubtrees(struct WRBTree* rbt, struct RBTNode* u, struct RB
 	return;
 }
 
-static void DeleteKeyFixup(struct WRBTree* rbt, struct RBTNode* x)
+static void DeleteNodeFixup(struct WRBTree* rbt, struct RBTNode* x)
 {
 	struct RBTNode* w;
 	while (x != rbt->tree && x->color == WRBCLR_BLACK)
@@ -327,13 +334,10 @@ static void DeleteKeyFixup(struct WRBTree* rbt, struct RBTNode* x)
 	return;
 }
 
-int WDeleteKeyRBT(struct WRBTree* rbt, void* key)
+static void DeleteNode(struct WRBTree* rbt, struct RBTNode* z)
 {
-	struct RBTNode* z, *y, *x;
+	struct RBTNode * y, * x;
 	int y_original_color;
-
-	if ((z = SearchKeyNode(rbt, key)) == NULL)
-		return -2; /* Key not found */
 
 	y = z;
 	y_original_color = y->color;
@@ -366,9 +370,20 @@ int WDeleteKeyRBT(struct WRBTree* rbt, void* key)
 		y->color = z->color;
 	}
 	if (y_original_color == WRBCLR_BLACK)
-		DeleteKeyFixup(rbt, x);
+		DeleteNodeFixup(rbt, x);
 	rbt->DTOR(z->data);
 	rbt->count--;
 	free(z);
+	return;
+}
+
+int WDeleteKeyRBT(struct WRBTree* rbt, void* key)
+{
+	struct RBTNode* z;
+
+	if ((z = SearchKeyNode(rbt, key)) == rbt->nil)
+		return -2; /* Key not found */
+
+	DeleteNode(rbt, z);
 	return 0;
 }

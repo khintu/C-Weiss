@@ -23,7 +23,8 @@ enum {
 	WESUCCESS = 0,
 	WENOMEMORY = -1,
 	WEKEYNOTFND = -2,
-	WEINCKEYLESS = -3
+	WEINCKEYLESS = -3,
+	WEUNIQUEKEY = -4 /* Only unique keys allowed, key already exists */
 };
 
 /* ---Linked List ADT--- */
@@ -293,6 +294,25 @@ void* WSearchKeyRBT(struct WRBTree* rbt, void* key);
 int WInsertKeyRBT(struct WRBTree* rbt, void* key);
 int WDeleteKeyRBT(struct WRBTree* rbt, void* key);
 void WIteratorRBT(struct WRBTree* rbt, void (*ITR)(void*));
+
+/* ---Sets based on Red-Black Tree ADT--- */
+
+struct WSet {
+	struct WRBTree* rbt; /* set is unique key unordered, other ADTs are multisets */
+};
+
+struct WSet* WCreateSet(int (*CMP)(const void* x, const void* y),
+												void* (*CTOR)(void* x),
+												void (*DTOR)(void* x));
+void WDeleteSet(struct WSet* set);
+int WInsertKeySet(struct WSet* set, void* key);
+int WDeleteKeySet(struct WSet* set, void* key);
+
+/* Both sets s, t must be homogeneous, with same types */
+int WUnionOfSet(struct WSet* s, struct WSet* t, struct WSet** u);
+int WIntersectionOfSet(struct WSet* s, struct WSet* t, struct WSet** i);
+int WMinusOfSet(struct WSet* s, struct WSet* t, struct WSet** m);
+void WIteratorSet(struct WSet* set, void (*ITR)(void*));
 
 /* ---Sorting Algorithms on Array--- */
 
