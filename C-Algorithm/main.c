@@ -674,8 +674,8 @@ int UnitTestWRBT(int argc, char* argv[])
 	putchar('\n');
 	WDeleteRBT(rbt);
 
-	// Testcases for tree balancing
-	printf("RBT: Insertion balancing\n");
+	// Testcases for tree balancing (Right chaining)
+	printf("RBT: Insertion balancing(Right chaining)\n");
 	rbt = WCreateRBT((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
 	WInsertKeyRBT(rbt, "XYZ1");
 	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
@@ -694,6 +694,48 @@ int UnitTestWRBT(int argc, char* argv[])
 	WInsertKeyRBT(rbt, "XYZ8");
 	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
 	WInsertKeyRBT(rbt, "XYZ9");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	printf("RBT: Deletion balancing\n");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WDeleteKeyRBT(rbt, "XYZ1");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WDeleteKeyRBT(rbt, "XYZ2");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WDeleteKeyRBT(rbt, "XYZ3");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WDeleteKeyRBT(rbt, "XYZ4");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WDeleteKeyRBT(rbt, "XYZ5");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WDeleteKeyRBT(rbt, "XYZ6");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WDeleteKeyRBT(rbt, "XYZ7");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WDeleteKeyRBT(rbt, "XYZ8");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WDeleteKeyRBT(rbt, "XYZ9");
+	WDeleteRBT(rbt);
+
+	// Testcases for tree balancing (Left chaining)
+	printf("RBT: Insertion balancing(Left chainging)\n");
+	rbt = WCreateRBT((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
+	WInsertKeyRBT(rbt, "XYZ9");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WInsertKeyRBT(rbt, "XYZ8");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WInsertKeyRBT(rbt, "XYZ7");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WInsertKeyRBT(rbt, "XYZ6");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WInsertKeyRBT(rbt, "XYZ5");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WInsertKeyRBT(rbt, "XYZ4");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WInsertKeyRBT(rbt, "XYZ3");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WInsertKeyRBT(rbt, "XYZ2");
+	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
+	WInsertKeyRBT(rbt, "XYZ1");
 	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
 	printf("RBT: Deletion balancing\n");
 	printf("RBT Root: %s\n", (char*)(rbt->tree->data));
@@ -753,6 +795,7 @@ int main(int argc, char* argv[])
 {
 	clock_t t1, t2;
 	t1 = clock();
+#ifndef UNIT_TEST_ALGO
 	printf("Hello Weiss!!\n");
 	UnitTestWLList(argc, argv);
 	UnitTestWDLList(argc, argv);
@@ -768,6 +811,10 @@ int main(int argc, char* argv[])
 	UnitTestWBST(argc, argv);
 	UnitTestWRBT(argc, argv);
 	UnitTestWSet(argc, argv);
+#else
+	/* ---Put your Algo here to test--- */
+	UnitTestWRBT(argc, argv);
+#endif /* UNIT_TEST_ALGO */
 	// ---Runtime Analysis ---
 	t2 = clock();
 	printf("Runtime = %ld - %ld = %ld\n", t2, t1, t2 - t1);
