@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "C-Algorithm", "C-Algorithm\C-Algorithm.vcxproj", "{6EFEF91F-1E9E-479E-A0F6-237CB36B018B}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Router", "Router\Router.vcxproj", "{CFC9F18E-6CA0-409F-8AF3-9434AA299CC4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6EFEF91F-1E9E-479E-A0F6-237CB36B018B} = {6EFEF91F-1E9E-479E-A0F6-237CB36B018B}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
