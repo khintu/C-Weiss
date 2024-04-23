@@ -791,6 +791,19 @@ int UnitTestWSet(int argc, char* argv[])
 	return 0;
 }
 
+int UnitTestWGraph(int argc, char* argv[])
+{
+	struct WGraph* G;
+	printf("Graph: Insert/Delete Vertex\n");
+	G = WCreateGraph((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
+	WInsertVertexToGraph(G, "192.168.235.11");
+	WInsertVertexToGraph(G, "192.168.235.12");
+	WInsertVertexToGraph(G, "192.168.235.13");
+	WDeleteGraph(G);
+	return 0;
+}
+
+#if 0 /* Moved to Router App */
 int main(int argc, char* argv[])
 {
 	clock_t t1, t2;
@@ -811,12 +824,14 @@ int main(int argc, char* argv[])
 	UnitTestWBST(argc, argv);
 	UnitTestWRBT(argc, argv);
 	UnitTestWSet(argc, argv);
+	UnitTestWGraph(argc, argv);
 #else
 	/* ---Put your Algo here to test--- */
-	UnitTestWRBT(argc, argv);
+	UnitTestWGraph(argc, argv);
 #endif /* UNIT_TEST_ALGO */
 	// ---Runtime Analysis ---
 	t2 = clock();
 	printf("Runtime = %ld - %ld = %ld\n", t2, t1, t2 - t1);
 	return 0;
 }
+#endif

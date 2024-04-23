@@ -38,5 +38,6 @@ int main(int argc, char* argv[])
 	WDeleteSet(a);
 	WDeleteSet(b);
 	WDeleteSet(c);
+	UnitTestWGraph(argc, argv);
 	return 0;
 }

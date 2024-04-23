@@ -312,7 +312,40 @@ int WDeleteKeySet(struct WSet* set, void* key);
 int WUnionOfSet(struct WSet* s, struct WSet* t, struct WSet** u);
 int WIntersectionOfSet(struct WSet* s, struct WSet* t, struct WSet** i);
 int WMinusOfSet(struct WSet* s, struct WSet* t, struct WSet** m);
+int WIsNullSet(struct WSet* set);
 void WIteratorSet(struct WSet* set, void (*ITR)(void*));
+
+/* Graphs (undirected) based on Adjacency Lists ADT */
+
+struct Vertex /* Vertices V in G, set of actual vertices */
+{
+	void* data;
+	struct AdjacencyList* Adj; /* edges adjacent to vertex u */
+	struct Vertex* next; /* List of dynamically added vertices */
+};
+
+struct AdjacencyList /* Edge E in G, set of edges of u */
+{
+	struct Vertex* v; /* Reference to vertex adjacent to u */
+	struct AdjacencyList* next;
+};
+
+struct WGraph /* G = (V, E) */
+{
+	struct Vertex* V;
+	int count;  /* Number of vertices */
+	int (*CMP)(const void* x, const void* y); /* key comparison fp */
+	void* (*CTOR)(void* x);  /* Key ADT user-defined c'tor & d'tor */
+	void (*DTOR)(void* x);
+};
+
+struct WGraph* WCreateGraph(int (*CMP)(const void* x, const void* y),
+														void* (*CTOR)(void* x),
+														void (*DTOR)(void* x));
+void WDeleteGraph(struct WGraph* G);
+int WInsertVertexToGraph(struct WGraph* G, void* key);
+int WDeleteVertexFrmGraph(struct WGraph* G, void* key);
+int WAddEdgeToGraph(struct WGraph* G, void* uKey, void* vKey);
 
 /* ---Sorting Algorithms on Array--- */
 
