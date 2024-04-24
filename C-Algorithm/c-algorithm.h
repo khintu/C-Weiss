@@ -318,13 +318,22 @@ int WMinusOfSet(struct WSet* s, struct WSet* t, struct WSet** m);
 int WIsNullSet(struct WSet* set);
 void WIteratorSet(struct WSet* set, void (*ITR)(void*));
 
-/* Graphs (undirected) based on Adjacency Lists ADT */
+/* ---Graphs (undirected) based on Adjacency Lists ADT--- */
+
+enum {
+	WGRPHCLR_WHITE = 1,
+	WGRPHCLR_GRAY,
+	WGRPHCLR_BLACK
+};
 
 struct Vertex /* Vertices V in G, set of actual vertices */
 {
 	void* data;
+	int color;
+	int d; /* Distance */
+	struct Vertex* p;  /* parent vertex in BFS tree */
 	struct AdjacencyList* Adj; /* edges adjacent to vertex u */
-	struct Vertex* next; /* List of dynamically added vertices */
+	struct Vertex* next;
 };
 
 struct AdjacencyList /* Edge E in G, set of edges of u */
@@ -335,7 +344,7 @@ struct AdjacencyList /* Edge E in G, set of edges of u */
 
 struct WGraph /* G = (V, E) */
 {
-	struct Vertex* V;
+	struct Vertex* V;  /* List of dynamically added vertices */
 	int count;  /* Number of vertices */
 	int (*CMP)(const void* x, const void* y); /* key comparison fp */
 	void* (*CTOR)(void* x);  /* Key ADT user-defined c'tor & d'tor */
@@ -350,6 +359,7 @@ int WInsertVertexToGraph(struct WGraph* G, void* key);
 int WDeleteVertexFrmGraph(struct WGraph* G, void* key);
 int WAddEdgeToGraph(struct WGraph* G, void* uKey, void* vKey);
 int WDeleteEdgeFrmGraph(struct WGraph* G, void* uKey, void* vKey);
+int WBreadthFirstSearchGraph(struct WGraph* G, void* key, void (*VISITUFP)(void*));
 
 /* ---Sorting Algorithms on Array--- */
 

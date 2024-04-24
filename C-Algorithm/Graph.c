@@ -220,3 +220,77 @@ int WDeleteEdgeFrmGraph(struct WGraph* G, void* uKey, void* vKey)
 		return -7; /* Edge not found */
 	return 0;
 }
+
+static int QCmp(const struct Vertex* x, const struct Vertex* y)
+{
+	if (x == y)
+		return 0;
+	return -1;
+}
+
+static void* QCtr(struct Vertex* x)
+{
+	return x;
+}
+
+static void QDtr(struct Vertex* x)
+{
+	return;
+}
+
+int WBreadthFirstSearchGraph(struct WGraph* G, void* key, void (*VISITUFP)(void*))
+{
+	struct Vertex* u, * v, *i;
+	struct AdjacencyList* e, * preve;
+	struct WLQueue* Q;
+
+	if (!(Q = WCreateLQueue((WCMPFP)QCmp, (WCTRFP)QCtr, (WDTRFP)QDtr)))
+		return -1;
+	
+	/* 1- Locate vertex in G by key */
+	for (u = NULL, i = G->V; i != NULL; i = i->next)
+	{
+		if ((*G->CMP)(i->data, key) == 0)
+		{
+			u = i;
+			break;
+		}
+	}
+	if (u == NULL) /* key not found */
+		return -2;
+	/* 2- Initialize V for BFS */
+	for (i = G->V; i != NULL; i = i->next)
+	{
+		if (i == u)
+		{
+			i->color = WGRPHCLR_GRAY;
+			i->d = 0;
+			i->p = NULL;
+		}
+		else
+		{
+			i->color = WGRPHCLR_WHITE;
+			i->d = INT_MAX;
+			i->p = NULL;
+		}
+	}
+	WEnqueueLQueue(Q, u);
+	/* 3- Start exploring the BFS frontier vertices, starting from u */
+	while ((u = WDequeueLQueue(Q)) != NULL)
+	{
+		VISITUFP(u->data);
+		for (e = u->Adj; e != NULL; e = e->next)
+		{
+			if (e->v->color == WGRPHCLR_WHITE)
+			{
+				e->v->color = WGRPHCLR_GRAY;
+				e->v->d = u->d + 1;
+				e->v->p = u;
+				WEnqueueLQueue(Q, e->v);
+			}
+		}
+		u->color = WGRPHCLR_BLACK;
+	}
+	WDeleteLQueue(Q);
+	return 0;
+}
