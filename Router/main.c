@@ -26,6 +26,7 @@ static void itr(char* s)
 int main(int argc, char* argv[])
 {
 	printf("Router: Hello World\n");
+#if 0
 	struct WSet* a, *b, *c;
 	a = WCreateSet((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
 	b = WCreateSet((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
@@ -38,6 +39,7 @@ int main(int argc, char* argv[])
 	WDeleteSet(a);
 	WDeleteSet(b);
 	WDeleteSet(c);
+#endif
 	UnitTestWGraph(argc, argv);
 	return 0;
 }

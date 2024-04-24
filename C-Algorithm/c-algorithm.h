@@ -24,7 +24,10 @@ enum {
 	WENOMEMORY = -1,
 	WEKEYNOTFND = -2,
 	WEINCKEYLESS = -3,
-	WEUNIQUEKEY = -4 /* Only unique keys allowed, key already exists */
+	WEUNIQUEKEY = -4, /* Only unique keys allowed, key already exists */
+	WESELFLOOP = -5, /* Self loop not allowed in undirected graph */
+	WEEDGALRDYEXTS = -6, /* Edge already exists in undirected Graph */
+	WEEDGNOTFND = -7 /* Edge not found in undirected Graph */
 };
 
 /* ---Linked List ADT--- */
@@ -346,6 +349,7 @@ void WDeleteGraph(struct WGraph* G);
 int WInsertVertexToGraph(struct WGraph* G, void* key);
 int WDeleteVertexFrmGraph(struct WGraph* G, void* key);
 int WAddEdgeToGraph(struct WGraph* G, void* uKey, void* vKey);
+int WDeleteEdgeFrmGraph(struct WGraph* G, void* uKey, void* vKey);
 
 /* ---Sorting Algorithms on Array--- */
 

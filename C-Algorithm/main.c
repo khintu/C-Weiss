@@ -799,6 +799,10 @@ int UnitTestWGraph(int argc, char* argv[])
 	WInsertVertexToGraph(G, "192.168.235.11");
 	WInsertVertexToGraph(G, "192.168.235.12");
 	WInsertVertexToGraph(G, "192.168.235.13");
+	WAddEdgeToGraph(G, "192.168.235.11", "192.168.235.12");
+	WAddEdgeToGraph(G, "192.168.235.11", "192.168.235.13");
+	WDeleteEdgeFrmGraph(G, "192.168.235.11", "192.168.235.13");
+	WDeleteVertexFrmGraph(G, "192.168.235.11");
 	WDeleteGraph(G);
 	return 0;
 }

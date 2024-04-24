@@ -38,15 +38,21 @@ void WDeleteGraph(struct WGraph* G)
 
 int WInsertVertexToGraph(struct WGraph* G, void* key)
 {
-	struct Vertex* u, *i;
+	struct Vertex* u, *i, *previ;
 	if ((u = (struct Vertex*) calloc(1, sizeof*u)) == NULL)
 		return -1;
-	for (i = G->V; i && i->next != NULL; i = i->next)
-		;
+	for (i = G->V, previ = NULL; i != NULL ; previ = i, i = i->next)
+	{
+		if ((*G->CMP)(i->data, key) == 0)
+		{
+			free(u);
+			return -4; /* Only unique keys allowed, key already exists */
+		}
+	}
 	if (G->V == NULL)
 		G->V = u;
 	else
-		i->next = u;
+		previ->next = u;
 	G->count++;
 	u->data = (*G->CTOR)(key);
 	return 0;
@@ -69,19 +75,27 @@ int WDeleteVertexFrmGraph(struct WGraph* G, void* key)
 		return -2;
 	for (i = G->V; i != NULL; i = i->next) /* Delete from all Edges/AdjLists */
 	{
-		if (i == u)
-			continue;
-		for (preve = NULL, e = i->Adj; \
-				e && e->v != u; \
-				preve = e, e = e->next)
-			;
-		if (e != NULL)
+		if (i == u) /* Delete entire AdjList of u */
 		{
-			if (i->Adj == e) /* update AdjList head for vertex i */
-				i->Adj = e->next;
-			else 
-				preve->next = e->next;
-			free(e);
+			for (e = u->Adj; e != NULL; )
+			{
+				preve = e;
+				e = e->next;
+				free(preve);
+			}
+		}
+		else
+		{
+			for (preve = NULL, e = i->Adj; e && e->v != u; preve = e, e = e->next)
+				;
+			if (e != NULL)
+			{
+				if (i->Adj == e) /* update AdjList head for vertex i */
+					i->Adj = e->next;
+				else
+					preve->next = e->next;
+				free(e);
+			}
 		}
 	}
 	(*G->DTOR)(u->data);
@@ -95,6 +109,114 @@ int WDeleteVertexFrmGraph(struct WGraph* G, void* key)
 
 int WAddEdgeToGraph(struct WGraph* G, void* uKey, void* vKey)
 {
+	struct Vertex* u, * i, *v;
+	struct AdjacencyList* e, * preve;
 
+	/* 1- locate u in Vertex List, using uKey */
+	for (u = NULL, i = G->V; i != NULL; i = i->next)
+	{
+		if ((*G->CMP)(i->data, uKey) == 0)
+		{
+			u = i;
+			break;
+		}
+	}
+	if (u == NULL) /* key not found */
+		return -2;
+	/* 2- locate v in Vertex List, using vKey */
+	for (v = NULL, i = G->V; i != NULL; i = i->next)
+	{
+		if ((*G->CMP)(i->data, vKey) == 0)
+		{
+			v = i;
+			break;
+		}
+	}
+	if (v == NULL) /* key not found */
+		return -2;
+	/* 3- Check for self loop, u != v */
+	if (u == v)
+		return -5; /* Self loop not allowed in undirected graph */
+	/* 4- Check if edge already exists, return otherwise */
+	/* 5- Add edge e in AdjList[u] pointing to v */
+	for (preve = NULL, e = u->Adj; e && e->v != v; preve = e, e = e->next)
+		;
+	if (e != NULL)
+		return -6; /* Edge already exists in Adj[u] */
+	if ((e = (struct AdjacencyList*) calloc(1, sizeof *e)) == NULL)
+		return -1;
+	e->v = v;
+	if (u->Adj == NULL)
+		u->Adj = e;
+	else
+		preve->next = e;
+	/* 6- Add edge e in AdjList[v] pointing to u */
+	for (preve = NULL, e = v->Adj; e && e->v != u; preve = e, e = e->next)
+		;
+	if (e != NULL)
+		return -6; /* Edge already exists in Adj[v] */
+	if ((e = (struct AdjacencyList*)calloc(1, sizeof * e)) == NULL)
+		return -1;
+	e->v = u;
+	if (v->Adj == NULL)
+		v->Adj = e;
+	else
+		preve->next = e;
+	return 0;
+}
+
+int WDeleteEdgeFrmGraph(struct WGraph* G, void* uKey, void* vKey)
+{
+	struct Vertex* u, * i, * v;
+	struct AdjacencyList* e, * preve;
+
+	/* 1- locate u in Vertex List, using uKey */
+	for (u = NULL, i = G->V; i != NULL; i = i->next)
+	{
+		if ((*G->CMP)(i->data, uKey) == 0)
+		{
+			u = i;
+			break;
+		}
+	}
+	if (u == NULL) /* key not found */
+		return -2;
+	/* 2- locate v in Vertex List, using vKey */
+	for (v = NULL, i = G->V; i != NULL; i = i->next)
+	{
+		if ((*G->CMP)(i->data, vKey) == 0)
+		{
+			v = i;
+			break;
+		}
+	}
+	if (v == NULL) /* key not found */
+		return -2;
+	/* Delete edge from AdjList[u] */
+	for (preve = NULL, e = u->Adj; e && e->v != v; preve = e, e = e->next)
+		;
+	if (e != NULL)
+	{
+		if (u->Adj == e) /* update AdjList head for vertex i */
+			u->Adj = e->next;
+		else
+			preve->next = e->next;
+		free(e);
+	}
+	else
+		return -7; /* Edge not found */
+	/* Delete edge from AdjList[v] */
+	for (preve = NULL, e = v->Adj; e && e->v != u; preve = e, e = e->next)
+		;
+	if (e != NULL)
+	{
+		if (v->Adj == e) /* update AdjList head for vertex i */
+			v->Adj = e->next;
+		else
+			preve->next = e->next;
+		free(e);
+	}
+	else
+		return -7; /* Edge not found */
 	return 0;
 }
