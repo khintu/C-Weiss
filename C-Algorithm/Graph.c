@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <limits.h>
 #include <c-algorithm.h>
 
 struct WGraph* WCreateGraph(int (*CMP)(const void* x, const void* y),
@@ -221,30 +222,30 @@ int WDeleteEdgeFrmGraph(struct WGraph* G, void* uKey, void* vKey)
 	return 0;
 }
 
-static int QCmp(const struct Vertex* x, const struct Vertex* y)
+static int GCmp(const struct Vertex* x, const struct Vertex* y)
 {
 	if (x == y)
 		return 0;
 	return -1;
 }
 
-static void* QCtr(struct Vertex* x)
+static void* GCtr(struct Vertex* x)
 {
 	return x;
 }
 
-static void QDtr(struct Vertex* x)
+static void GDtr(struct Vertex* x)
 {
 	return;
 }
 
 int WBreadthFirstSearchGraph(struct WGraph* G, void* key, void (*VISITUFP)(void*))
 {
-	struct Vertex* u, * v, *i;
-	struct AdjacencyList* e, * preve;
+	struct Vertex* u, *i;
+	struct AdjacencyList* e;
 	struct WLQueue* Q;
 
-	if (!(Q = WCreateLQueue((WCMPFP)QCmp, (WCTRFP)QCtr, (WDTRFP)QDtr)))
+	if ((Q = WCreateLQueue((WCMPFP)GCmp, (WCTRFP)GCtr, (WDTRFP)GDtr)) == NULL)
 		return -1;
 	
 	/* 1- Locate vertex in G by key */

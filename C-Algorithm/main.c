@@ -809,14 +809,16 @@ int UnitTestWGraph(int argc, char* argv[])
 	WAddEdgeToGraph(G, "192.168.235.13", "192.168.235.14");
 	WAddEdgeToGraph(G, "192.168.235.14", "192.168.235.15");
 	WBreadthFirstSearchGraph(G, "192.168.235.11", (void (*)(void*))iterator1);
-
+	putchar('\n');
+	WBreadthFirstSearchGraph(G, "192.168.235.15", (void (*)(void*))iterator1);
+	putchar('\n');
 	WDeleteEdgeFrmGraph(G, "192.168.235.11", "192.168.235.12");
 	WDeleteVertexFrmGraph(G, "192.168.235.12");
 	WDeleteGraph(G);
 	return 0;
 }
 
-#if 0 /* Moved to Router App Project */
+#if __LINUX__ /* Moved to Router App Project, only available in Linux */
 int main(int argc, char* argv[])
 {
 	clock_t t1, t2;
