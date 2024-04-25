@@ -24,7 +24,10 @@ enum {
 	WENOMEMORY = -1,
 	WEKEYNOTFND = -2,
 	WEINCKEYLESS = -3,
-	WEUNIQUEKEY = -4 /* Only unique keys allowed, key already exists */
+	WEUNIQUEKEY = -4, /* Only unique keys allowed, key already exists */
+	WESELFLOOP = -5, /* Self loop not allowed in undirected graph */
+	WEEDGALRDYEXTS = -6, /* Edge already exists in undirected Graph */
+	WEEDGNOTFND = -7 /* Edge not found in undirected Graph */
 };
 
 /* ---Linked List ADT--- */
@@ -312,7 +315,51 @@ int WDeleteKeySet(struct WSet* set, void* key);
 int WUnionOfSet(struct WSet* s, struct WSet* t, struct WSet** u);
 int WIntersectionOfSet(struct WSet* s, struct WSet* t, struct WSet** i);
 int WMinusOfSet(struct WSet* s, struct WSet* t, struct WSet** m);
+int WIsNullSet(struct WSet* set);
 void WIteratorSet(struct WSet* set, void (*ITR)(void*));
+
+/* ---Graphs (undirected) based on Adjacency Lists ADT--- */
+
+enum {
+	WGRPHCLR_WHITE = 1,
+	WGRPHCLR_GRAY,
+	WGRPHCLR_BLACK
+};
+
+struct Vertex /* Vertices V in G, set of actual vertices */
+{
+	void* data;
+	int color;
+	int d; /* Distance */
+	struct Vertex* p;  /* parent vertex in BFS tree */
+	struct AdjacencyList* Adj; /* edges adjacent to vertex u */
+	struct Vertex* next;
+};
+
+struct AdjacencyList /* Edge E in G, set of edges of u */
+{
+	struct Vertex* v; /* Reference to vertex adjacent to u */
+	struct AdjacencyList* next;
+};
+
+struct WGraph /* G = (V, E) */
+{
+	struct Vertex* V;  /* List of dynamically added vertices */
+	int count;  /* Number of vertices */
+	int (*CMP)(const void* x, const void* y); /* key comparison fp */
+	void* (*CTOR)(void* x);  /* Key ADT user-defined c'tor & d'tor */
+	void (*DTOR)(void* x);
+};
+
+struct WGraph* WCreateGraph(int (*CMP)(const void* x, const void* y),
+														void* (*CTOR)(void* x),
+														void (*DTOR)(void* x));
+void WDeleteGraph(struct WGraph* G);
+int WInsertVertexToGraph(struct WGraph* G, void* key);
+int WDeleteVertexFrmGraph(struct WGraph* G, void* key);
+int WAddEdgeToGraph(struct WGraph* G, void* uKey, void* vKey);
+int WDeleteEdgeFrmGraph(struct WGraph* G, void* uKey, void* vKey);
+int WBreadthFirstSearchGraph(struct WGraph* G, void* key, void (*VISITUFP)(void*));
 
 /* ---Sorting Algorithms on Array--- */
 

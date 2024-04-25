@@ -143,3 +143,8 @@ void  WIteratorSet(struct WSet* set, void (*ITR)(void*))
 	WIteratorRBT(set->rbt, (void (*)(void*))ITR);
 	return;
 }
+
+int WIsNullSet(struct WSet* set)
+{
+	return (set->rbt->count == 0) ? TRUE : FALSE;
+}
