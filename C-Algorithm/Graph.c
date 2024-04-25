@@ -105,6 +105,7 @@ int WDeleteVertexFrmGraph(struct WGraph* G, void* key)
 		G->V = u->next;
 	else
 		prevu->next = u->next;
+	free(u);
 	return 0;
 }
 
