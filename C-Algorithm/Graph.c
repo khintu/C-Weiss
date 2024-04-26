@@ -105,6 +105,7 @@ int WDeleteVertexFrmGraph(struct WGraph* G, void* key)
 		G->V = u->next;
 	else
 		prevu->next = u->next;
+	free(u);
 	return 0;
 }
 
@@ -294,4 +295,48 @@ int WBreadthFirstSearchGraph(struct WGraph* G, void* key, void (*VISITUFP)(void*
 	}
 	WDeleteLQueue(Q);
 	return 0;
+}
+
+static int PrintPathFrmS2V(struct Vertex* s, struct Vertex* v, void (*VISITUFP)(void*))
+{
+	if (v == s)
+		(*VISITUFP)(s->data);
+	else if (v->p == NULL)
+		return -8; /* BFS tree disconnected */
+	else
+	{
+		PrintPathFrmS2V(s, v->p, VISITUFP);
+		(*VISITUFP)(v->data);
+	}
+	return 0;
+}
+
+void WTraceBFSTreeOnGraph(struct WGraph* G, void* sKey, void* vKey, void (*VISITUFP)(void*))
+{
+	struct Vertex* s, * v, * i;
+
+	/* 1- Locate vertex s in G by key */
+	for (s = NULL, i = G->V; i != NULL; i = i->next)
+	{
+		if ((*G->CMP)(i->data, sKey) == 0)
+		{
+			s = i;
+			break;
+		}
+	}
+	if (s == NULL) /* key not found */
+		return;
+	/* 2- Locate vertex v in G by key */
+	for (v = NULL, i = G->V; i != NULL; i = i->next)
+	{
+		if ((*G->CMP)(i->data, vKey) == 0)
+		{
+			v = i;
+			break;
+		}
+	}
+	if (v == NULL) /* key not found */
+		return;
+	PrintPathFrmS2V(s, v, VISITUFP);
+	return;
 }

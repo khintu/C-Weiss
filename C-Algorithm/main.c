@@ -63,7 +63,7 @@ void iterator(char* key)
 
 void iterator1(char* key)
 {
-	printf("%s,", key);
+	printf(" %s, ", key);
 	return;
 }
 
@@ -811,6 +811,8 @@ int UnitTestWGraph(int argc, char* argv[])
 	WBreadthFirstSearchGraph(G, "192.168.235.11", (void (*)(void*))iterator1);
 	putchar('\n');
 	WBreadthFirstSearchGraph(G, "192.168.235.15", (void (*)(void*))iterator1);
+	putchar('\n');
+	WTraceBFSTreeOnGraph(G, "192.168.235.15", "192.168.235.13", (void (*)(void*))iterator1);
 	putchar('\n');
 	WDeleteEdgeFrmGraph(G, "192.168.235.11", "192.168.235.12");
 	WDeleteVertexFrmGraph(G, "192.168.235.12");
