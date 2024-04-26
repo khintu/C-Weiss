@@ -1,45 +1,80 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 #include <router_defs.h>
 
-static char* ctor(char* s)
+struct Router
 {
-	char* p;
-	if ((p = (char*)malloc(strlen(s) + 1)) != NULL)
-		strcpy(p, s);
+	char* name;
+	int key;
+	int nInterfaces;
+};
+
+static int RouterCmp(const struct Router* x, const struct Router* y)
+{
+	if (x->key == y->key)
+		return 0;
+	else if (x->key > y->key)
+		return 1;
+	else
+		return -1;
+}
+
+static struct Router* ctor(struct Router* r)
+{
+	struct Router* p;
+
+	if ((p = (struct Router*)calloc(1, sizeof * p)) == NULL)
+		return NULL;
+	if ((p->name = (char*)malloc(strlen(r->name) + 1)) != NULL)
+		strcpy(p->name, r->name);
+	p->nInterfaces = r->nInterfaces;
+	p->key = r->key;
 	return p;
 }
 
-static void dtor(char* s)
+static void dtor(struct Router* r)
 {
-	free(s);
+	free(r->name);
+	free(r);
 	return;
 }
 
-static void itr(char* s)
+static struct Router* ctorR(struct Router* r)
 {
-	printf("%s ", s);
+	return r;
+}
+
+static void dtorR(struct Router* r)
+{
+	return;
+}
+
+static void itr(struct Router* r)
+{
+	printf(" %s, ", r->name);
 	return;
 }
 
 int main(int argc, char* argv[])
 {
-	printf("Router: Hello World\n");
-#if 0
-	struct WSet* a, *b, *c;
-	a = WCreateSet((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
-	b = WCreateSet((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
-	WInsertKeySet(a, "Where");
-	WInsertKeySet(a, "is");
-	WInsertKeySet(a, "Tom");
-	WUnionOfSet(a, b, &c);
-	WIteratorSet(c, (void (*)(void*))itr);
+	printf("Router: Internet Simulator\n");
+
+	struct Router input;
+	struct WSet* RouterSet;
+	struct WGraph* Internet;
+	RouterSet = WCreateSet((WCMPFP)RouterCmp, (WCTRFP)ctor, (WDTRFP)dtor);
+	Internet = WCreateGraph((WCMPFP)RouterCmp, (WCTRFP)ctorR, (WDTRFP)dtorR);
+	input.key = 10; input.name = "192.168.254.10"; input.nInterfaces = 3;
+	WInsertKeySet(RouterSet, &input);
+	input.key = 11; input.name = "192.168.254.11"; input.nInterfaces = 4;
+	WInsertKeySet(RouterSet, &input);
+	input.key = 12; input.name = "192.168.254.12"; input.nInterfaces = 3;
+	WInsertKeySet(RouterSet, &input);
+	WIteratorSet(RouterSet, (void (*)(void*))itr);
 	putchar('\n');
-	WDeleteSet(a);
-	WDeleteSet(b);
-	WDeleteSet(c);
-#endif
-	UnitTestWGraph(argc, argv);
+	WInsertVertexToGraph(Internet, &input);
+	WBreadthFirstSearchGraph(Internet, &input, (void (*)(void*))itr);
+	putchar('\n');
+	WDeleteGraph(Internet);
+	WDeleteSet(RouterSet);
+	//UnitTestWGraph(argc, argv);
 	return 0;
 }
