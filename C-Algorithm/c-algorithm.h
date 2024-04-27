@@ -360,8 +360,8 @@ int WInsertVertexToGraph(struct WGraph* G, void* key);
 int WDeleteVertexFrmGraph(struct WGraph* G, void* key);
 int WAddEdgeToGraph(struct WGraph* G, void* uKey, void* vKey);
 int WDeleteEdgeFrmGraph(struct WGraph* G, void* uKey, void* vKey);
-int WBreadthFirstSearchGraph(struct WGraph* G, void* key, void (*VISITUFP)(void*));
-void WTraceBFSTreeOnGraph(struct WGraph* G, void* sKey, void* vKey, void (*VISITUFP)(void*));
+int WBreadthFirstSearchGraph(struct WGraph* G, void* key, void (*VISITUFP)(void*,int));
+void WTraceBFSTreeOnGraph(struct WGraph* G, void* sKey, void* vKey, void (*VISITUFP)(void*,int));
 
 /* ---Sorting Algorithms on Array--- */
 

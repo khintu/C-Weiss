@@ -56,7 +56,7 @@ static void itr(struct Router* r)
 int main(int argc, char* argv[])
 {
 	printf("Router: Internet Simulator\n");
-
+#if 0
 	struct Router input;
 	struct WSet* RouterSet;
 	struct WGraph* Internet;
@@ -75,6 +75,8 @@ int main(int argc, char* argv[])
 	putchar('\n');
 	WDeleteGraph(Internet);
 	WDeleteSet(RouterSet);
-	//UnitTestWGraph(argc, argv);
+#else
+	UnitTestWGraph(argc, argv);
+#endif
 	return 0;
 }

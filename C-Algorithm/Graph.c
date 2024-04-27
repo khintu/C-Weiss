@@ -240,7 +240,7 @@ static void GDtr(struct Vertex* x)
 	return;
 }
 
-int WBreadthFirstSearchGraph(struct WGraph* G, void* key, void (*VISITUFP)(void*))
+int WBreadthFirstSearchGraph(struct WGraph* G, void* key, void (*VISITUFP)(void*,int))
 {
 	struct Vertex* u, *i;
 	struct AdjacencyList* e;
@@ -280,7 +280,7 @@ int WBreadthFirstSearchGraph(struct WGraph* G, void* key, void (*VISITUFP)(void*
 	/* 3- Start exploring the BFS frontier vertices, starting from u */
 	while ((u = WDequeueLQueue(Q)) != NULL)
 	{
-		VISITUFP(u->data);
+		VISITUFP(u->data, u->d);
 		for (e = u->Adj; e != NULL; e = e->next)
 		{
 			if (e->v->color == WGRPHCLR_WHITE)
@@ -297,21 +297,23 @@ int WBreadthFirstSearchGraph(struct WGraph* G, void* key, void (*VISITUFP)(void*
 	return 0;
 }
 
-static int PrintPathFrmS2V(struct Vertex* s, struct Vertex* v, void (*VISITUFP)(void*))
+static int PrintPathFrmS2V(struct Vertex* s, struct Vertex* v, void (*VISITUFP)(void*,int))
 {
+	int c = 0;
+
 	if (v == s)
-		(*VISITUFP)(s->data);
+		(*VISITUFP)(s->data, s->d);
 	else if (v->p == NULL)
 		return -8; /* BFS tree disconnected */
 	else
 	{
-		PrintPathFrmS2V(s, v->p, VISITUFP);
-		(*VISITUFP)(v->data);
+		if ((c = PrintPathFrmS2V(s, v->p, VISITUFP)) == 0)
+			(*VISITUFP)(v->data, v->d);
 	}
-	return 0;
+	return c;
 }
 
-void WTraceBFSTreeOnGraph(struct WGraph* G, void* sKey, void* vKey, void (*VISITUFP)(void*))
+void WTraceBFSTreeOnGraph(struct WGraph* G, void* sKey, void* vKey, void (*VISITUFP)(void*,int))
 {
 	struct Vertex* s, * v, * i;
 

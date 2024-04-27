@@ -67,6 +67,12 @@ void iterator1(char* key)
 	return;
 }
 
+void iterator2(char* key, int d)
+{
+	printf(" %s(%d), ", key, d);
+	return;
+}
+
 int UnitTestWLList(int argc, char* argv[])
 {
 	struct WLList* lst;
@@ -801,6 +807,7 @@ int UnitTestWGraph(int argc, char* argv[])
 	WInsertVertexToGraph(G, "192.168.235.13");
 	WInsertVertexToGraph(G, "192.168.235.14");
 	WInsertVertexToGraph(G, "192.168.235.15");
+	WInsertVertexToGraph(G, "192.168.235.16");
 	WAddEdgeToGraph(G, "192.168.235.11", "192.168.235.12");
 	WAddEdgeToGraph(G, "192.168.235.11", "192.168.235.15");
 	WAddEdgeToGraph(G, "192.168.235.12", "192.168.235.13");
@@ -808,11 +815,15 @@ int UnitTestWGraph(int argc, char* argv[])
 	WAddEdgeToGraph(G, "192.168.235.12", "192.168.235.15");
 	WAddEdgeToGraph(G, "192.168.235.13", "192.168.235.14");
 	WAddEdgeToGraph(G, "192.168.235.14", "192.168.235.15");
-	WBreadthFirstSearchGraph(G, "192.168.235.11", (void (*)(void*))iterator1);
+	WAddEdgeToGraph(G, "192.168.235.13", "192.168.235.16");
+	WBreadthFirstSearchGraph(G, "192.168.235.11", (void (*)(void*,int))iterator2);
 	putchar('\n');
-	WBreadthFirstSearchGraph(G, "192.168.235.15", (void (*)(void*))iterator1);
+	WBreadthFirstSearchGraph(G, "192.168.235.15", (void (*)(void*,int))iterator2);
 	putchar('\n');
-	WTraceBFSTreeOnGraph(G, "192.168.235.15", "192.168.235.13", (void (*)(void*))iterator1);
+	WBreadthFirstSearchGraph(G, "192.168.235.16", (void (*)(void*,int))iterator2);
+	putchar('\n');
+	printf("trace path:\n");
+	WTraceBFSTreeOnGraph(G, "192.168.235.16", "192.168.235.15", (void (*)(void*,int))iterator2);
 	putchar('\n');
 	WDeleteEdgeFrmGraph(G, "192.168.235.11", "192.168.235.12");
 	WDeleteVertexFrmGraph(G, "192.168.235.12");
