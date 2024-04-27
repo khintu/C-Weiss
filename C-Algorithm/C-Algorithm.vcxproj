@@ -132,6 +132,7 @@
   <ItemGroup>
     <ClCompile Include="ArraySorting.c" />
     <ClCompile Include="BSTree.c" />
+    <ClCompile Include="Convert.c" />
     <ClCompile Include="DLList.c" />
     <ClCompile Include="Graph.c" />
     <ClCompile Include="HashMap.c" />

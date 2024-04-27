@@ -53,15 +53,21 @@ static void itr(struct Router* r)
 	return;
 }
 
+static void itr2(struct Router* r, int d)
+{
+	printf(" %s(%d), ", r->name, d);
+	return;
+}
+
 int main(int argc, char* argv[])
 {
 	printf("Router: Internet Simulator\n");
-#if 0
+#if 1
 	struct Router input;
 	struct WSet* RouterSet;
 	struct WGraph* Internet;
 	RouterSet = WCreateSet((WCMPFP)RouterCmp, (WCTRFP)ctor, (WDTRFP)dtor);
-	Internet = WCreateGraph((WCMPFP)RouterCmp, (WCTRFP)ctorR, (WDTRFP)dtorR);
+	//Internet = WCreateGraph((WCMPFP)RouterCmp, (WCTRFP)ctorR, (WDTRFP)dtorR);
 	input.key = 10; input.name = "192.168.254.10"; input.nInterfaces = 3;
 	WInsertKeySet(RouterSet, &input);
 	input.key = 11; input.name = "192.168.254.11"; input.nInterfaces = 4;
@@ -70,8 +76,8 @@ int main(int argc, char* argv[])
 	WInsertKeySet(RouterSet, &input);
 	WIteratorSet(RouterSet, (void (*)(void*))itr);
 	putchar('\n');
-	WInsertVertexToGraph(Internet, &input);
-	WBreadthFirstSearchGraph(Internet, &input, (void (*)(void*))itr);
+	WConvertSetToGraph2(RouterSet, &Internet, (WCTRFP)ctorR, (WDTRFP)dtorR);
+	WBreadthFirstSearchGraph(Internet, &input, (void (*)(void*,int))itr2);
 	putchar('\n');
 	WDeleteGraph(Internet);
 	WDeleteSet(RouterSet);

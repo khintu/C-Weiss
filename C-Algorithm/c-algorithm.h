@@ -379,4 +379,8 @@ void WMaxHeapify(void* v[], int Len, int indx, int (*CMP)(const void* x, const v
 void WBuildMaxHeap(void* v[], int Len, int* heapSize, int (*CMP)(const void* x, const void* y));
 void WHeapSort(void* v[], int Len, int (*CMP)(const void* x, const void* y));
 
+/* ---Conversion of one ADT to another ADT--- */
+int WConvertSetToGraph(struct WSet* S, struct WGraph** G);
+int WConvertSetToGraph2(struct WSet* S, struct WGraph** G, WCTRFP ctr, WDTRFP dtr);
+
 #endif /* C_ALGORITHM_H */
