@@ -814,8 +814,10 @@ int UnitTestWGraph(int argc, char* argv[])
 	WAddEdgeToGraph(G, "192.168.235.12", "192.168.235.14");
 	WAddEdgeToGraph(G, "192.168.235.12", "192.168.235.15");
 	WAddEdgeToGraph(G, "192.168.235.13", "192.168.235.14");
-	WAddEdgeToGraph(G, "192.168.235.14", "192.168.235.15");
 	WAddEdgeToGraph(G, "192.168.235.13", "192.168.235.16");
+	WAddEdgeToGraph(G, "192.168.235.14", "192.168.235.15");
+
+	printf("---BFS:---\n");
 	WBreadthFirstSearchGraph(G, "192.168.235.11", (void (*)(void*,int))iterator2);
 	putchar('\n');
 	WBreadthFirstSearchGraph(G, "192.168.235.15", (void (*)(void*,int))iterator2);
@@ -828,6 +830,25 @@ int UnitTestWGraph(int argc, char* argv[])
 	WDeleteEdgeFrmGraph(G, "192.168.235.11", "192.168.235.12");
 	WDeleteVertexFrmGraph(G, "192.168.235.12");
 	WDeleteGraph(G);
+
+	G = WCreateGraph((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
+	WInsertVertexToGraph(G, "192.168.235.11");
+	WInsertVertexToGraph(G, "192.168.235.12");
+	WInsertVertexToGraph(G, "192.168.235.13");
+	WInsertVertexToGraph(G, "192.168.235.14");
+	WInsertVertexToGraph(G, "192.168.235.15");
+	WAddEdgeToGraph(G, "192.168.235.11", "192.168.235.12");
+	WAddEdgeToGraph(G, "192.168.235.11", "192.168.235.15");
+	WAddEdgeToGraph(G, "192.168.235.12", "192.168.235.13");
+	WAddEdgeToGraph(G, "192.168.235.12", "192.168.235.14");
+	WAddEdgeToGraph(G, "192.168.235.12", "192.168.235.15");
+	WAddEdgeToGraph(G, "192.168.235.13", "192.168.235.14");
+	WAddEdgeToGraph(G, "192.168.235.14", "192.168.235.15");
+	printf("---DFS:---\n");
+	WDepthFirstSearchGraph(G, (void (*)(void*, int))iterator2);
+	putchar('\n');
+	WDeleteGraph(G);
+
 	return 0;
 }
 

@@ -62,8 +62,8 @@ static void itr2(struct Router* r, int d)
 int main(int argc, char* argv[])
 {
 	printf("Router: Internet Simulator\n");
-#if 1
-	struct Router input;
+#if 0
+	struct Router input, input2;
 	struct WSet* RouterSet;
 	struct WGraph* Internet;
 	RouterSet = WCreateSet((WCMPFP)RouterCmp, (WCTRFP)ctor, (WDTRFP)dtor);
@@ -77,6 +77,13 @@ int main(int argc, char* argv[])
 	WIteratorSet(RouterSet, (void (*)(void*))itr);
 	putchar('\n');
 	WConvertSetToGraph2(RouterSet, &Internet, (WCTRFP)ctorR, (WDTRFP)dtorR);
+	input.key = 10; input.name = "192.168.254.10"; input.nInterfaces = 3;
+	input2.key = 11; input2.name = "192.168.254.11"; input2.nInterfaces = 4;
+	WAddEdgeToGraph(Internet, &input, &input2);
+	input.key = 11; input.name = "192.168.254.11"; input.nInterfaces = 4;
+	input2.key = 12; input2.name = "192.168.254.12"; input2.nInterfaces = 3;
+	WAddEdgeToGraph(Internet, &input, &input2);
+	input.key = 10; input.name = "192.168.254.10"; input.nInterfaces = 3;
 	WBreadthFirstSearchGraph(Internet, &input, (void (*)(void*,int))itr2);
 	putchar('\n');
 	WDeleteGraph(Internet);

@@ -362,6 +362,7 @@ int WAddEdgeToGraph(struct WGraph* G, void* uKey, void* vKey);
 int WDeleteEdgeFrmGraph(struct WGraph* G, void* uKey, void* vKey);
 int WBreadthFirstSearchGraph(struct WGraph* G, void* key, void (*VISITUFP)(void*,int));
 void WTraceBFSTreeOnGraph(struct WGraph* G, void* sKey, void* vKey, void (*VISITUFP)(void*,int));
+int WDepthFirstSearchGraph(struct WGraph* G, void (*VISITUFP)(void*, int));
 
 /* ---Sorting Algorithms on Array--- */
 
@@ -380,6 +381,7 @@ void WBuildMaxHeap(void* v[], int Len, int* heapSize, int (*CMP)(const void* x, 
 void WHeapSort(void* v[], int Len, int (*CMP)(const void* x, const void* y));
 
 /* ---Conversion of one ADT to another ADT--- */
+
 int WConvertSetToGraph(struct WSet* S, struct WGraph** G);
 int WConvertSetToGraph2(struct WSet* S, struct WGraph** G, WCTRFP ctr, WDTRFP dtr);
 

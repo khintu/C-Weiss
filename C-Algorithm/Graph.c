@@ -342,3 +342,58 @@ void WTraceBFSTreeOnGraph(struct WGraph* G, void* sKey, void* vKey, void (*VISIT
 	PrintPathFrmS2V(s, v, VISITUFP);
 	return;
 }
+
+int WDepthFirstSearchGraph(struct WGraph* G, void (*VISITUFP)(void*, int))
+{
+	struct Vertex* u, *u1;
+	struct AdjacencyList* e;
+	struct WLStack* Stk;
+	int c, bottom;
+
+	if ((Stk = WCreateLStack((WCMPFP)GCmp, (WCTRFP)GCtr, (WDTRFP)GDtr)) == NULL)
+		return -1;
+
+	/* 1- Initialize Graph for search */
+	for (u = G->V; u != NULL; u = u->next)
+	{
+		u->color = WGRPHCLR_WHITE;
+		u->p = NULL;
+		u->d = INT_MAX;
+	}
+	/* 2- Start search on each vertex in G */
+	for (u = G->V; u != NULL; u = u->next)
+	{
+		if (u->color == WGRPHCLR_WHITE)
+		{
+			u->d = 0;
+			u->color = WGRPHCLR_GRAY;
+			if ((c = WPushLStack(Stk, u)) != 0)
+				return c;
+			/* 3- Start exploring all of u's edges e */
+			while ((u1 = WTopLStack(Stk)) != NULL)
+			{
+				bottom = TRUE;
+				for (e = u1->Adj; e != NULL; e = e->next)
+				{
+					if (e->v->color == WGRPHCLR_WHITE)
+					{
+						e->v->color = WGRPHCLR_GRAY;
+						e->v->p = u1;
+						e->v->d = u1->d + 1;
+						if ((c = WPushLStack(Stk, e->v)) != 0)
+							return c;
+						bottom = FALSE;
+					}
+				}
+				if (bottom == TRUE && u1->color == WGRPHCLR_GRAY)
+				{
+					u1->color = WGRPHCLR_BLACK;
+					(*VISITUFP)(u1->data, u1->d);
+					WPopLStack(Stk);
+				}
+			}
+		}
+	}
+	WDeleteLStack(Stk);
+	return 0;
+}
