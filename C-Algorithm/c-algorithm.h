@@ -27,7 +27,8 @@ enum {
 	WEUNIQUEKEY = -4, /* Only unique keys allowed, key already exists */
 	WESELFLOOP = -5, /* Self loop not allowed in undirected graph */
 	WEEDGALRDYEXTS = -6, /* Edge already exists in undirected Graph */
-	WEEDGNOTFND = -7 /* Edge not found in undirected Graph */
+	WEEDGNOTFND = -7, /* Edge not found in undirected Graph */
+	WEPATHNOTFND = -8 /* Path between s and v not found, disconnected tree */
 };
 
 /* ---Linked List ADT--- */
@@ -359,7 +360,9 @@ int WInsertVertexToGraph(struct WGraph* G, void* key);
 int WDeleteVertexFrmGraph(struct WGraph* G, void* key);
 int WAddEdgeToGraph(struct WGraph* G, void* uKey, void* vKey);
 int WDeleteEdgeFrmGraph(struct WGraph* G, void* uKey, void* vKey);
-int WBreadthFirstSearchGraph(struct WGraph* G, void* key, void (*VISITUFP)(void*));
+int WBreadthFirstSearchGraph(struct WGraph* G, void* key, void (*VISITUFP)(void*,int));
+void WTraceBFSTreeOnGraph(struct WGraph* G, void* sKey, void* vKey, void (*VISITUFP)(void*,int));
+int WDepthFirstSearchGraph(struct WGraph* G, void (*VISITUFP)(void*, int));
 
 /* ---Sorting Algorithms on Array--- */
 
@@ -376,5 +379,10 @@ void WHeapSortInt(int v[], int Len);
 void WMaxHeapify(void* v[], int Len, int indx, int (*CMP)(const void* x, const void* y));
 void WBuildMaxHeap(void* v[], int Len, int* heapSize, int (*CMP)(const void* x, const void* y));
 void WHeapSort(void* v[], int Len, int (*CMP)(const void* x, const void* y));
+
+/* ---Conversion of one ADT to another ADT--- */
+
+int WConvertSetToGraph(struct WSet* S, struct WGraph** G);
+int WConvertSetToGraph2(struct WSet* S, struct WGraph** G, WCTRFP ctr, WDTRFP dtr);
 
 #endif /* C_ALGORITHM_H */
