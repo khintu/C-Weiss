@@ -57,6 +57,9 @@
     <ClCompile Include="Convert.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FibHeap.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="c-algorithm.h">

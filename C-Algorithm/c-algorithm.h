@@ -385,4 +385,33 @@ void WHeapSort(void* v[], int Len, int (*CMP)(const void* x, const void* y));
 int WConvertSetToGraph(struct WSet* S, struct WGraph** G);
 int WConvertSetToGraph2(struct WSet* S, struct WGraph** G, WCTRFP ctr, WDTRFP dtr);
 
+/* ---Fibonacci (Min) Heap O(1), built with circular-doubly linked list ADT--- */
+
+struct FibNode
+{
+	void* data; /* key of Heap nodes */
+	struct FibNode* p; /* parent of node */
+	struct FibNode* child; /* child list pointer */
+	struct FibNode* left; /* left sibling of child in circular-doubly linked list  */
+	struct FibNode* right; /* right sibling of child in circular-doubly linked list */
+	int degree; /* the number of children in child list */
+	int mark; /* True or False */
+};
+
+struct WFibHeap
+{
+	struct FibNode* rootList; /* list of rooted-trees that are min-heap ordered c-d-ll */
+	struct FibNode* min;  /* points to node in rootlist whose key is minimum */
+	int count; /* n the number of nodes currently in H */
+	int (*CMP)(const void* x, const void* y); /* key comparison fp */
+	void* (*CTOR)(void* x);  /* Key ADT user-defined c'tor & d'tor */
+	void (*DTOR)(void* x);
+};
+
+struct WFibHeap* WCreateFibHeap(int (*CMP)(const void* x, const void* y),
+																void* (*CTOR)(void* x),
+																void (*DTOR)(void* x));
+void WDeleteFibHeap(struct WFibHeap* fh);
+
+
 #endif /* C_ALGORITHM_H */

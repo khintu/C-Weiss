@@ -837,6 +837,8 @@ int UnitTestWGraph(int argc, char* argv[])
 	WInsertVertexToGraph(G, "192.168.235.13");
 	WInsertVertexToGraph(G, "192.168.235.14");
 	WInsertVertexToGraph(G, "192.168.235.15");
+	WInsertVertexToGraph(G, "192.168.235.16");
+	WInsertVertexToGraph(G, "192.168.235.17");
 	WAddEdgeToGraph(G, "192.168.235.11", "192.168.235.12");
 	WAddEdgeToGraph(G, "192.168.235.11", "192.168.235.15");
 	WAddEdgeToGraph(G, "192.168.235.12", "192.168.235.13");
@@ -844,6 +846,7 @@ int UnitTestWGraph(int argc, char* argv[])
 	WAddEdgeToGraph(G, "192.168.235.12", "192.168.235.15");
 	WAddEdgeToGraph(G, "192.168.235.13", "192.168.235.14");
 	WAddEdgeToGraph(G, "192.168.235.14", "192.168.235.15");
+	WAddEdgeToGraph(G, "192.168.235.16", "192.168.235.17");
 	printf("---DFS:---\n");
 	WDepthFirstSearchGraph(G, (void (*)(void*, int))iterator2);
 	putchar('\n');
