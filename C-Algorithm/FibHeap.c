@@ -20,30 +20,21 @@ static void deleteFibNode(struct WFibHeap* fh, struct FibNode* tree)
 	struct FibNode *currNode, *tmp, *last;
 	
 	currNode = tree->child;
-	last = (currNode) ? tree->child->left: NULL;
-	while (currNode != NULL)
+	while (currNode != NULL && currNode->p->degree > 0)
 	{
 		if (currNode->child == NULL)
 		{
 			fh->DTOR(currNode->data);
 			fh->count--;
 			tmp = currNode;
-			if (currNode == last)
-			{
-				free(tmp);
-				break;
-			}
+			currNode->p->degree--;
 			currNode = currNode->right;
 			free(tmp);
 		}
 		else
 		{
 			tmp = currNode;
-			if (currNode == last)
-			{
-				deleteFibNode(fh, tmp);
-				break;
-			}
+			currNode->p->degree--;
 			currNode = currNode->right;
 			deleteFibNode(fh, tmp);
 			
@@ -120,4 +111,45 @@ int WInsertKeyFibHeap(struct WFibHeap* fh, void* key)
 	}
 	fh->count++;
 	return 0;
+}
+
+static struct FibNode* concatenateFibList(struct FibNode* rtLst1, struct FibNode* rtLst2)
+{
+	struct FibNode* rtLst, *tmp;
+
+	if (rtLst1 == NULL && rtLst2 == NULL)
+		return NULL;
+	else if (rtLst1 == NULL)
+		return rtLst2;
+	else if (rtLst2 == NULL)
+		return rtLst1;
+	else
+	{
+		rtLst = rtLst1;
+		tmp = rtLst1->left;
+		tmp->right = rtLst2;
+		rtLst->left = rtLst2->left;
+		rtLst->left->right = rtLst;
+		rtLst2->left = tmp;
+	}
+	return rtLst;
+}
+
+struct WFibHeap* WUnionFibHeap(struct WFibHeap* fh1, struct WFibHeap* fh2)
+{
+	struct WFibHeap* fh;
+	if ((fh = WCreateFibHeap(fh1->CMP, fh1->CTOR, fh1->DTOR)) == NULL)
+		return NULL;
+	
+	fh->min = fh1->min;
+	fh->rootList = concatenateFibList(fh1->rootList, fh2->rootList);
+	if ((fh1->min == NULL) || (fh2->min != NULL && fh->CMP(fh2->min->data, fh1->min->data) < 0))
+		fh->min = fh2->min;
+	fh->count = fh1->count + fh2->count;
+
+	// Destroy input FibHeaps
+	fh1->rootList = fh2->rootList = NULL;
+	WDeleteFibHeap(fh1);
+	WDeleteFibHeap(fh2);
+	return fh;
 }
