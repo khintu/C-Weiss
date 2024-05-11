@@ -17,7 +17,7 @@ struct WFibHeap* WCreateFibHeap(int (*CMP)(const void* x, const void* y),
 
 static void deleteFibNode(struct WFibHeap* fh, struct FibNode* tree)
 {
-	struct FibNode *currNode, *tmp, *last;
+	struct FibNode *currNode, *tmp;
 	
 	currNode = tree->child;
 	while (currNode != NULL && currNode->p->degree > 0)
@@ -152,4 +152,100 @@ struct WFibHeap* WUnionFibHeap(struct WFibHeap* fh1, struct WFibHeap* fh2)
 	WDeleteFibHeap(fh1);
 	WDeleteFibHeap(fh2);
 	return fh;
+}
+
+static struct FibNode* collapseHMin2RtLst(struct FibNode* rtLst, struct FibNode const * const hMin)
+{
+	struct FibNode* head, *tail, *child, *rtLstHead, *rtLstTail;
+	int degree;
+
+	// nullify parent of all children of hMin
+	for (child = hMin->child, degree = hMin->degree; child != NULL && degree > 0; child = child->right, degree--)
+	{
+		child->p = NULL;
+	}
+
+	// if hMin is the only tree node, or head of rootList
+	if (rtLst == hMin) {
+		if (rtLst->left == hMin && hMin->right == rtLst) {
+			if (hMin->child != NULL)
+				rtLst = hMin->child;
+			else
+				rtLst = NULL;
+		}
+		else {
+			if (hMin->child != NULL) {
+				tail = hMin->child->left;
+				hMin->child->left = hMin->left;
+				hMin->left->right = hMin->child;
+				tail->right = hMin->right;
+				hMin->right->left = tail;
+				rtLst = hMin->child;
+			}
+			else {
+				hMin->left->right = hMin->right;
+				hMin->right->left = hMin->left;
+				rtLst = hMin->right;
+			}
+		}
+	}
+	else {
+		// hMin is inside the rootList or at the end
+		rtLstHead = hMin->left;
+		rtLstTail = hMin->right;
+		if (hMin->child != NULL) {
+			head = hMin->child;
+			tail = hMin->child->left;
+			rtLstHead->right = head;
+			rtLstTail->left = tail;
+			head->left = rtLstHead;
+			tail->right = rtLstTail;
+		}
+		else {
+			rtLstHead->right = hMin->right;
+			rtLstTail->left = hMin->left;
+		}
+	}
+	return rtLst;
+}
+
+static void consolidateFibHeap(struct WFibHeap* fh)
+{
+
+	return;
+}
+
+static struct FibNode* extractHMinFrmHeap(struct WFibHeap* fh)
+{
+	struct FibNode* z;
+
+	if ((z = fh->min) != NULL)
+	{
+		fh->rootList = collapseHMin2RtLst(fh->rootList, z);
+		if (z == z->right)
+			fh->min = NULL;
+		else {
+			fh->min = z->right;
+			consolidateFibHeap(fh);
+		}
+		fh->count--;
+	}
+	return z;
+}
+
+void* WExtractMinFrmFibHeap(struct WFibHeap* fh)
+{
+	void* min;
+	struct FibNode* z;
+
+	if (fh->count < 1)
+		return NULL;
+	if ((z = extractHMinFrmHeap(fh)) != NULL) {
+		min = fh->CTOR(z->data);
+		fh->DTOR(z->data);
+		free(z);
+	}
+	else
+		return NULL;
+	return min;
 }

@@ -414,5 +414,6 @@ struct WFibHeap* WCreateFibHeap(int (*CMP)(const void* x, const void* y),
 void WDeleteFibHeap(struct WFibHeap* fh);
 int WInsertKeyFibHeap(struct WFibHeap* fh, void* key);
 struct WFibHeap* WUnionFibHeap(struct WFibHeap* fh1, struct WFibHeap* fh2);
+void* WExtractMinFrmFibHeap(struct WFibHeap* fh);
 
 #endif /* C_ALGORITHM_H */
