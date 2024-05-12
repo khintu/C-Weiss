@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <math.h>
 #include <c-algorithm.h>
 
 struct WFibHeap* WCreateFibHeap(int (*CMP)(const void* x, const void* y),
@@ -209,9 +210,90 @@ static struct FibNode* collapseHMin2RtLst(struct FibNode* rtLst, struct FibNode 
 	return rtLst;
 }
 
+static int getDegreeArraySize(double deg)
+{
+	return (int)ceil(log(deg) / log(2));
+}
+
+static void fibHeapLink(struct WFibHeap* fh, struct FibNode* y, struct FibNode* x)
+{
+	struct FibNode* tmp;
+
+	// remove y from root list of H
+	if (fh->rootList == y) {
+		y->left->right = x;
+		x->left = y->left;
+		fh->rootList = x;
+	}
+	else {
+		x->left = y->left;
+		y->left->right = x;
+	}
+	// make y a child of x incrementing x.degree
+	if (x->child != NULL) {
+		tmp = x->child->left;
+		x->child->left = y;
+		y->left = tmp;
+		tmp->right = y;
+	}
+	else {
+		y->right = y->left = y;
+	}
+	y->p = x;
+	x->child = y;
+	x->degree++;
+	// y.mark = FALSE
+	y->mark = FALSE;
+	return;
+}
+
+// Condition: H must contain atleast 2 nodes in the rootlist
 static void consolidateFibHeap(struct WFibHeap* fh)
 {
+	struct FibNode** A, *x, *w, *y, *last, *tmp;
+	int ALen, d, i;
 
+	ALen = getDegreeArraySize(fh->count);
+	if ((A = (struct FibNode**)calloc(ALen, sizeof(struct FibNode*))) == NULL)
+		return; // Try next time, consolidate cannot proceed
+
+	for (w = fh->rootList, last = fh->rootList->left; w != last ;\
+			 w = w->right, last = fh->rootList)	{
+		x = w;
+		d = x->degree;
+		while (A[d] != NULL) {
+			y = A[d];
+			if (fh->CMP(x->data, y->data) > 0) {
+				tmp = x, x = y, y = tmp;
+			}
+			fibHeapLink(fh, y, x);
+			A[d] = NULL;
+			d++;
+		}
+		A[d] = x;
+	}
+	fh->min = NULL; // Reconstruct rootList from A, below
+	// Since A now contains lowest keys from rootList, assign H.min from A
+	for (i = 0; i < ALen; i++) {
+		if (A[i] != NULL) {
+			if (fh->min == NULL) {
+				fh->rootList = A[i];
+				fh->rootList->left = fh->rootList;
+				fh->rootList->right = fh->rootList;
+				fh->min = A[i];
+			}
+			else {
+				tmp = fh->rootList->left;
+				fh->rootList->left = A[i];
+				A[i]->right = fh->rootList;
+				A[i]->left = tmp;
+				tmp->right = A[i];
+				fh->rootList = A[i];
+				if (fh->CMP(A[i]->data, fh->min->data) < 0)
+					fh->min = A[i];
+			}
+		}
+	}
 	return;
 }
 
