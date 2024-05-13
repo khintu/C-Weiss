@@ -855,6 +855,28 @@ int UnitTestWGraph(int argc, char* argv[])
 	return 0;
 }
 
+int UnitTestWFibHeap(int argc, char* argv[])
+{
+	struct WFibHeap* fh;
+	char* tmp;
+
+	printf("Unit Test MinHeap FibonacciHeap\n");
+
+	fh = WCreateFibHeap((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
+
+	WInsertKeyFibHeap(fh, "XYZ1");
+	WInsertKeyFibHeap(fh, "XYZ2");
+	WInsertKeyFibHeap(fh, "XYZ3");
+	printf("FibHeap: Extract Min %s\n", (tmp = WExtractMinFrmFibHeap(fh)));
+	free(tmp);
+	printf("FibHeap: Extract Min %s\n", (tmp = WExtractMinFrmFibHeap(fh)));
+	free(tmp);
+	printf("FibHeap: Extract Min %s\n", (tmp = WExtractMinFrmFibHeap(fh)));
+	free(tmp);
+	WDeleteFibHeap(fh);
+	return 0;
+}
+
 #if __LINUX__ /* Moved to Router App Project, only available in Linux */
 int main(int argc, char* argv[])
 {
@@ -877,9 +899,10 @@ int main(int argc, char* argv[])
 	UnitTestWRBT(argc, argv);
 	UnitTestWSet(argc, argv);
 	UnitTestWGraph(argc, argv);
+	UnitTestWFibHeap(argc, argv);
 #else
 	/* ---Put your Algo here to test--- */
-	UnitTestWGraph(argc, argv);
+	UnitTestWFibHeap(argc, argv);
 #endif /* UNIT_TEST_ALGO */
 	// ---Runtime Analysis ---
 	t2 = clock();

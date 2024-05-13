@@ -89,7 +89,7 @@ int main(int argc, char* argv[])
 	WDeleteGraph(Internet);
 	WDeleteSet(RouterSet);
 #else
-	UnitTestWGraph(argc, argv);
+	UnitTestWFibHeap(argc, argv);
 #endif
 	return 0;
 }

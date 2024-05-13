@@ -21,22 +21,25 @@ static void deleteFibNode(struct WFibHeap* fh, struct FibNode* tree)
 	struct FibNode *currNode, *tmp;
 	
 	currNode = tree->child;
-	while (currNode != NULL && currNode->p->degree > 0)
-	{
-		if (currNode->child == NULL)
-		{
+	while (currNode != NULL) {
+		if (currNode->child == NULL) {
 			fh->DTOR(currNode->data);
 			fh->count--;
 			tmp = currNode;
 			currNode->p->degree--;
-			currNode = currNode->right;
+			if (currNode->p->degree == 0)
+				currNode = NULL;
+			else
+				currNode = currNode->right;
 			free(tmp);
 		}
-		else
-		{
+		else {
 			tmp = currNode;
 			currNode->p->degree--;
-			currNode = currNode->right;
+			if (currNode->p->degree == 0)
+				currNode = NULL;
+			else
+				currNode = currNode->right;
 			deleteFibNode(fh, tmp);
 			
 		}
@@ -53,11 +56,9 @@ void WDeleteFibHeap(struct WFibHeap* fh)
 
 	hn = fh->rootList;
 	last = (hn) ? fh->rootList->left: NULL;
-	while (hn != NULL)
-	{
+	while (hn != NULL) {
 		tmp = hn;
-		if (hn == last)
-		{
+		if (hn == last) {
 			deleteFibNode(fh, tmp);
 			break;
 		}
@@ -71,14 +72,12 @@ void WDeleteFibHeap(struct WFibHeap* fh)
 static void insertFibNode(struct FibNode** list, struct FibNode* node)
 {
 	struct FibNode* tmp;
-	if (*list == NULL)
-	{
+	if (*list == NULL) {
 		*list = node;
 		(*list)->left = node;
 		(*list)->right = node;
 	}
-	else
-	{
+	else {
 		tmp = (*list)->left;
 		node->right = *list;
 		(*list)->left = node;
@@ -97,20 +96,17 @@ int WInsertKeyFibHeap(struct WFibHeap* fh, void* key)
 	hn->data = fh->CTOR(key);
 	fh->count++;
 
-	if (fh->min == NULL)
-	{
+	if (fh->min == NULL) {
 		fh->rootList = hn;
 		hn->left = hn;
 		hn->right = hn;
 		fh->min = hn;
 	}
-	else
-	{
+	else {
 		insertFibNode(&fh->rootList, hn);
 		if (fh->CMP(key, fh->min->data) < 0)
 			fh->min = hn;
 	}
-	fh->count++;
 	return 0;
 }
 
@@ -124,8 +120,7 @@ static struct FibNode* concatenateFibList(struct FibNode* rtLst1, struct FibNode
 		return rtLst2;
 	else if (rtLst2 == NULL)
 		return rtLst1;
-	else
-	{
+	else {
 		rtLst = rtLst1;
 		tmp = rtLst1->left;
 		tmp->right = rtLst2;
@@ -265,6 +260,7 @@ static void consolidateFibHeap(struct WFibHeap* fh)
 			y = A[d];
 			if (fh->CMP(x->data, y->data) > 0) {
 				tmp = x, x = y, y = tmp;
+				w = x;
 			}
 			fibHeapLink(fh, y, x);
 			A[d] = NULL;
@@ -294,6 +290,7 @@ static void consolidateFibHeap(struct WFibHeap* fh)
 			}
 		}
 	}
+	free(A);
 	return;
 }
 
@@ -301,11 +298,10 @@ static struct FibNode* extractHMinFrmHeap(struct WFibHeap* fh)
 {
 	struct FibNode* z;
 
-	if ((z = fh->min) != NULL)
-	{
+	if ((z = fh->min) != NULL) {
 		fh->rootList = collapseHMin2RtLst(fh->rootList, z);
 		if (z == z->right)
-			fh->min = NULL;
+			fh->min = fh->rootList;
 		else {
 			fh->min = z->right;
 			consolidateFibHeap(fh);
