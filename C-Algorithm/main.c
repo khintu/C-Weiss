@@ -886,6 +886,8 @@ int UnitTestWFibHeap(int argc, char* argv[])
 	free(tmp);
 	printf("FibHeap: Extract Min %s\n", (tmp = WExtractMinFrmFibHeap(fh)));
 	free(tmp);
+	printf("FibHeap: Extract Min %s\n", (tmp = WExtractMinFrmFibHeap(fh)));
+	free(tmp);
 	WDeleteFibHeap(fh);
 	return 0;
 }

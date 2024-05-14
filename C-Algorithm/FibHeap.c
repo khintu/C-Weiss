@@ -255,8 +255,14 @@ static void consolidateFibHeap(struct WFibHeap* fh)
 		x = w;
 		d = x->degree;
 		while (A[d] != NULL) {
+			if (d + 1 >= ALen)
+			{
+				ALen++;
+				A = (struct FibNode**)realloc(A, ALen * sizeof(struct FibNode*));
+				A[ALen - 1] = NULL;
+			}
 			y = A[d];
-			//if (x == y) break;
+			if (x == y) break;
 			if (fh->CMP(x->data, y->data) > 0) {
 				tmp = x, x = y, y = tmp;
 				w = x;
@@ -300,7 +306,7 @@ static struct FibNode* extractHMinFrmFibHeap(struct WFibHeap* fh)
 	if ((z = fh->min) != NULL) {
 		fh->rootList = collapseHMin2RtLst(fh->rootList, z);
 		//if (z == z->right)
-		if (fh->rootList == fh->rootList->right)
+		if (fh->rootList == NULL || fh->rootList == fh->rootList->right)
 			fh->min = fh->rootList;
 		else {
 			fh->min = z->right;
