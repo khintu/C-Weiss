@@ -215,14 +215,11 @@ static void fibHeapLink(struct WFibHeap* fh, struct FibNode* y, struct FibNode* 
 	struct FibNode* tmp;
 
 	// remove y from root list of H
+	y->left->right = y->right;
+	y->right->left = y->left;
 	if (fh->rootList == y) {
-		y->left->right = x;
-		x->left = y->left;
-		fh->rootList = x;
-	}
-	else {
-		x->left = y->left;
-		y->left->right = x;
+		
+		fh->rootList = y->right;
 	}
 	// make y a child of x incrementing x.degree
 	if (x->child != NULL) {
@@ -230,6 +227,7 @@ static void fibHeapLink(struct WFibHeap* fh, struct FibNode* y, struct FibNode* 
 		x->child->left = y;
 		y->left = tmp;
 		tmp->right = y;
+		y->right = x->child;
 	}
 	else {
 		y->right = y->left = y;
@@ -258,6 +256,7 @@ static void consolidateFibHeap(struct WFibHeap* fh)
 		d = x->degree;
 		while (A[d] != NULL) {
 			y = A[d];
+			//if (x == y) break;
 			if (fh->CMP(x->data, y->data) > 0) {
 				tmp = x, x = y, y = tmp;
 				w = x;
@@ -294,13 +293,14 @@ static void consolidateFibHeap(struct WFibHeap* fh)
 	return;
 }
 
-static struct FibNode* extractHMinFrmHeap(struct WFibHeap* fh)
+static struct FibNode* extractHMinFrmFibHeap(struct WFibHeap* fh)
 {
 	struct FibNode* z;
 
 	if ((z = fh->min) != NULL) {
 		fh->rootList = collapseHMin2RtLst(fh->rootList, z);
-		if (z == z->right)
+		//if (z == z->right)
+		if (fh->rootList == fh->rootList->right)
 			fh->min = fh->rootList;
 		else {
 			fh->min = z->right;
@@ -318,7 +318,7 @@ void* WExtractMinFrmFibHeap(struct WFibHeap* fh)
 
 	if (fh->count < 1)
 		return NULL;
-	if ((z = extractHMinFrmHeap(fh)) != NULL) {
+	if ((z = extractHMinFrmFibHeap(fh)) != NULL) {
 		min = fh->CTOR(z->data);
 		fh->DTOR(z->data);
 		free(z);
