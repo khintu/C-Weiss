@@ -262,7 +262,7 @@ static void consolidateFibHeap(struct WFibHeap* fh)
 				A[ALen - 1] = NULL;
 			}
 			y = A[d];
-			if (x == y) break;
+			if (x == y) break; // x is already in A[d] skip x
 			if (fh->CMP(x->data, y->data) > 0) {
 				tmp = x, x = y, y = tmp;
 				w = x;
