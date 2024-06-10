@@ -890,6 +890,36 @@ int UnitTestWFibHeap(int argc, char* argv[])
 	free(tmp);
 	WDeleteFibHeap(fh);
 	
+	printf("Unit Test MinHeap FibonacciHeap, Reverse\n");
+
+	fh = WCreateFibHeap((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
+
+	WInsertKeyFibHeap(fh, "XYZ8");
+	WInsertKeyFibHeap(fh, "XYZ7");
+	WInsertKeyFibHeap(fh, "XYZ6");
+	WInsertKeyFibHeap(fh, "XYZ5");
+	WInsertKeyFibHeap(fh, "XYZ4");
+	WInsertKeyFibHeap(fh, "XYZ3");
+	WInsertKeyFibHeap(fh, "XYZ2");
+	WInsertKeyFibHeap(fh, "XYZ1");
+	printf("FibHeap: Extract Min %s\n", (tmp = WExtractMinFrmFibHeap(fh)));
+	free(tmp);
+	printf("FibHeap: Extract Min %s\n", (tmp = WExtractMinFrmFibHeap(fh)));
+	free(tmp);
+	printf("FibHeap: Extract Min %s\n", (tmp = WExtractMinFrmFibHeap(fh)));
+	free(tmp);
+	printf("FibHeap: Extract Min %s\n", (tmp = WExtractMinFrmFibHeap(fh)));
+	free(tmp);
+	printf("FibHeap: Extract Min %s\n", (tmp = WExtractMinFrmFibHeap(fh)));
+	free(tmp);
+	printf("FibHeap: Extract Min %s\n", (tmp = WExtractMinFrmFibHeap(fh)));
+	free(tmp);
+	printf("FibHeap: Extract Min %s\n", (tmp = WExtractMinFrmFibHeap(fh)));
+	free(tmp);
+	printf("FibHeap: Extract Min %s\n", (tmp = WExtractMinFrmFibHeap(fh)));
+	free(tmp);
+	WDeleteFibHeap(fh);
+
 	// Test union
 	printf("FibHeap: Testing union\n");
 	fh1 = WCreateFibHeap((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);

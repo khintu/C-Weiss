@@ -62,7 +62,7 @@ static void itr2(struct Router* r, int d)
 int main(int argc, char* argv[])
 {
 	printf("Router: Internet Simulator\n");
-#if 0
+#if 1
 	struct Router input, input2;
 	struct WSet* RouterSet;
 	struct WGraph* Internet;
