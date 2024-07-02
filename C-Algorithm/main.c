@@ -1052,8 +1052,7 @@ int UnitTestWFibHeap(int argc, char* argv[])
 	return 0;
 }
 
-#if __LINUX__ /* Moved to Router App Project, only available in Linux */
-int main(int argc, char* argv[])
+int insert_in_main_unittestsuit(int argc, char* argv[])
 {
 	clock_t t1, t2;
 	t1 = clock();
@@ -1085,4 +1084,3 @@ int main(int argc, char* argv[])
 	printf("Runtime = %ld - %ld = %ld\n", t2, t1, t2 - t1);
 	return 0;
 }
-#endif
