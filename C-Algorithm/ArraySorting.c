@@ -315,3 +315,39 @@ int WMaxHeapInsertPAQueue(struct WPAQueue* pQ, void* key)
 	//pQ->array[pQ->heapSize - 1] = NULL;
 	return WHeapIncKeyPAQueue(pQ, pQ->heapSize - 1, key);
 }
+
+/* ---QuickSort--- */
+
+/* Generic version of swap, works with any user-specified type */
+void qswap(void* v[], int i, int j)
+{
+	void* tmp;
+	tmp = v[i];
+	v[i] = v[j];
+	v[j] = tmp;
+	return;
+}
+
+/* From C-Reloaded project, already unit-tested/production tested. K&R C book */
+void WQuickSort(void* v[], int left, int right, int (*cmp)(void*, void*))
+{
+	int i, pivot;
+
+	if (left >= right)
+		return;
+
+	qswap(v, left, (left + right) / 2);
+	pivot = left;
+	for (i = left + 1; i <= right; ++i)
+	{
+		/* Calling the caller specified comparison func. makes this Qsort generic */
+		if ((*cmp)(v[i], v[left]) < 0)
+		{
+			qswap(v, ++pivot, i);
+		}
+	}
+	qswap(v, left, pivot);
+	WQuickSort(v, left, pivot - 1, cmp);
+	WQuickSort(v, pivot + 1, right, cmp);
+	return;
+}

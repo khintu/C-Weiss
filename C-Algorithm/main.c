@@ -73,7 +73,7 @@ static void Routeritr2(struct Router* r, int d)
 int internet_simulator_main(int argc, char* argv[])
 {
 	printf("Router: Internet Simulator\n");
-#if 1
+
 	struct Router input, input2;
 	struct WSet* RouterSet;
 	struct WGraph* Internet;
@@ -99,9 +99,6 @@ int internet_simulator_main(int argc, char* argv[])
 	putchar('\n');
 	WDeleteGraph(Internet);
 	WDeleteSet(RouterSet);
-#else
-	UnitTestWFibHeap(argc, argv);
-#endif
 	return 0;
 }
 

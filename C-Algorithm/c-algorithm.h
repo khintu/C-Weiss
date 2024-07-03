@@ -3,7 +3,8 @@
 
 /*
 	 C algorithms on Lists, Sets & Graphs.
-	 All APIs, ADTs & Algos are pointer based with generic types ie. 'void*'
+	 All APIs, ADTs & Algos are all pointer based with generic types ie. 'void*'
+	 using heap allocated memory only! Will crash on memory outage.
 */
 
 #define ABS(x)	((x) < 0)?(-(x)):(x)
@@ -379,6 +380,8 @@ void WHeapSortInt(int v[], int Len);
 void WMaxHeapify(void* v[], int Len, int indx, int (*CMP)(const void* x, const void* y));
 void WBuildMaxHeap(void* v[], int Len, int* heapSize, int (*CMP)(const void* x, const void* y));
 void WHeapSort(void* v[], int Len, int (*CMP)(const void* x, const void* y));
+
+void WQuickSort(void* v[], int left, int right, int (*cmp)(void*, void*));
 
 /* ---Conversion of one ADT to another ADT--- */
 

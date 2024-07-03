@@ -21,6 +21,9 @@
     <ClCompile Include="network_lib.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="routing_table.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="router_defs.h">

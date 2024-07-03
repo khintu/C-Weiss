@@ -135,6 +135,7 @@
   <ItemGroup>
     <ClCompile Include="main.c" />
     <ClCompile Include="network_lib.c" />
+    <ClCompile Include="routing_table.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="router_defs.h" />

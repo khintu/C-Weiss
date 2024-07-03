@@ -1,4 +1,5 @@
-#include<router_defs.h>
+#include <router_defs.h>
+
 
 uint32_t reversebyteorder32(uint32_t h);
 uint16_t reverseobyteorder16(uint16_t h);
@@ -67,4 +68,103 @@ uint16_t host2network16(uint16_t h)
 uint16_t network2host16(uint16_t n)
 {
 	return reversebyteorder16Fast(n);
+}
+
+struct RouteEntry* longestPrefixMatch(struct RouteEntry* FwdgTbl[], uint32_t DestinationDatagram)
+{
+	int32_t i;
+	for (i = 0; FwdgTbl[i] && i < MAX_FWDGTBL_ENTRIES; i++) {
+		if ((FwdgTbl[i]->M & DestinationDatagram) == FwdgTbl[i]->A)
+			return FwdgTbl[i];
+	}
+	return NULL;
+}
+
+/* Sort in descending order of Network Prefix in Route entry */
+int RouteCmp(struct RouteEntry* x, struct RouteEntry* y)
+{
+	if (x->M > y->M)
+		return -1;
+	else if (x->M < y->M)
+		return 1;
+	else
+		return 0;
+}
+
+void longestPrefixOrdered(struct RouteEntry* FwdgTbl[], int32_t startIdx, int32_t endIdx)
+{
+	WQuickSort((void**)FwdgTbl, startIdx, endIdx, (int (*)(void*, void*)) & RouteCmp);
+	return;
+}
+
+int32_t addRoute2FwdTbl(struct RouteEntry* FwdgTbl[], struct RouteEntry* x)
+{
+	int32_t i;
+	for (i = 0; i < MAX_FWDGTBL_ENTRIES; ++i) {
+		if (FwdgTbl[i] == NULL) {
+			FwdgTbl[i] = x;
+			return i;
+		}
+	}
+	return -1;
+}
+
+int32_t removeRouteAdPackFwdTbl(struct RouteEntry* FwdgTbl[], struct RouteEntry* x)
+{
+	int32_t i, j;
+
+	if (FwdgTbl[0] == NULL)
+		return -1; /* Route entry not found, table is empty as it stays packed */
+	for (i = 0; i < MAX_FWDGTBL_ENTRIES; ++i) {
+		if( FwdgTbl[i]->A == x->A && FwdgTbl[i]->M == x->M /*&& \
+			FwdgTbl[i]->R == x->R && FwdgTbl[i]->I == x->I*/) {
+			free(FwdgTbl[i]); /* Route entry found & deleted */
+			FwdgTbl[i] = NULL;
+			break;
+		}
+	}
+	if (i == MAX_FWDGTBL_ENTRIES) {
+		return -1; /* Route entry not found */
+	}
+	/* Pack the fwdg table, it is not empty case */
+	for (i = 0; i < MAX_FWDGTBL_ENTRIES; ++i) {
+		if (FwdgTbl[i] == NULL) {
+			for (j = i + 1; j < MAX_FWDGTBL_ENTRIES; ++j) {
+				FwdgTbl[j - 1] = FwdgTbl[j];
+			}
+			break; /* No need to look for more NULL entries, from above */
+		}
+	}
+	return 0;
+}
+
+uint32_t dotted2decimal32(const char* d)
+{
+	uint32_t x, y, z;
+	for (x = 0, y = 0, z = 3; *d != NUL ; d++) {
+		if (*d != '.') {
+			y = 10*y + (*d - '0');
+		}
+		else {
+			x |= y << (z*8);
+			y = 0; z--;
+		}
+	}
+	x |= y;
+	return x;
+}
+
+uint32_t ntwkprefx2decimal32(const char* np)
+{
+	int32_t np2, i;
+	uint32_t x = 0, mask = 1;
+
+	for (np2 = 0; *np != NUL; ++np) {
+		np2 = np2 * 10 + (*np - '0');
+	}
+	if (np2 >= 0 && np2 <= 32) { /* Permitted values between 0 & 32 */
+		for (i = 31; i > 0 && np2-- > 0; --i)
+			x |= (mask << i);
+	}
+	return x;
 }
