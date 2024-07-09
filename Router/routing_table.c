@@ -31,7 +31,7 @@ int32_t addRoute2RoutingTable(struct RouteEntry* FwdgTbl[],
 	return 0;
 }
 
-void removeRouteFrmTable(struct RouteEntry* FwdgTbl[], const char* IPAddr, const char* NetPrefx)
+void removeRouteFrmRoutingTable(struct RouteEntry* FwdgTbl[], const char* IPAddr, const char* NetPrefx)
 {
 	struct RouteEntry route;
 
