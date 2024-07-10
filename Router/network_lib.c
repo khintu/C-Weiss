@@ -70,6 +70,8 @@ uint16_t network2host16(uint16_t n)
 	return reversebyteorder16Fast(n);
 }
 
+/* Match against Host Specific, Same Network, Intranet/Known networks,
+	 Internet/Unknown networks (Defualt Gw), destination(s) */
 struct RouteEntry* longestPrefixMatch(struct RouteEntry* FwdgTbl[], uint32_t DestinationDatagram)
 {
 	int32_t i;

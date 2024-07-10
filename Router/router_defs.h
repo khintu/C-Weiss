@@ -30,6 +30,8 @@ int32_t removeRouteAdPackFwdTbl(struct RouteEntry* [], struct RouteEntry*);
 void printRoutingTable(struct RouteEntry const* []);
 int32_t addRoute2RoutingTable(struct RouteEntry* [], const char*, const char*, const char*, uint32_t);
 void removeRouteFrmRoutingTable(struct RouteEntry* [], const char*, const char*);
+uint32_t getNextHopFrmRoutingTable(struct RouteEntry* [], const char*);
+uint32_t getInterfaceFrmRoutingTable(struct RouteEntry* [], const char*);
 
 /* Helper Network APIs */
 uint32_t host2network32(uint32_t);

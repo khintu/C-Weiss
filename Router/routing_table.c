@@ -5,7 +5,7 @@ void printRoutingTable(struct RouteEntry const * FwdgTbl[])
 	int32_t i;
 	printf("Routing/Forwarding Table:\n");
 	for (i = 0; FwdgTbl[i] != NULL; ++i)
-		printf("%x, %x, %x, %d\n", FwdgTbl[i]->A, FwdgTbl[i]->M, FwdgTbl[i]->R, FwdgTbl[i]->I);
+		printf("%.8x, %.8x, %.8x, %d\n", FwdgTbl[i]->A, FwdgTbl[i]->M, FwdgTbl[i]->R, FwdgTbl[i]->I);
 	return;
 }
 
@@ -40,4 +40,24 @@ void removeRouteFrmRoutingTable(struct RouteEntry* FwdgTbl[], const char* IPAddr
 	removeRouteAdPackFwdTbl(FwdgTbl, &route);
 
 	return;
+}
+
+/* IP addresses 0.0.0.0 & 255.255.255.255 are reserved and not part of addressable IPs */
+uint32_t getNextHopFrmRoutingTable(struct RouteEntry* FwdgTbl[], const char *DestinationIP)
+{
+	struct RouteEntry* nextHop;
+
+	nextHop = longestPrefixMatch(FwdgTbl, dotted2decimal32(DestinationIP));
+
+	return (nextHop)? nextHop->R : 0;
+}
+
+/* zero is an invalid interface ID */
+uint32_t getInterfaceFrmRoutingTable(struct RouteEntry* FwdgTbl[], const char *DestinationIP)
+{
+	struct RouteEntry* nextHop;
+
+	nextHop = longestPrefixMatch(FwdgTbl, dotted2decimal32(DestinationIP));
+
+	return (nextHop) ? nextHop->I : 0;
 }

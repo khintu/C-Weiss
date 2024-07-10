@@ -3,22 +3,27 @@
 extern int insert_in_main_unittestsuit(int argc, char* argv[]);
 void unit_test_network_lib(void);
 
-struct RouteEntry* FwdgTbl[MAX_FWDGTBL_ENTRIES];
-
-
-
 
 int main(int argc, char* argv[])
 {
+	struct RouteEntry* FwdgTbl[MAX_FWDGTBL_ENTRIES] = { 0 };
 	//unit_test_network_lib();
 	//insert_in_main_unittestsuit(argc, argv);
-	
-	addRoute2RoutingTable(FwdgTbl, "128.170.187.255", "8", "128.170.200.255", 3);
-	addRoute2RoutingTable(FwdgTbl, "128.170.188.255", "16", "128.170.201.255", 4);
+	uint32_t nextHopIP, nextHopIntf;
+
+	addRoute2RoutingTable(FwdgTbl, "128.170.187.255", "8", "128.170.200.210", 3);
+	addRoute2RoutingTable(FwdgTbl, "128.170.188.255", "16", "128.170.201.206", 5);
+	addRoute2RoutingTable(FwdgTbl, "128.170.189.255", "24", "128.170.201.201", 4);
+	addRoute2RoutingTable(FwdgTbl, "0.0.0.0", "0", "128.170.202.255", 6);
 	printRoutingTable(FwdgTbl);
-	removeRouteFrmRoutingTable(FwdgTbl, "128.170.188.255", "16");
-	removeRouteFrmRoutingTable(FwdgTbl, "128.170.187.255", "8");
-	printRoutingTable(FwdgTbl);
+	if ((nextHopIP = getNextHopFrmRoutingTable(FwdgTbl, "128.170.120.11")) && \
+		  (nextHopIntf = getInterfaceFrmRoutingTable(FwdgTbl, "128.170.120.11")))
+	{
+		printf("Route for %s is NextHop %.8x, Intf %d\n", "128.170.120.11", nextHopIP, nextHopIntf);
+	}
+	//removeRouteFrmRoutingTable(FwdgTbl, "128.170.188.255", "16");
+	//removeRouteFrmRoutingTable(FwdgTbl, "128.170.187.255", "8");
+	//printRoutingTable(FwdgTbl);
 	return 0;
 }
 
