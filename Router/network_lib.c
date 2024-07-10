@@ -174,14 +174,15 @@ uint32_t ntwkprefx2decimal32(const char* np)
 char* itoa8(uint8_t d)
 {
 	int32_t lsb, i, j, len, tmp;
-	static char a[4] = { 0 };
+	static char a[4];
 	
+	memset(a, 0x0, 4);
 	for (i = 0, a[0] = '0'; d && i < 3 ; ++i, d /= 10) {
 		lsb = d % 10 + '0';
 		a[i] = lsb;
 	}
 	len = (int32_t)strlen(a);
-	for (i = len - 1, j = 0; i > (len / 2); --i, ++j) {
+	for (i = len - 1, j = 0; i > (len / 2 - 1) ; --i, ++j) {
 		tmp = a[i];
 		a[i] = a[j];
 		a[j] = tmp;
@@ -191,9 +192,11 @@ char* itoa8(uint8_t d)
 
 char* decimal2dotted32(uint32_t ipAddr)
 {
-	static char dottd[16] = { 0 };
+	static char dottd[16];
 	uint8_t a[4] = { 0 };
 	int32_t idx;
+
+	memset(dottd, 0x0, 16);
 	a[0] = ipAddr >> 24; /* MSB */
 	a[1] = (ipAddr << 8) >> 24;
 	a[2] = (ipAddr << 16) >> 24;
