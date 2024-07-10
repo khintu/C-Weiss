@@ -21,6 +21,7 @@ struct RouteEntry
 	uint32_t I;
 };
 
+/* Forwarding algorithms */
 void longestPrefixOrdered(struct RouteEntry* [], int32_t, int32_t);
 struct RouteEntry* longestPrefixMatch(struct RouteEntry* [], uint32_t);
 int32_t addRoute2FwdTbl(struct RouteEntry* [], struct RouteEntry*);
@@ -41,4 +42,7 @@ uint16_t network2host16(uint16_t);
 
 uint32_t dotted2decimal32(const char*);
 uint32_t ntwkprefx2decimal32(const char*);
+char* decimal2dotted32(uint32_t);
+char* itoa8(uint8_t);
+
 #endif // ROUTER_DEFS_H

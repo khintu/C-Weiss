@@ -170,3 +170,46 @@ uint32_t ntwkprefx2decimal32(const char* np)
 	}
 	return x;
 }
+
+char* itoa8(uint8_t d)
+{
+	int32_t lsb, i, j, len, tmp;
+	static char a[4] = { 0 };
+	
+	for (i = 0, a[0] = '0'; d && i < 3 ; ++i, d /= 10) {
+		lsb = d % 10 + '0';
+		a[i] = lsb;
+	}
+	len = (int32_t)strlen(a);
+	for (i = len - 1, j = 0; i > (len / 2); --i, ++j) {
+		tmp = a[i];
+		a[i] = a[j];
+		a[j] = tmp;
+	}
+	return a;
+}
+
+char* decimal2dotted32(uint32_t ipAddr)
+{
+	static char dottd[16] = { 0 };
+	uint8_t a[4] = { 0 };
+	int32_t idx;
+	a[0] = ipAddr >> 24; /* MSB */
+	a[1] = (ipAddr << 8) >> 24;
+	a[2] = (ipAddr << 16) >> 24;
+	a[3] = (ipAddr << 24) >> 24; /* LSB */
+	strcpy(dottd, itoa8(a[0]));
+	idx = (int32_t)strlen(dottd);
+	dottd[idx] = '.';
+	
+	strcat(dottd, itoa8(a[1]));
+	idx = (int32_t)strlen(dottd);
+	dottd[idx] = '.';
+
+	strcat(dottd, itoa8(a[2]));
+	idx = (int32_t)strlen(dottd);
+	dottd[idx] = '.';
+
+	strcat(dottd, itoa8(a[3]));
+ 	return dottd;
+}

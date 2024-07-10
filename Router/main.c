@@ -11,15 +11,15 @@ int main(int argc, char* argv[])
 	//insert_in_main_unittestsuit(argc, argv);
 	uint32_t nextHopIP, nextHopIntf;
 
-	addRoute2RoutingTable(FwdgTbl, "128.170.187.255", "8", "128.170.200.210", 3);
-	addRoute2RoutingTable(FwdgTbl, "128.170.188.255", "16", "128.170.201.206", 5);
-	addRoute2RoutingTable(FwdgTbl, "128.170.189.255", "24", "128.170.201.201", 4);
+	addRoute2RoutingTable(FwdgTbl, "128.0.0.0", "8", "128.170.200.210", 3);
+	addRoute2RoutingTable(FwdgTbl, "128.170.0.0", "16", "128.170.201.206", 5);
+	addRoute2RoutingTable(FwdgTbl, "128.170.189.0", "24", "128.170.201.201", 4);
 	addRoute2RoutingTable(FwdgTbl, "0.0.0.0", "0", "128.170.202.255", 6);
 	printRoutingTable(FwdgTbl);
-	if ((nextHopIP = getNextHopFrmRoutingTable(FwdgTbl, "128.170.120.11")) && \
-		  (nextHopIntf = getInterfaceFrmRoutingTable(FwdgTbl, "128.170.120.11")))
+	if ((nextHopIP = getNextHopFrmRoutingTable(FwdgTbl, "128.170.189.11")) && \
+		  (nextHopIntf = getInterfaceFrmRoutingTable(FwdgTbl, "128.170.189.11")))
 	{
-		printf("Route for %s is NextHop %.8x, Intf %d\n", "128.170.120.11", nextHopIP, nextHopIntf);
+		printf("Route for %s is NextHop %s, Intf %d\n", "128.170.189.11", decimal2dotted32(nextHopIP), nextHopIntf);
 	}
 	//removeRouteFrmRoutingTable(FwdgTbl, "128.170.188.255", "16");
 	//removeRouteFrmRoutingTable(FwdgTbl, "128.170.187.255", "8");
@@ -35,5 +35,6 @@ void unit_test_network_lib(void)
 	printf("%x to %x\n", host2network32(dummy32), network2host32(host2network32(dummy32)));
 	printf("%x to %x\n", dummy16, host2network16(dummy16));
 	printf("%x to %x\n", host2network16(dummy16), network2host16(host2network16(dummy16)));
+	printf("%s\n", decimal2dotted32(dummy32));
 	return;
 }
