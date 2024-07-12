@@ -615,10 +615,13 @@ int UnitTestWArrySortStr(int argc, char* argv[])
 	return 0;
 }
 
+/* Best case O(nlgn), worst case when already sorted, both dec/inc order O(n^2) */
 int UnitTestWDLListQuickSortStr(int argc, char* argv[])
 {
 	//char* A[10] = { "99", "88", "77", "66", "55", "44", "33", "22", "11", "0" };
 	char* A[11] = { "0", "12", "11", "22", "22", "55", "11", "33", "22", "11", "0" };
+	//char* A[11] = { "0", "11", "12", "22", "33", "44", "55", "66", "77", "88", "99" };
+	//char* A[11] = { "99", "88", "77", "66", "55", "44", "33", "22", "12", "11", "0" };
 	struct WDLList* dll = WCreateDList((WCMPFP)strcmp, (WCTRFP)ctor, (WDTRFP)dtor);
 	for (int i = 0; i < 11; ++i)
 		WAppendToDList(dll, A[i]);

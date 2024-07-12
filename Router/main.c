@@ -19,7 +19,8 @@ int main(int argc, char* argv[])
 	if ((nextHopIP = getNextHopFrmRoutingTable(FwdgTbl, "128.170.189.11")) && \
 		  (nextHopIntf = getInterfaceFrmRoutingTable(FwdgTbl, "128.170.189.11")))
 	{
-		printf("Route for %s is NextHop %s, Intf %d\n", "128.170.189.11", decimal2dotted32(nextHopIP), nextHopIntf);
+		printf("Route for %s is NextHop %s, Intf %d\n", \
+					 "128.170.189.11", decimal2dotted32(nextHopIP), nextHopIntf);
 	}
 	//removeRouteFrmRoutingTable(FwdgTbl, "128.170.188.255", "16");
 	//removeRouteFrmRoutingTable(FwdgTbl, "128.170.187.255", "8");

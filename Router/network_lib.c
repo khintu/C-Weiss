@@ -95,7 +95,8 @@ int RouteCmp(struct RouteEntry* x, struct RouteEntry* y)
 
 void longestPrefixOrdered(struct RouteEntry* FwdgTbl[], int32_t startIdx, int32_t endIdx)
 {
-	WQuickSort((void**)FwdgTbl, startIdx, endIdx, (int (*)(void*, void*)) & RouteCmp);
+	//WQuickSort((void**)FwdgTbl, startIdx, endIdx, (int (*)(void*, void*)) & RouteCmp);
+	WMergeSort((void**)FwdgTbl, startIdx, endIdx, (int (*)(const void*, const void*)) & RouteCmp);
 	return;
 }
 
