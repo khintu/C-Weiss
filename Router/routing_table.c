@@ -4,7 +4,7 @@ void printRoutingTable(struct RouteEntry const * FwdgTbl[])
 {
 	int32_t i;
 	printf("Routing/Forwarding Table:\n");
-	for (i = 0; FwdgTbl[i] != NULL; ++i)
+	for (i = 0; i < MAX_FWDGTBL_ENTRIES && FwdgTbl[i] != NULL; ++i)
 		printf("%.8x, %.8x, %.8x, %d\n", FwdgTbl[i]->A, FwdgTbl[i]->M, FwdgTbl[i]->R, FwdgTbl[i]->I);
 	return;
 }
@@ -26,7 +26,7 @@ int32_t addRoute2RoutingTable(struct RouteEntry* FwdgTbl[],
 	idx = addRoute2FwdTbl(FwdgTbl, route);
 	
 	if (idx > 0) {
-		printf("Route Added %x, %x, %x, %d\n", FwdgTbl[idx]->A, FwdgTbl[idx]->M, \
+		printf("Route Added %.8x, %.8x, %.8x, %d\n", FwdgTbl[idx]->A, FwdgTbl[idx]->M, \
 			FwdgTbl[idx]->R, FwdgTbl[idx]->I);
 		longestPrefixOrdered(FwdgTbl, 0, idx);
 	}

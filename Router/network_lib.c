@@ -75,32 +75,20 @@ uint16_t network2host16(uint16_t n)
 struct RouteEntry* longestPrefixMatch(struct RouteEntry* FwdgTbl[], uint32_t DestinationDatagram)
 {
 	int32_t i;
-	for (i = 0; FwdgTbl[i] && i < MAX_FWDGTBL_ENTRIES; i++) {
+	for (i = 0; i < MAX_FWDGTBL_ENTRIES && FwdgTbl[i]; i++) {
 		if ((FwdgTbl[i]->M & DestinationDatagram) == FwdgTbl[i]->A)
 			return FwdgTbl[i];
 	}
 	return NULL;
 }
 
-/* Sort in descending order of Network Prefix in Route entry */
-int RouteCmp(struct RouteEntry* x, struct RouteEntry* y)
-{
-	if (x->M > y->M)
-		return 1;
-	else if (x->M < y->M)
-		return -1;
-	else
-		return 0;
-}
-
 void longestPrefixOrdered(struct RouteEntry* FwdgTbl[], int32_t startIdx, int32_t endIdx)
 {
 	int32_t i;
 	struct RouteEntry* tmp;
-	//WQuickSort((void**)FwdgTbl, startIdx, endIdx, (int (*)(void*, void*)) & RouteCmp);
-	//WMergeSort((void**)FwdgTbl, startIdx, endIdx, (int (*)(const void*, const void*)) & RouteCmp);
+
 	for (i = endIdx; i > startIdx; --i) {
-		if (RouteCmp(FwdgTbl[i], FwdgTbl[i - 1]) > 0) {
+		if (FwdgTbl[i]->M > FwdgTbl[i - 1]->M) {
 			tmp = FwdgTbl[i], FwdgTbl[i] = FwdgTbl[i - 1], FwdgTbl[i - 1] = tmp;
 		}
 	}
