@@ -86,17 +86,24 @@ struct RouteEntry* longestPrefixMatch(struct RouteEntry* FwdgTbl[], uint32_t Des
 int RouteCmp(struct RouteEntry* x, struct RouteEntry* y)
 {
 	if (x->M > y->M)
-		return -1;
-	else if (x->M < y->M)
 		return 1;
+	else if (x->M < y->M)
+		return -1;
 	else
 		return 0;
 }
 
 void longestPrefixOrdered(struct RouteEntry* FwdgTbl[], int32_t startIdx, int32_t endIdx)
 {
+	int32_t i;
+	struct RouteEntry* tmp;
 	//WQuickSort((void**)FwdgTbl, startIdx, endIdx, (int (*)(void*, void*)) & RouteCmp);
-	WMergeSort((void**)FwdgTbl, startIdx, endIdx, (int (*)(const void*, const void*)) & RouteCmp);
+	//WMergeSort((void**)FwdgTbl, startIdx, endIdx, (int (*)(const void*, const void*)) & RouteCmp);
+	for (i = endIdx; i > startIdx; --i) {
+		if (RouteCmp(FwdgTbl[i], FwdgTbl[i - 1]) > 0) {
+			tmp = FwdgTbl[i], FwdgTbl[i] = FwdgTbl[i - 1], FwdgTbl[i - 1] = tmp;
+		}
+	}
 	return;
 }
 
@@ -132,8 +139,9 @@ int32_t removeRouteAdPackFwdTbl(struct RouteEntry* FwdgTbl[], struct RouteEntry*
 	/* Pack the fwdg table, it is not empty case */
 	for (i = 0; i < MAX_FWDGTBL_ENTRIES; ++i) {
 		if (FwdgTbl[i] == NULL) {
-			for (j = i + 1; j < MAX_FWDGTBL_ENTRIES; ++j) {
+			for (j = i + 1; j < MAX_FWDGTBL_ENTRIES && FwdgTbl[j] ; ++j) {
 				FwdgTbl[j - 1] = FwdgTbl[j];
+				FwdgTbl[j] = NULL;
 			}
 			break; /* No need to look for more NULL entries, from above */
 		}

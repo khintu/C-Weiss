@@ -24,20 +24,23 @@ int32_t addRoute2RoutingTable(struct RouteEntry* FwdgTbl[],
 	route->R = dotted2decimal32(NextHop);
 	route->I = IntfId;
 	idx = addRoute2FwdTbl(FwdgTbl, route);
-	printf("Route Added %x, %x, %x, %d\n", FwdgTbl[idx]->A, FwdgTbl[idx]->M,\
-				 FwdgTbl[idx]->R, FwdgTbl[idx]->I);
-	if (idx > 0)
+	
+	if (idx > 0) {
+		printf("Route Added %x, %x, %x, %d\n", FwdgTbl[idx]->A, FwdgTbl[idx]->M, \
+			FwdgTbl[idx]->R, FwdgTbl[idx]->I);
 		longestPrefixOrdered(FwdgTbl, 0, idx);
+	}
 	return 0;
 }
 
 void removeRouteFrmRoutingTable(struct RouteEntry* FwdgTbl[], const char* IPAddr, const char* NetPrefx)
 {
-	struct RouteEntry route;
+	struct RouteEntry route = { 0 };
 
 	route.A = dotted2decimal32(IPAddr);
 	route.M = ntwkprefx2decimal32(NetPrefx);
-	removeRouteAdPackFwdTbl(FwdgTbl, &route);
+	if (removeRouteAdPackFwdTbl(FwdgTbl, &route) == 0)
+		printf("Route Removed %.8x, %.8x\n", route.A, route.M);
 
 	return;
 }

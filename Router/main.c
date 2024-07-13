@@ -22,9 +22,10 @@ int main(int argc, char* argv[])
 		printf("Route for %s is NextHop %s, Intf %d\n", \
 					 "128.170.189.11", decimal2dotted32(nextHopIP), nextHopIntf);
 	}
-	//removeRouteFrmRoutingTable(FwdgTbl, "128.170.188.255", "16");
-	//removeRouteFrmRoutingTable(FwdgTbl, "128.170.187.255", "8");
-	//printRoutingTable(FwdgTbl);
+	//removeRouteFrmRoutingTable(FwdgTbl, "128.170.189.0", "24");
+	removeRouteFrmRoutingTable(FwdgTbl, "0.0.0.0", "0");
+	//removeRouteFrmRoutingTable(FwdgTbl, "128.0.0.0", "8");
+	printRoutingTable(FwdgTbl);
 	return 0;
 }
 
