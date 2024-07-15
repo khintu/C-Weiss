@@ -9,6 +9,14 @@ void printRoutingTable(struct RouteEntry const * FwdgTbl[])
 	return;
 }
 
+void freeRoutingTable(struct RouteEntry* FwdgTbl[])
+{
+	for (int32_t i = 0; i < MAX_FWDGTBL_ENTRIES; ++i)
+		if (FwdgTbl[i])
+			free(FwdgTbl[i]);
+	return;
+}
+
 int32_t addRoute2RoutingTable(struct RouteEntry* FwdgTbl[],
 															const char* IPAddr,
 															const char* NetPrefx,
@@ -24,10 +32,10 @@ int32_t addRoute2RoutingTable(struct RouteEntry* FwdgTbl[],
 	route->R = dotted2decimal32(NextHop);
 	route->I = IntfId;
 	idx = addRoute2FwdTbl(FwdgTbl, route);
-	
-	if (idx > 0) {
+	if (idx >= 0)
 		printf("Route Added %.8x, %.8x, %.8x, %d\n", FwdgTbl[idx]->A, FwdgTbl[idx]->M, \
-			FwdgTbl[idx]->R, FwdgTbl[idx]->I);
+																								 FwdgTbl[idx]->R, FwdgTbl[idx]->I);
+	if (idx > 0) {
 		longestPrefixOrdered(FwdgTbl, 0, idx);
 	}
 	return 0;
@@ -63,4 +71,16 @@ uint32_t getInterfaceFrmRoutingTable(struct RouteEntry* FwdgTbl[], const char *D
 	nextHop = longestPrefixMatch(FwdgTbl, dotted2decimal32(DestinationIP));
 
 	return (nextHop) ? nextHop->I : 0;
+}
+
+uint32_t getNextHopFrmRoutingTable2(struct Router* R1, const char* Destination)
+{
+	uint32_t nextHopIP, nextHopIntf;
+	if ((nextHopIP = getNextHopFrmRoutingTable(R1->FwdgTbl, Destination)) && \
+		(nextHopIntf = getInterfaceFrmRoutingTable(R1->FwdgTbl, Destination)))
+	{
+		printf("Route for %s is NextHop %s, Intf %d\n", \
+			Destination, decimal2dotted32(nextHopIP), nextHopIntf);
+	}
+	return nextHopIP;
 }

@@ -381,7 +381,7 @@ void WMaxHeapify(void* v[], int Len, int indx, int (*CMP)(const void* x, const v
 void WBuildMaxHeap(void* v[], int Len, int* heapSize, int (*CMP)(const void* x, const void* y));
 void WHeapSort(void* v[], int Len, int (*CMP)(const void* x, const void* y));
 
-void WQuickSort(void* v[], int left, int right, int (*cmp)(void*, void*));
+void WQuickSort(void* v[], int left, int right, int (*cmp)(const void*, const void*));
 
 /* ---Conversion of one ADT to another ADT--- */
 

@@ -33,6 +33,8 @@ int32_t addRoute2RoutingTable(struct RouteEntry* [], const char*, const char*, c
 void removeRouteFrmRoutingTable(struct RouteEntry* [], const char*, const char*);
 uint32_t getNextHopFrmRoutingTable(struct RouteEntry* [], const char*);
 uint32_t getInterfaceFrmRoutingTable(struct RouteEntry* [], const char*);
+uint32_t getNextHopFrmRoutingTable2(struct Router*, const char*);
+void freeRoutingTable(struct RouteEntry* []);
 
 /* Helper Network APIs */
 uint32_t host2network32(uint32_t);
@@ -44,5 +46,16 @@ uint32_t dotted2decimal32(const char*);
 uint32_t ntwkprefx2decimal32(const char*);
 char* decimal2dotted32(uint32_t);
 char* itoa8(uint8_t);
+
+/* Internet/WAN Builder APIs */
+#define MAX_INTFTBL_SIZE	100
+
+struct Router {
+	uint32_t Id;
+	struct RouteEntry* FwdgTbl[MAX_FWDGTBL_ENTRIES];
+	struct Router* IntfTbl[MAX_INTFTBL_SIZE];
+};
+
+int32_t readInitFile(char*, struct WLList*);
 
 #endif // ROUTER_DEFS_H

@@ -133,12 +133,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="init_inet.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="network_lib.c" />
     <ClCompile Include="routing_table.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="router_defs.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="route_init.ini" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

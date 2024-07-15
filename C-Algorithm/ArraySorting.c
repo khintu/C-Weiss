@@ -329,7 +329,7 @@ void qswap(void* v[], int i, int j)
 }
 
 /* From C-Reloaded project, already unit-tested/production tested. K&R C book */
-void WQuickSort(void* v[], int left, int right, int (*cmp)(void*, void*))
+void WQuickSort(void* v[], int left, int right, int (*cmp)(const void*, const void*))
 {
 	int i, pivot;
 

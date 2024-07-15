@@ -24,10 +24,18 @@
     <ClCompile Include="routing_table.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="init_inet.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="router_defs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="route_init.ini">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

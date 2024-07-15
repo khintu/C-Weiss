@@ -3,29 +3,53 @@
 extern int insert_in_main_unittestsuit(int argc, char* argv[]);
 void unit_test_network_lib(void);
 
+int RouterCmp(const struct Router* R1, const struct Router* R2)
+{
+	if (R1->Id > R2->Id)
+		return 1;
+	else if (R1->Id < R1->Id)
+		return -1;
+	else
+		return 0;
+}
+
+struct Router* RouterCtor(struct Router* x)
+{
+	struct Router* R;
+	R = (struct Router*)malloc(sizeof * x);
+	memcpy(R, x, sizeof * x);
+	return R;
+}
+
+void RouterDtor(struct Router* x)
+{
+	freeRoutingTable(x->FwdgTbl);
+	free(x);
+	return;
+}
+
+void RouterItr(struct Router* R)
+{
+	printf("RouterId: %d\n", R->Id);
+	printRoutingTable(R->FwdgTbl);
+}
 
 int main(int argc, char* argv[])
 {
-	struct RouteEntry* FwdgTbl[MAX_FWDGTBL_ENTRIES] = { 0 };
-	uint32_t nextHopIP, nextHopIntf;
-
+	struct WLList* inetList;
 	//unit_test_network_lib();
 	//insert_in_main_unittestsuit(argc, argv);
-	addRoute2RoutingTable(FwdgTbl, "128.0.0.0", "8", "128.170.200.210", 3);
-	addRoute2RoutingTable(FwdgTbl, "128.170.0.0", "16", "128.170.201.206", 5);
-	addRoute2RoutingTable(FwdgTbl, "128.170.189.0", "24", "128.170.201.201", 4);
-	addRoute2RoutingTable(FwdgTbl, "0.0.0.0", "0", "128.170.202.255", 6);
-	printRoutingTable(FwdgTbl);
-	if ((nextHopIP = getNextHopFrmRoutingTable(FwdgTbl, "128.170.189.11")) && \
-		  (nextHopIntf = getInterfaceFrmRoutingTable(FwdgTbl, "128.170.189.11")))
-	{
-		printf("Route for %s is NextHop %s, Intf %d\n", \
-					 "128.170.189.11", decimal2dotted32(nextHopIP), nextHopIntf);
-	}
+	
+	inetList = WCreateList((WCMPFP)RouterCmp, (WCTRFP)RouterCtor, (WDTRFP)RouterDtor);
+	readInitFile("route_init.ini", inetList);
+	WIteratorList(inetList, (void (*)(void*))RouterItr);
+	
+
 	//removeRouteFrmRoutingTable(FwdgTbl, "128.170.189.0", "24");
-	removeRouteFrmRoutingTable(FwdgTbl, "0.0.0.0", "0");
+	//removeRouteFrmRoutingTable(R1->FwdgTbl, "0.0.0.0", "0");
 	//removeRouteFrmRoutingTable(FwdgTbl, "128.0.0.0", "8");
-	printRoutingTable(FwdgTbl);
+	//printRoutingTable(R1->FwdgTbl);
+	WDeleteList(inetList);
 	return 0;
 }
 
