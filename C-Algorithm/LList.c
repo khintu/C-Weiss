@@ -138,6 +138,15 @@ void WIteratorList(struct WLList* l, void (*ITR)(void*))
 	return;
 }
 
+void WIteratorList2(struct WLList* l, void (*ITR)(void*, void*))
+{
+	struct LNode* p;
+
+	for (p = l->head; p; p = p->next)
+		(*ITR)(p->data, l);
+	return;
+}
+
 void WSortList(struct WLList* l)
 {
 	struct LNode* p;

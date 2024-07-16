@@ -2,6 +2,38 @@
 
 #define ROUTER_TOKEN	"Router:"
 
+
+int RouterCmp(const struct Router* R1, const struct Router* R2)
+{
+	if (R1->Id > R2->Id)
+		return 1;
+	else if (R1->Id < R2->Id)
+		return -1;
+	else
+		return 0;
+}
+
+struct Router* RouterCtor(struct Router* x)
+{
+	struct Router* R;
+	R = (struct Router*)malloc(sizeof * x);
+	memcpy(R, x, sizeof * x);
+	return R;
+}
+
+void RouterDtor(struct Router* x)
+{
+	freeRoutingTable(x->FwdgTbl);
+	free(x);
+	return;
+}
+
+void PrintRoutgTbls(struct Router* R)
+{
+	printf("RouterId: %d\n", R->Id);
+	printRoutingTable(R->FwdgTbl);
+}
+
 int32_t readInitFile(char* fName, struct WLList* inetList)
 {
 	struct Router* Rtr;
@@ -39,4 +71,39 @@ int32_t readInitFile(char* fName, struct WLList* inetList)
 	}
 	fclose(fp);
 	return 0;
+}
+
+struct WLList* initializeInternetMap(void)
+{
+	struct WLList* inetList;
+	inetList = WCreateList((WCMPFP)RouterCmp, (WCTRFP)RouterCtor, (WDTRFP)RouterDtor);
+	readInitFile("route_init.ini", inetList);
+	WIteratorList(inetList, (void (*)(void*))PrintRoutgTbls);
+	generateLinksBwRouters(inetList);
+	return inetList;
+}
+
+void RouterGenLinks(struct Router* Rtr, struct WLList* inetList)
+{
+	int32_t i;
+	struct Router* x, tmp = { 0 };
+	
+	printf("Interface link associations for %d\n", Rtr->Id);
+
+	for (i = 0; Rtr->FwdgTbl[i] && i < MAX_FWDGTBL_ENTRIES; ++i) {
+		tmp.Id = Rtr->FwdgTbl[i]->I;
+		if (x = WFindInList(inetList, &tmp)) {
+			if (x->Id < MAX_INTFTBL_SIZE) {
+				Rtr->IntfTbl[x->Id] = x;
+				printf("b/w % d and %d\n", Rtr->FwdgTbl[i]->I, x->Id);
+			}
+		}
+	}
+	return;
+}
+
+void generateLinksBwRouters(struct WLList* inetList)
+{
+	WIteratorList2(inetList, (void (*)(void*, void*))RouterGenLinks);
+	return;
 }

@@ -12,8 +12,10 @@ void printRoutingTable(struct RouteEntry const * FwdgTbl[])
 void freeRoutingTable(struct RouteEntry* FwdgTbl[])
 {
 	for (int32_t i = 0; i < MAX_FWDGTBL_ENTRIES; ++i)
-		if (FwdgTbl[i])
+		if (FwdgTbl[i]) {
 			free(FwdgTbl[i]);
+			FwdgTbl[i] = NULL;
+		}
 	return;
 }
 

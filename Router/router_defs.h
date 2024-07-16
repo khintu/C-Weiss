@@ -57,5 +57,7 @@ struct Router {
 };
 
 int32_t readInitFile(char*, struct WLList*);
+struct WLList* initializeInternetMap(void);
+void generateLinksBwRouters(struct WLList*);
 
 #endif // ROUTER_DEFS_H
