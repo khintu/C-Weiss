@@ -9,8 +9,8 @@
 #include <c-algorithm.h>
 
 
-#define MAX_FWDGTBL_ENTRIES	100
-
+#define MAX_FWDGTBL_ENTRIES	128
+#define MAX_INTFTBL_SIZE	128
 
 /* IPv4 Routing Table entry, APIs */
 struct RouteEntry
@@ -19,6 +19,7 @@ struct RouteEntry
 	uint32_t M;
 	uint32_t R;
 	uint32_t I;
+	float Metric;
 };
 
 /* Forwarding algorithms */
@@ -29,7 +30,7 @@ int32_t removeRouteAdPackFwdTbl(struct RouteEntry* [], struct RouteEntry*);
 
 /* Routing Table Interface APIs */
 void printRoutingTable(struct RouteEntry const* []);
-int32_t addRoute2RoutingTable(struct RouteEntry* [], const char*, const char*, const char*, uint32_t);
+int32_t addRoute2RoutingTable(struct RouteEntry* [], const char*, const char*, const char*, uint32_t, float);
 void removeRouteFrmRoutingTable(struct RouteEntry* [], const char*, const char*);
 uint32_t getNextHopFrmRoutingTable(struct RouteEntry* [], const char*);
 uint32_t getInterfaceFrmRoutingTable(struct RouteEntry* [], const char*);
@@ -48,7 +49,6 @@ char* decimal2dotted32(uint32_t);
 char* itoa8(uint8_t);
 
 /* Internet/WAN Builder APIs */
-#define MAX_INTFTBL_SIZE	100
 
 struct Router {
 	uint32_t Id;
@@ -59,5 +59,6 @@ struct Router {
 int32_t readInitFile(char*, struct WLList*);
 struct WLList* initializeInternetMap(void);
 void generateLinksBwRouters(struct WLList*);
+void resetAdPurgeEntsFrmRouter(struct Router*);
 
 #endif // ROUTER_DEFS_H

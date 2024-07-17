@@ -16,8 +16,8 @@ int RouterCmp(const struct Router* R1, const struct Router* R2)
 struct Router* RouterCtor(struct Router* x)
 {
 	struct Router* R;
-	R = (struct Router*)malloc(sizeof * x);
-	memcpy(R, x, sizeof * x);
+	if (R = (struct Router*)malloc(sizeof * x))
+		memcpy(R, x, sizeof * x);
 	return R;
 }
 
@@ -41,6 +41,7 @@ int32_t readInitFile(char* fName, struct WLList* inetList)
 	FILE* fp;
 	char A[16+1], M[3+1], R[16+1];
 	int32_t I;
+	float Metric;
 	if (!(fp = fopen(fName, "r")))
 		return -1;
 	Rtr = NULL;
@@ -53,16 +54,17 @@ int32_t readInitFile(char* fName, struct WLList* inetList)
 			continue;
 		}
 		else if (!strncmp(lineBuf, ROUTER_TOKEN, strlen(ROUTER_TOKEN))) {
-			Rtr = (struct Router*)malloc(sizeof * Rtr);
-			memset(Rtr, 0x0, sizeof * Rtr);
-			Rtr->Id = atoi(lineBuf + strlen(ROUTER_TOKEN));
+			if (Rtr = (struct Router*)malloc(sizeof * Rtr)) {
+				memset(Rtr, 0x0, sizeof * Rtr);
+				Rtr->Id = atoi(lineBuf + strlen(ROUTER_TOKEN));
+			}
 		}
 		else {
-			sscanf(lineBuf, "%s %s %s %d", A, M, R, &I);
+			sscanf(lineBuf, "%s %s %s %d %f", A, M, R, &I, &Metric);
 			A[strlen(A) - 1] = NUL;
 			M[strlen(M) - 1] = NUL;
 			R[strlen(R) - 1] = NUL;
-			addRoute2RoutingTable(Rtr->FwdgTbl, A, M, R, I);
+			addRoute2RoutingTable(Rtr->FwdgTbl, A, M, R, I, Metric);
 		}
 	}
 	if (Rtr) {
@@ -105,5 +107,12 @@ void RouterGenLinks(struct Router* Rtr, struct WLList* inetList)
 void generateLinksBwRouters(struct WLList* inetList)
 {
 	WIteratorList2(inetList, (void (*)(void*, void*))RouterGenLinks);
+	return;
+}
+
+void resetAdPurgeEntsFrmRouter(struct Router* Rtr)
+{
+	freeRoutingTable(Rtr->FwdgTbl);
+	memset(Rtr->IntfTbl, 0x0, sizeof Rtr->IntfTbl);
 	return;
 }
