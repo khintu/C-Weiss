@@ -52,6 +52,8 @@ int32_t readInitFile(char* fName, struct WLList* inetList)
 			}
 			continue;
 		}
+		else if (lineBuf[0] == '#')
+			continue;
 		else if (!strncmp(lineBuf, ROUTER_TOKEN, strlen(ROUTER_TOKEN))) {
 			if (Rtr = (struct Router*)malloc(sizeof * Rtr)) {
 				memset(Rtr, 0x0, sizeof * Rtr);
