@@ -39,8 +39,7 @@ int32_t readInitFile(char* fName, struct WLList* inetList)
 	struct Router* Rtr;
 	char lineBuf[1024];
 	FILE* fp;
-	char A[16+1], M[3+1], R[16+1];
-	int32_t I;
+	char A[16+1], M[3+1], R[16+1], I[4+1];
 	float Metric;
 	if (!(fp = fopen(fName, "r")))
 		return -1;
@@ -60,11 +59,12 @@ int32_t readInitFile(char* fName, struct WLList* inetList)
 			}
 		}
 		else {
-			sscanf(lineBuf, "%s %s %s %d %f", A, M, R, &I, &Metric);
+			sscanf(lineBuf, "%s %s %s %s %f", A, M, R, I, &Metric);
 			A[strlen(A) - 1] = NUL;
 			M[strlen(M) - 1] = NUL;
 			R[strlen(R) - 1] = NUL;
-			addRoute2RoutingTable(Rtr->FwdgTbl, A, M, R, I, Metric);
+			I[strlen(I) - 1] = NUL;
+			addRoute2RoutingTable(Rtr->FwdgTbl, A, M, R, atoi(I), Metric);
 		}
 	}
 	if (Rtr) {

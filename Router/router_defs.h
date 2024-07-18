@@ -8,9 +8,10 @@
 #include <stdint.h>
 #include <c-algorithm.h>
 
+#define MAX_ARRAY_SIZE	128
 
-#define MAX_FWDGTBL_ENTRIES	128
-#define MAX_INTFTBL_SIZE	128
+#define MAX_FWDGTBL_ENTRIES	MAX_ARRAY_SIZE
+#define MAX_INTFTBL_SIZE	MAX_ARRAY_SIZE
 
 /* IPv4 Routing Table entry, APIs */
 struct RouteEntry
