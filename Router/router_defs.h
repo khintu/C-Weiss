@@ -13,6 +13,9 @@
 #define MAX_FWDGTBL_ENTRIES	MAX_ARRAY_SIZE
 #define MAX_INTFTBL_SIZE	MAX_ARRAY_SIZE
 
+/* Global AS/Interface Id table */
+extern struct Router* gIntfTbl[MAX_INTFTBL_SIZE];
+
 /* IPv4 Routing Table entry, APIs */
 struct RouteEntry
 {
@@ -52,14 +55,13 @@ char* itoa8(uint8_t);
 /* Internet/WAN Builder APIs */
 
 struct Router {
-	uint32_t Id;
+	uint32_t Id; /* Unique AS id in internet/graph */
 	struct RouteEntry* FwdgTbl[MAX_FWDGTBL_ENTRIES];
-	struct Router* IntfTbl[MAX_INTFTBL_SIZE];
 };
 
 int32_t readInitFile(char*, struct WLList*);
 struct WLList* initializeInternetMap(void);
 void generateLinksBwRouters(struct WLList*);
 void resetAdPurgeEntsFrmRouter(struct Router*);
-
+void resetEverythingInIntrnt(struct WLList*);
 #endif // ROUTER_DEFS_H

@@ -98,8 +98,8 @@ void RouterGenLinks(struct Router* Rtr, struct WLList* inetList)
 		tmp.Id = Rtr->FwdgTbl[i]->I;
 		if (x = WFindInList(inetList, &tmp)) {
 			if (x->Id < MAX_INTFTBL_SIZE) {
-				Rtr->IntfTbl[x->Id] = x;
-				printf("b/w % d and %d\n", Rtr->FwdgTbl[i]->I, x->Id);
+				gIntfTbl[x->Id] = x;
+				printf("b/w (Lcl) %d and (Rmt) %d\n", Rtr->FwdgTbl[i]->I, gIntfTbl[x->Id]->Id);
 			}
 		}
 	}
@@ -115,6 +115,13 @@ void generateLinksBwRouters(struct WLList* inetList)
 void resetAdPurgeEntsFrmRouter(struct Router* Rtr)
 {
 	freeRoutingTable(Rtr->FwdgTbl);
-	memset(Rtr->IntfTbl, 0x0, sizeof Rtr->IntfTbl);
+	// Moved to global gIntfTbl, reset it where the listIterator gets called
+	// memset(Rtr->IntfTbl, 0x0, sizeof Rtr->IntfTbl);
 	return;
+}
+
+void resetEverythingInIntrnt(struct WLList* inetList)
+{
+	WIteratorList(inetList, (void (*)(void*))resetAdPurgeEntsFrmRouter);
+	memset(gIntfTbl, 0x0, sizeof gIntfTbl);
 }
