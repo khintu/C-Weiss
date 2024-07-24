@@ -8,10 +8,10 @@
 #include <stdint.h>
 #include <c-algorithm.h>
 
-#define MAX_ARRAY_SIZE	128
+#define MAX_GRAPH_VERTICES	128
 
-#define MAX_FWDGTBL_ENTRIES	MAX_ARRAY_SIZE
-#define MAX_INTFTBL_SIZE	MAX_ARRAY_SIZE
+#define MAX_FWDGTBL_ENTRIES	MAX_GRAPH_VERTICES
+#define MAX_INTFTBL_SIZE	MAX_GRAPH_VERTICES
 
 /* Global AS/Interface Id table */
 extern struct Router* gIntfTbl[MAX_INTFTBL_SIZE];
@@ -53,10 +53,10 @@ char* decimal2dotted32(uint32_t);
 char* itoa8(uint8_t);
 
 /* Internet/WAN Builder APIs */
-
 struct Router {
 	uint32_t Id; /* Unique AS id in internet/graph */
 	struct RouteEntry* FwdgTbl[MAX_FWDGTBL_ENTRIES];
+	void* super;	/* For a parent struct that encapsulates a Router */
 };
 
 int32_t readInitFile(char*, struct WLList*);
@@ -64,4 +64,14 @@ struct WLList* initializeInternetMap(void);
 void generateLinksBwRouters(struct WLList*);
 void resetAdPurgeEntsFrmRouter(struct Router*);
 void resetEverythingInIntrnt(struct WLList*);
+
+/* Graph Algorithms (Dijkstra, Shortest paths, etc.) */
+struct GVertex {
+	uint32_t unvisited; /* boolean flag */
+	float distance;    /* distance from source vertex */
+	struct Router* router; /* Router object ref. encapsulated */
+};
+
+struct WLList* initializeGraphContainer(struct WLList* inetList);
+
 #endif // ROUTER_DEFS_H

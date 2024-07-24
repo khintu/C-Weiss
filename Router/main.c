@@ -6,7 +6,7 @@ void unit_test_network_lib(void);
 /* 
 	In our implementation the Router Interface Id is a unique
 	Autonomous System (AS) Id across the internet/graph, starting
-	at 1 and at most MAX_ARRAY_SIZE. Do NOT interpret interface
+	at 1 and at most MAX_GRAPH_VERTICES. Do NOT interpret interface
 	Id as the hardware physical address or MAC.
 	We'll have Graph Algorithms from Wikipedia in this program.
 */
@@ -17,17 +17,18 @@ struct Router* gIntfTbl[MAX_INTFTBL_SIZE];
 
 int main(int argc, char* argv[])
 {
-	struct WLList* inetList;
+	struct WLList* inetList, *grphList;
 	//unit_test_network_lib();
 	//insert_in_main_unittestsuit(argc, argv);
 	printf("*** Internet Routing Algorithms Simulator ***\n\n");
 	inetList = initializeInternetMap();
-
+	grphList = initializeGraphContainer(inetList);
 	resetEverythingInIntrnt(inetList);
 	//removeRouteFrmRoutingTable(FwdgTbl, "128.170.189.0", "24");
 	//removeRouteFrmRoutingTable(R1->FwdgTbl, "0.0.0.0", "0");
 	//removeRouteFrmRoutingTable(FwdgTbl, "128.0.0.0", "8");
 	//printRoutingTable(R1->FwdgTbl);
+	WDeleteList(grphList);
 	WDeleteList(inetList);
 	return 0;
 }

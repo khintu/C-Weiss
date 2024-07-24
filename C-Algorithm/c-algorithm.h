@@ -62,6 +62,7 @@ int WPrependToList(struct WLList* l, void* data);
 int WAppendToList(struct WLList* l, void* data);
 void WIteratorList(struct WLList* l, void (*ITR)(void*));
 void WIteratorList2(struct WLList* l, void (*ITR)(void*, void*));
+void WIteratorList3(struct WLList* l, void* arg, void (*ITR)(void*, void*));
 void WSortList(struct WLList* l);
 int WInsertToSortdList(struct WLList* l, void* data);
 
