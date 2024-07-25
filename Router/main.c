@@ -14,20 +14,25 @@ void unit_test_network_lib(void);
 /* Actual memeory address of AS(s) from FwdgTbl of each router */
 struct Router* gIntfTbl[MAX_INTFTBL_SIZE];
 
+void printDistance(struct GVertex* v)
+{
+	printf("%d @ %f\n", v->router->Id, v->distance);
+	return;
+}
 
 int main(int argc, char* argv[])
 {
 	struct WLList* inetList, *grphList;
 	//unit_test_network_lib();
 	//insert_in_main_unittestsuit(argc, argv);
+	//return 0;
 	printf("*** Internet Routing Algorithms Simulator ***\n\n");
 	inetList = initializeInternetMap();
 	grphList = initializeGraphContainer(inetList);
-	resetEverythingInIntrnt(inetList);
-	//removeRouteFrmRoutingTable(FwdgTbl, "128.170.189.0", "24");
-	//removeRouteFrmRoutingTable(R1->FwdgTbl, "0.0.0.0", "0");
-	//removeRouteFrmRoutingTable(FwdgTbl, "128.0.0.0", "8");
-	//printRoutingTable(R1->FwdgTbl);
+	graphDijikstraCalcDistance(grphList, inetList, 2);
+	WIteratorList(grphList, (void (*)(void*))printDistance);
+	//resetEverythingInIntrnt(inetList);
+	
 	WDeleteList(grphList);
 	WDeleteList(inetList);
 	return 0;

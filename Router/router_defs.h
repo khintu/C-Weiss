@@ -72,6 +72,7 @@ struct GVertex {
 	struct Router* router; /* Router object ref. encapsulated */
 };
 
-struct WLList* initializeGraphContainer(struct WLList* inetList);
+struct WLList* initializeGraphContainer(struct WLList*);
+void graphDijikstraCalcDistance(struct WLList*, struct WLList*, uint32_t);
 
 #endif // ROUTER_DEFS_H
