@@ -1,4 +1,4 @@
-#include <router_defs.h>
+﻿#include <router_defs.h>
 #include <float.h>
 
 
@@ -68,8 +68,13 @@ struct GVertex* getVertexFrmNextEdge(struct GVertex* src, int32_t *RtrIdx, struc
 			dst->distance = src->distance + src->router->FwdgTbl[*RtrIdx]->Metric;
 			WEnqueueLQueue(negbhrQ, (void*)dst);
 		}
-		else if ((src->distance + src->router->FwdgTbl[*RtrIdx]->Metric) < dst->distance)
+		else if ((src->distance + src->router->FwdgTbl[*RtrIdx]->Metric) < dst->distance) {
 			dst->distance = src->distance + src->router->FwdgTbl[*RtrIdx]->Metric;
+			WEnqueueLQueue(negbhrQ, (void*)dst);
+		}
+		else
+			printf("\t\tDistance update for %d not needed,bad distance %g\n", dst->router->Id, \
+						(src->distance + src->router->FwdgTbl[*RtrIdx]->Metric));
 	}
 	return dst;
 }
@@ -83,7 +88,9 @@ void EachVertexDijikstra(struct GVertex* src)
 	negbhrQ = WCreateLQueue((WCMPFP)GrphCmp, (WCTRFP)GrphCtrEmpty, (WDTRFP)GrphDtrEmpty);
 	RtrIdx = 0;
 	do {
+		printf("src %d, current distance %g\n", src->router->Id, src->distance);
 		while (dst = getVertexFrmNextEdge(src, &RtrIdx, negbhrQ)) {
+			printf("\tdst %d, distance calctd %g\n", dst->router->Id, dst->distance);
 			++RtrIdx;
 		}
 	} while (src = WDequeueLQueue(negbhrQ));

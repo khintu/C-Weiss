@@ -11,12 +11,12 @@ void unit_test_network_lib(void);
 	We'll have Graph Algorithms from Wikipedia in this program.
 */
 
-/* Actual memeory address of AS(s) from FwdgTbl of each router */
+/* Actual memory address of AS(s) from FwdgTbl of each router */
 struct Router* gIntfTbl[MAX_INTFTBL_SIZE];
 
 void printDistance(struct GVertex* v)
 {
-	printf("%d @ %f\n", v->router->Id, v->distance);
+	printf("AS:%d @ Distance:%g\n", v->router->Id, v->distance);
 	return;
 }
 
@@ -29,7 +29,8 @@ int main(int argc, char* argv[])
 	printf("*** Internet Routing Algorithms Simulator ***\n\n");
 	inetList = initializeInternetMap();
 	grphList = initializeGraphContainer(inetList);
-	graphDijikstraCalcDistance(grphList, inetList, 2);
+	printf("Single Source Shortest Path:\n");
+	graphDijikstraCalcDistance(grphList, inetList, 1);
 	WIteratorList(grphList, (void (*)(void*))printDistance);
 	//resetEverythingInIntrnt(inetList);
 	
