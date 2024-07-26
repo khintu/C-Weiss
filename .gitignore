@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Router/route_init.ini.2
+/Router/route_init.ini.wiki
+/Router/route_init.ini.1
