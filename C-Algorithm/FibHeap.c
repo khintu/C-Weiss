@@ -336,8 +336,12 @@ void* WExtractMinFrmFibHeap(struct WFibHeap* fh)
 
 static struct FibNode* findKeyNodeFrmFibHeap(struct WFibHeap* fh, struct FibNode* list, void* key)
 {
+	int isEnd;
 	struct FibNode* x, *tmp;
-	for (x = list; x != list->left; x = x->right) {
+
+	for (isEnd = FALSE, x = list; !isEnd ; x = x->right) {
+		if (x == list->left)
+			isEnd = TRUE;
 		if (fh->CMP(x->data, key) == 0)
 			return x;
 		else {
@@ -348,6 +352,7 @@ static struct FibNode* findKeyNodeFrmFibHeap(struct WFibHeap* fh, struct FibNode
 	}
 	return NULL;
 }
+
 static void CutXFrmYLstMov2RtLst(struct WFibHeap* fh, struct FibNode* x, struct FibNode* y)
 {
 	// remove x from the child list of y, decrementing y.degree
@@ -362,7 +367,6 @@ static void CutXFrmYLstMov2RtLst(struct WFibHeap* fh, struct FibNode* x, struct 
 		y->degree--;
 	}
 	// add x to the root list of H (prepend)
-	//fh->rootList->left = x;
 	if (fh->rootList->left == fh->rootList && fh->rootList->right == fh->rootList) {
 		x->right = x->left = fh->rootList;
 		fh->rootList->left = fh->rootList->right = x;
