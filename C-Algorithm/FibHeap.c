@@ -333,3 +333,85 @@ void* WExtractMinFrmFibHeap(struct WFibHeap* fh)
 		return NULL;
 	return min;
 }
+
+static struct FibNode* findKeyNodeFrmFibHeap(struct WFibHeap* fh, struct FibNode* list, void* key)
+{
+	struct FibNode* x, *tmp;
+	for (x = list; x != list->left; x = x->right) {
+		if (fh->CMP(x->data, key) == 0)
+			return x;
+		else {
+			if (x->child != NULL)
+				if ((tmp = findKeyNodeFrmFibHeap(fh, x->child, key)) != NULL)
+					return tmp;
+		}
+	}
+	return NULL;
+}
+static void CutXFrmYLstMov2RtLst(struct WFibHeap* fh, struct FibNode* x, struct FibNode* y)
+{
+	// remove x from the child list of y, decrementing y.degree
+	if (x->left == x && x->right == x) {
+		y->child = NULL;
+		y->degree = 0;
+	}
+	else {
+		x->left->right = x->right;
+		x->right->left = x->left;
+		y->child = x->right;
+		y->degree--;
+	}
+	// add x to the root list of H (prepend)
+	//fh->rootList->left = x;
+	if (fh->rootList->left == fh->rootList && fh->rootList->right == fh->rootList) {
+		x->right = x->left = fh->rootList;
+		fh->rootList->left = fh->rootList->right = x;
+	}
+	else {
+		x->right = fh->rootList->left->right;
+		x->left = fh->rootList->left;
+		fh->rootList->left->right = x;
+		fh->rootList->left = x;
+	}
+	fh->rootList = x;
+	// Reset x's properties
+	x->p = NULL;
+	x->mark = FALSE;
+	return;
+}
+
+static void CascadingCut(struct WFibHeap* fh, struct FibNode* y)
+{
+	struct FibNode* z;
+
+	z = y->p;
+	if (z != NULL) {
+		if (y->mark == FALSE)
+			y->mark = TRUE;
+		else {
+			CutXFrmYLstMov2RtLst(fh, y, z);
+			CascadingCut(fh, z);
+		}
+	}
+	return;
+}
+
+int WDecreaseKeyFibHeap(struct WFibHeap* fh, void* key, void *newKey)
+{
+	struct FibNode* x, *y;
+
+	if ((x = findKeyNodeFrmFibHeap(fh, fh->rootList, key)) == NULL)
+		return -2;
+	if (fh->CMP(newKey, x->data) > 0)
+		return -9;
+	fh->DTOR(x->data);
+	x->data = fh->CTOR(newKey);
+	y = x->p;
+	if (y != NULL && fh->CMP(x->data, y->data) < 0) {
+		CutXFrmYLstMov2RtLst(fh, x, y);
+		CascadingCut(fh, y);
+	}
+	if (fh->CMP(x->data, fh->min->data) < 0)
+		fh->min = x;
+	return 0;
+}

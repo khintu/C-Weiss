@@ -950,10 +950,30 @@ int UnitTestWGraph(int argc, char* argv[])
 	return 0;
 }
 
+int* ctorDecKey(int* x)
+{
+	int* r;
+	if ((r = (int*)malloc(sizeof *x)) != NULL) {
+		*r = *x;
+	}
+	return r;
+}
+
+void dtorDecKey(int* x)
+{
+	free(x);
+}
+
+int cmpDecKey(int* x, int* y)
+{
+	return (*x > *y) ? 1 : (*x < *y) ? -1 : 0;
+}
+
 int UnitTestWFibHeap(int argc, char* argv[])
 {
 	struct WFibHeap* fh, *fh1, *fh2;
 	char* tmp;
+	int *tmp2, key, newKey;
 
 	printf("Unit Test MinHeap FibonacciHeap\n");
 
@@ -1048,7 +1068,39 @@ int UnitTestWFibHeap(int argc, char* argv[])
 	printf("FibHeap: Extract Min %s\n", (tmp = WExtractMinFrmFibHeap(fh)));
 	free(tmp);
 	WDeleteFibHeap(fh);
+	
+	// Test Decrease Key
+	printf("Unit Test DecreaseKey FibonacciHeap\n");
+	fh = WCreateFibHeap((WCMPFP)cmpDecKey, (WCTRFP)ctorDecKey, (WDTRFP)dtorDecKey);
 
+	key = 10; WInsertKeyFibHeap(fh, &key);
+	key = 9; WInsertKeyFibHeap(fh, &key);
+	key = 8; WInsertKeyFibHeap(fh, &key);
+	key = 7; WInsertKeyFibHeap(fh, &key);
+	key = 6; WInsertKeyFibHeap(fh, &key);
+	key = 5; WInsertKeyFibHeap(fh, &key);
+	key = 4; WInsertKeyFibHeap(fh, &key);
+	key = 3; WInsertKeyFibHeap(fh, &key);
+	
+	printf("FibHeap: Extract Min %d\n", *(tmp2 = WExtractMinFrmFibHeap(fh)));
+	free(tmp2);
+	newKey = 1; key = 10;
+	WDecreaseKeyFibHeap(fh, &key, &newKey);
+	printf("FibHeap: Extract Min %d\n", *(tmp2 = WExtractMinFrmFibHeap(fh)));
+	free(tmp2);
+	printf("FibHeap: Extract Min %d\n", *(tmp2 = WExtractMinFrmFibHeap(fh)));
+	free(tmp2);
+	printf("FibHeap: Extract Min %d\n", *(tmp2 = WExtractMinFrmFibHeap(fh)));
+	free(tmp2);
+	printf("FibHeap: Extract Min %d\n", *(tmp2 = WExtractMinFrmFibHeap(fh)));
+	free(tmp2);
+	printf("FibHeap: Extract Min %d\n", *(tmp2 = WExtractMinFrmFibHeap(fh)));
+	free(tmp2);
+	printf("FibHeap: Extract Min %d\n", *(tmp2 = WExtractMinFrmFibHeap(fh)));
+	free(tmp2);
+	printf("FibHeap: Extract Min %d\n", *(tmp2 = WExtractMinFrmFibHeap(fh)));
+	free(tmp2);
+	WDeleteFibHeap(fh);
 	return 0;
 }
 

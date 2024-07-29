@@ -29,7 +29,8 @@ enum {
 	WESELFLOOP = -5, /* Self loop not allowed in undirected graph */
 	WEEDGALRDYEXTS = -6, /* Edge already exists in undirected Graph */
 	WEEDGNOTFND = -7, /* Edge not found in undirected Graph */
-	WEPATHNOTFND = -8 /* Path between s and v not found, disconnected tree */
+	WEPATHNOTFND = -8, /* Path between s and v not found, disconnected tree */
+	WEDECKEYGRTR = -9 /* New key is greater than current key */
 };
 
 /* ---Linked List ADT--- */
@@ -420,5 +421,6 @@ void WDeleteFibHeap(struct WFibHeap* fh);
 int WInsertKeyFibHeap(struct WFibHeap* fh, void* key);
 struct WFibHeap* WUnionFibHeap(struct WFibHeap* fh1, struct WFibHeap* fh2);
 void* WExtractMinFrmFibHeap(struct WFibHeap* fh);
+int WDecreaseKeyFibHeap(struct WFibHeap* fh, void* key, void* newKey);
 
 #endif /* C_ALGORITHM_H */
