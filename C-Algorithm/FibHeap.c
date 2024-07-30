@@ -419,3 +419,13 @@ int WDecreaseKeyFibHeap(struct WFibHeap* fh, void* key, void *newKey)
 		fh->min = x;
 	return 0;
 }
+
+int WDeleteKeyFibHeap(struct WFibHeap* fh, void* key)
+{
+	int cc = -10;
+	
+	if (fh->min != NULL && (cc = WDecreaseKeyFibHeap(fh, key, fh->min->data)) == 0) {
+		fh->DTOR(WExtractMinFrmFibHeap(fh));
+	}
+	return cc;
+}

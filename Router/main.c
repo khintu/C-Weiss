@@ -24,8 +24,8 @@ int main(int argc, char* argv[])
 {
 	struct WLList* inetList, *grphList;
 	//unit_test_network_lib();
-	insert_in_main_unittestsuit(argc, argv);
-	return 0;
+	//insert_in_main_unittestsuit(argc, argv);
+	//return 0;
 	printf("*** Internet Routing Algorithms Simulator ***\n\n");
 	inetList = initializeInternetMap();
 	grphList = initializeGraphContainer(inetList);

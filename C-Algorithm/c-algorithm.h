@@ -30,7 +30,8 @@ enum {
 	WEEDGALRDYEXTS = -6, /* Edge already exists in undirected Graph */
 	WEEDGNOTFND = -7, /* Edge not found in undirected Graph */
 	WEPATHNOTFND = -8, /* Path between s and v not found, disconnected tree */
-	WEDECKEYGRTR = -9 /* New key is greater than current key */
+	WEDECKEYGRTR = -9, /* New key is greater than current key */
+	WEANYDSTEMPTY = -10 /* DST empty before delete is called on a key */
 };
 
 /* ---Linked List ADT--- */
@@ -422,5 +423,6 @@ int WInsertKeyFibHeap(struct WFibHeap* fh, void* key);
 struct WFibHeap* WUnionFibHeap(struct WFibHeap* fh1, struct WFibHeap* fh2);
 void* WExtractMinFrmFibHeap(struct WFibHeap* fh);
 int WDecreaseKeyFibHeap(struct WFibHeap* fh, void* key, void* newKey);
+int WDeleteKeyFibHeap(struct WFibHeap* fh, void* key);
 
 #endif /* C_ALGORITHM_H */
