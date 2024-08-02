@@ -74,5 +74,6 @@ struct GVertex {
 
 struct WLList* initializeGraphContainer(struct WLList*);
 void graphDijikstraCalcDistance(struct WLList*, struct WLList*, uint32_t);
+void graphDijikstraCalcDistance2(struct WLList*, struct WLList*, uint32_t);
 
 #endif // ROUTER_DEFS_H

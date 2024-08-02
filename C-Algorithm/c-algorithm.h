@@ -423,6 +423,8 @@ int WInsertKeyFibHeap(struct WFibHeap* fh, void* key);
 struct WFibHeap* WUnionFibHeap(struct WFibHeap* fh1, struct WFibHeap* fh2);
 void* WExtractMinFrmFibHeap(struct WFibHeap* fh);
 int WDecreaseKeyFibHeap(struct WFibHeap* fh, void* key, void* newKey);
+int WDecreaseKeyFibHeap2(struct WFibHeap* fh, void* key,WCMPFP cmp,\
+												 void (*updte)(void*, void*), void* updtArg);
 int WDeleteKeyFibHeap(struct WFibHeap* fh, void* key);
 
 #endif /* C_ALGORITHM_H */

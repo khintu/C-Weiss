@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
 	inetList = initializeInternetMap();
 	grphList = initializeGraphContainer(inetList);
 	printf("Single Source Shortest Path:\n");
-	graphDijikstraCalcDistance(grphList, inetList, 1);
+	graphDijikstraCalcDistance2(grphList, inetList, 1);
 	WIteratorList(grphList, (void (*)(void*))printDistance);
 	//resetEverythingInIntrnt(inetList);
 	

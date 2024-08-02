@@ -334,19 +334,23 @@ void* WExtractMinFrmFibHeap(struct WFibHeap* fh)
 	return min;
 }
 
-static struct FibNode* findKeyNodeFrmFibHeap(struct WFibHeap* fh, struct FibNode* list, void* key)
+static struct FibNode* findKeyNodeFrmFibHeap(struct WFibHeap* fh, struct FibNode* list, void* key, WCMPFP cmp)
 {
 	int isEnd;
 	struct FibNode* x, *tmp;
+	WCMPFP CMP = cmp;
+
+	if (CMP == NULL)
+		CMP = fh->CMP;
 
 	for (isEnd = FALSE, x = list; !isEnd ; x = x->right) {
 		if (x == list->left)
 			isEnd = TRUE;
-		if (fh->CMP(x->data, key) == 0)
+		if (CMP(x->data, key) == 0)
 			return x;
 		else {
 			if (x->child != NULL)
-				if ((tmp = findKeyNodeFrmFibHeap(fh, x->child, key)) != NULL)
+				if ((tmp = findKeyNodeFrmFibHeap(fh, x->child, key, CMP)) != NULL)
 					return tmp;
 		}
 	}
@@ -404,12 +408,33 @@ int WDecreaseKeyFibHeap(struct WFibHeap* fh, void* key, void *newKey)
 {
 	struct FibNode* x, *y;
 
-	if ((x = findKeyNodeFrmFibHeap(fh, fh->rootList, key)) == NULL)
+	if ((x = findKeyNodeFrmFibHeap(fh, fh->rootList, key, NULL)) == NULL)
 		return -2;
 	if (fh->CMP(newKey, x->data) > 0)
 		return -9;
 	fh->DTOR(x->data);
 	x->data = fh->CTOR(newKey);
+	y = x->p;
+	if (y != NULL && fh->CMP(x->data, y->data) < 0) {
+		CutXFrmYLstMov2RtLst(fh, x, y);
+		CascadingCut(fh, y);
+	}
+	if (fh->CMP(x->data, fh->min->data) < 0)
+		fh->min = x;
+	return 0;
+}
+
+int WDecreaseKeyFibHeap2(struct WFibHeap* fh, void* key, WCMPFP cmp, void (*updte)(void*, void*), void* updtArg)
+{
+	struct FibNode* x, * y;
+
+	if ((x = findKeyNodeFrmFibHeap(fh, fh->rootList, key, cmp)) == NULL)
+		return -2;
+	if (fh->CMP(updtArg, x->data) > 0)
+		return -9;
+	//fh->DTOR(x->data);
+	//x->data = fh->CTOR(newKey);
+	updte(x->data, updtArg);
 	y = x->p;
 	if (y != NULL && fh->CMP(x->data, y->data) < 0) {
 		CutXFrmYLstMov2RtLst(fh, x, y);
