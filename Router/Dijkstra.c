@@ -20,6 +20,7 @@ struct GVertex* GrphCtr(struct GVertex* v)
 		rv->unvisited = v->unvisited;
 		rv->distance = v->distance;
 		rv->router = v->router;
+		rv->prev = v->prev;
 	}
 	return rv;
 }
@@ -39,7 +40,7 @@ int32_t GrphCmp(struct GVertex* x, struct GVertex* y)
 
 void GrphInitItr(struct Router* Rtr, struct WLList* grph)
 {
-	struct GVertex v = { TRUE, FLT_MAX, NULL };
+	struct GVertex v = { TRUE, FLT_MAX, NULL, NULL };
 	v.router = Rtr;
 	WAppendToList(grph, &v);
 	Rtr->super = WFindInList(grph, &v);
@@ -66,10 +67,12 @@ struct GVertex* getVertexFrmNextEdge(struct GVertex* src, int32_t *RtrIdx, struc
 		if (dst->unvisited == TRUE) {
 			dst->unvisited = FALSE;
 			dst->distance = src->distance + src->router->FwdgTbl[*RtrIdx]->Metric;
+			dst->prev = src;
 			WEnqueueLQueue(negbhrQ, (void*)dst);
 		}
 		else if ((src->distance + src->router->FwdgTbl[*RtrIdx]->Metric) < dst->distance) {
 			dst->distance = src->distance + src->router->FwdgTbl[*RtrIdx]->Metric;
+			dst->prev = src;
 			WEnqueueLQueue(negbhrQ, (void*)dst);
 		}
 		else
@@ -104,13 +107,31 @@ void graphDijikstraCalcDistance(struct WLList* grph, struct WLList* inet, uint32
 	struct GVertex *src;
 	srcKey.Id = srcRtrId;
 	if (!(srcRtr = WFindInList(inet, &srcKey))) {
-		printf("RouterId %u, not found\n", srcRtrId);
+		printf("Source RouterId %u, not found\n", srcRtrId);
 	}
 	else {
 		src = (struct GVertex*)srcRtr->super;
 		src->distance = 0.0f;
 		src->unvisited = FALSE;
 		EachVertexDijikstra(src);
+	}
+	return;
+}
+
+void graphTraceShortstPathFrmSrc2Trgt(struct WLList* grph, struct WLList* inet, uint32_t trgtRtrId)
+{
+	struct Router trgtKey = { 0 }, * trgtRtr;
+	struct GVertex* trgt;
+	trgtKey.Id = trgtRtrId;
+	if (!(trgtRtr = WFindInList(inet, &trgtKey))) {
+		printf("Target RouterId %u, not found\n", trgtRtrId);
+	}
+	else {
+		printf("Tracing shortest path from target %u to source\n", trgtRtrId);
+		trgt = (struct GVertex*)trgtRtr->super;
+		do {
+			printf("AS:%u @ Distance %g\n", trgt->router->Id, trgt->distance);
+		} while (trgt = trgt->prev);
 	}
 	return;
 }
@@ -147,11 +168,13 @@ struct GVertex* getVertexFrmNextEdge2(struct GVertex* src, int32_t* RtrIdx, stru
 			newKey.distance = src->distance + src->router->FwdgTbl[*RtrIdx]->Metric;
 			WDecreaseKeyFibHeap2(unvisitedSet, (void*)dst, (WCMPFP) GrphCmp, \
 													(void (*)(void*,void*))GrphDistUpdt, &newKey);
+			dst->prev = src;
 		}
 		else if ((src->distance + src->router->FwdgTbl[*RtrIdx]->Metric) < dst->distance) {
 			newKey.distance = src->distance + src->router->FwdgTbl[*RtrIdx]->Metric;
 			WDecreaseKeyFibHeap2(unvisitedSet, (void*)dst, (WCMPFP)GrphCmp, \
 													(void (*)(void*, void*))GrphDistUpdt, &newKey);
+			dst->prev = src;
 		}
 		else
 			printf("\t\tDistance update for %d not needed,bad distance %g\n", dst->router->Id, \
@@ -159,7 +182,6 @@ struct GVertex* getVertexFrmNextEdge2(struct GVertex* src, int32_t* RtrIdx, stru
 	}
 	return dst;
 }
-
 
 void EachVertexDijikstra2(struct GVertex* src, struct WFibHeap* unvisitedSet)
 {
@@ -184,6 +206,14 @@ void GrphInitItrDist(struct GVertex* v, struct WFibHeap* unvisitedSet)
 	return;
 }
 
+/* The algo converges on shortest path vertices faster than longer paths vertices,
+	 Thus, longer paths stay in the MinPQ until all other shorter connected vertices
+	 are visited and their distance computed first. Once a vertex is exrtacted it
+	 must have been at the shortest distance from source. If not, then it stays below
+	 other vertices in the MinPQ until all other paths have been computed and extracted.
+	 This makes sure that alternate paths correctly update vertices that may not yet be
+	 at optimal shortest distance from source.
+*/
 void graphDijikstraCalcDistance2(struct WLList* grph, struct WLList* inet, uint32_t srcRtrId)
 {
 	struct Router srcKey = { 0 }, * srcRtr;

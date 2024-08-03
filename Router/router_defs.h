@@ -70,10 +70,12 @@ struct GVertex {
 	uint32_t unvisited; /* boolean flag */
 	float distance;    /* distance from source vertex */
 	struct Router* router; /* Router object ref. encapsulated */
+	struct GVertex* prev; /* previous vertex on shortest path trace to source */
 };
 
 struct WLList* initializeGraphContainer(struct WLList*);
 void graphDijikstraCalcDistance(struct WLList*, struct WLList*, uint32_t);
+void graphTraceShortstPathFrmSrc2Trgt(struct WLList*, struct WLList*, uint32_t);
 void graphDijikstraCalcDistance2(struct WLList*, struct WLList*, uint32_t);
 
 #endif // ROUTER_DEFS_H

@@ -32,6 +32,7 @@ int main(int argc, char* argv[])
 	printf("Single Source Shortest Path:\n");
 	graphDijikstraCalcDistance2(grphList, inetList, 1);
 	WIteratorList(grphList, (void (*)(void*))printDistance);
+	graphTraceShortstPathFrmSrc2Trgt(grphList, inetList, 7);
 	//resetEverythingInIntrnt(inetList);
 	
 	WDeleteList(grphList);
