@@ -134,6 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Dijkstra.c" />
+    <ClCompile Include="DisjointSetLL.c" />
     <ClCompile Include="init_inet.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="network_lib.c" />

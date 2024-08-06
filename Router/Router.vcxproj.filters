@@ -30,6 +30,9 @@
     <ClCompile Include="Dijkstra.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DisjointSetLL.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="router_defs.h">

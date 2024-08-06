@@ -78,4 +78,41 @@ void graphDijikstraCalcDistance(struct WLList*, struct WLList*, uint32_t);
 void graphTraceShortstPathFrmSrc2Trgt(struct WLList*, struct WLList*, uint32_t);
 void graphDijikstraCalcDistance2(struct WLList*, struct WLList*, uint32_t);
 
+/* Disjoint Sets, using Linked List, Amortized weigthed-union Heuristic O(m + nlgn) */
+
+struct DJSetNode {
+	void* object;
+	struct DJSetNode* next;
+	struct DJSet* set;
+};
+
+struct DJSet {
+	struct DJSetNode* head, *tail;
+	uint32_t length;
+};
+
+struct DJSCollection {
+	struct DJSet* S;
+	struct DJSCollection* next;
+};
+
+struct DJSCollection* DJSCreateCollection(void);
+void DJSCollectionDestroy(struct DJSCollection*);
+struct DJSet* DJSMakeSet(struct DJSCollection*, void*);
+void* DJSFindSet(void*);
+void DJSUnion(struct DJSCollection**, struct DJSet*, struct DJSet*);
+void DJSCollectionDestroy(struct DJSCollection* clc);
+
+/* Minimum Spanning Tree, using Disjoint Sets */
+
+struct MSTVertex {
+	uint32_t vrtxId;
+	struct DJSetNode* object;
+};
+
+struct MSTEdge {
+	struct MSTVertex* x, * y;
+	float weigth;
+};
+
 #endif // ROUTER_DEFS_H
