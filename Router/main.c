@@ -29,20 +29,24 @@ int main(int argc, char* argv[])
 	printf("*** Internet Routing Algorithms Simulator ***\n\n");
 	inetList = initializeInternetMap();
 #if 0
-	/* OSPF using Dijkstras algo on Directed Graph */
+	/* OSPF using Dijkstras algo on Directed weighted Graph */
 	grphList = initializeGraphContainer(inetList);
 	printf("Single Source Shortest Path:\n");
 	graphDijikstraCalcDistance2(grphList, inetList, 1);
 	WIteratorList(grphList, (void (*)(void*))printDistance);
 	graphTraceShortstPathFrmSrc2Trgt(grphList, inetList, 7);
 	WDeleteList(grphList);
-#endif
-#if 1
+#elif 1
 	/* Minimum Spanning Tree, using disjoint sets on Undirected weighted graph */
 	struct MSTGraph* G;
+	struct DJSCollection* S;
+	S = DJSCreateCollection();
 	G = initializeMSTGraphContainer(inetList);
+	ConnectedComponentsGraph(G, S);
+	printConnectedComponents(G);
+	DJSDestroyCollection(S);
 	DeleteMSTGraph(G);
-#endif	
+#endif
 	resetEverythingInIntrnt(inetList);
 	WDeleteList(inetList);
 	return 0;

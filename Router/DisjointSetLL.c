@@ -16,6 +16,7 @@ struct DJSet* DJSMakeSet(struct DJSCollection* collctn, void* object)
 	if ((n = (struct DJSetNode*)calloc(1, sizeof * n)) == NULL)
 		return NULL;
 	n->object = object;
+	((struct MSTVertex*)object)->setNode = n;
 	n->next = NULL;
 	if ((s = (struct DJSet*)calloc(1, sizeof * s)) == NULL) {
 		free(n);
@@ -25,12 +26,8 @@ struct DJSet* DJSMakeSet(struct DJSCollection* collctn, void* object)
 	s->length = 1;
 	s->head = n;
 	s->tail = n;
-	if (collctn->next == NULL) {
+	if (collctn->S == NULL && collctn->next == NULL) {
 		collctn->S = s;
-		if ((collctn->next = (struct DJSCollection*)calloc(1, sizeof * collctn)) == NULL) {
-			free(n); free(s);
-			return NULL;
-		}
 	}
 	else {
 		for (p = collctn; p->next != NULL; p = p->next)
@@ -48,7 +45,7 @@ struct DJSet* DJSMakeSet(struct DJSCollection* collctn, void* object)
 /* Returns representative from the set found in */
 void* DJSFindSet(void* vertex)
 {
-	return ((struct MSTVertex*)vertex)->setNode->set->head->object;
+	return ((struct MSTVertex*)vertex)->setNode->set->head;
 }
 
 void DJSUnion(struct DJSCollection** collctn, struct DJSet* x, struct DJSet* y)
@@ -93,15 +90,29 @@ void DJSetDestroy(struct DJSet* s)
 	return;
 }
 
-void DJSCollectionDestroy(struct DJSCollection* clc)
+void DJSDestroyCollection(struct DJSCollection* cln)
 {
-	struct DJSCollection* p, * p1;
-	p = clc;
-	while (p != NULL) {
-		p1 = p;
-		p = p->next;
-		DJSetDestroy(p1->S);
-		free(p1);
+	struct DJSCollection* p;
+	
+	while (cln != NULL) {
+		p = cln;
+		cln = cln->next;
+		DJSetDestroy(p->S);
+		free(p);
 	}
 	return;
+}
+
+struct DJSet* FindSetInCollctn(struct DJSCollection* clc, struct MSTVertex* x)
+{
+	struct DJSet* s;
+	struct DJSetNode* n;
+	for (; clc != NULL; clc = clc->next) {
+		s = clc->S;
+		for (n = s->head; n != NULL; n = n->next) {
+			if (((struct MSTVertex*)n->object) == x)
+				return s;
+		}
+	}
+	return NULL;
 }

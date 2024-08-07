@@ -103,3 +103,54 @@ void DeleteMSTGraph(struct MSTGraph* G)
 	free(G);
 	return;
 }
+
+void addVertex2DJSet(struct MSTVertex* x, struct DJSCollection* S)
+{
+	DJSMakeSet(S, x);
+	return;
+}
+
+void addEdges2DJSet(struct MSTEdge* x, struct DJSCollection* S)
+{
+	struct DJSet* su, * sv;
+	if (DJSFindSet(x->u) != DJSFindSet(x->v)) {
+		su = FindSetInCollctn(S, x->u);
+		sv = FindSetInCollctn(S, x->v);
+		DJSUnion(&S, su, sv);
+	}
+	return;
+}
+
+void ConnectedComponentsGraph(struct MSTGraph* G, struct DJSCollection* S)
+{
+	WIteratorList3(G->vertices, (void*)S, (void(*)(void*, void*))addVertex2DJSet);
+	WIteratorList3(G->edges, (void*)S, (void(*)(void*, void*))addEdges2DJSet);
+	return;
+}
+
+int32_t isSameConnectedComponent(struct MSTVertex* x, struct MSTVertex* y)
+{
+	if (DJSFindSet((void*)x) == DJSFindSet((void*)y))
+		return TRUE;
+	return FALSE;
+}
+
+void printComponents2(struct MSTVertex* x, struct MSTVertex* y)
+{
+	if (isSameConnectedComponent(x, y) == TRUE)
+		printf("%d and %d in same component\n", y->vrtxId, x->vrtxId);
+	else
+		printf("%d and %d NOT in same component\n", y->vrtxId, x->vrtxId);
+	return;
+}
+
+void printComponents(struct MSTVertex* x, struct WLList* vertices)
+{
+	WIteratorList3(vertices, (void*)x, (void(*)(void*, void*))printComponents2);
+	return;
+}
+
+void printConnectedComponents(struct MSTGraph* G)
+{
+	WIteratorList2(G->vertices, (void(*)(void*, void*))printComponents);
+}

@@ -97,10 +97,11 @@ struct DJSCollection {
 };
 
 struct DJSCollection* DJSCreateCollection(void);
-void DJSCollectionDestroy(struct DJSCollection*);
+void DJSDestroyCollection(struct DJSCollection*);
 struct DJSet* DJSMakeSet(struct DJSCollection*, void*);
 void* DJSFindSet(void*);
 void DJSUnion(struct DJSCollection**, struct DJSet*, struct DJSet*);
+struct DJSet* FindSetInCollctn(struct DJSCollection*, struct MSTVertex*);
 
 /* Minimum Spanning Tree, using Disjoint Sets */
 
@@ -121,5 +122,8 @@ struct MSTGraph {
 
 struct MSTGraph* initializeMSTGraphContainer(struct WLList*);
 void DeleteMSTGraph(struct MSTGraph*);
+void ConnectedComponentsGraph(struct MSTGraph*, struct DJSCollection*);
+int32_t isSameConnectedComponent(struct MSTVertex*, struct MSTVertex*);
+void printConnectedComponents(struct MSTGraph*);
 
 #endif // ROUTER_DEFS_H
