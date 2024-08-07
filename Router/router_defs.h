@@ -101,18 +101,25 @@ void DJSCollectionDestroy(struct DJSCollection*);
 struct DJSet* DJSMakeSet(struct DJSCollection*, void*);
 void* DJSFindSet(void*);
 void DJSUnion(struct DJSCollection**, struct DJSet*, struct DJSet*);
-void DJSCollectionDestroy(struct DJSCollection* clc);
 
 /* Minimum Spanning Tree, using Disjoint Sets */
 
 struct MSTVertex {
 	uint32_t vrtxId;
-	struct DJSetNode* object;
+	struct DJSetNode* setNode;
 };
 
 struct MSTEdge {
-	struct MSTVertex* x, * y;
+	struct MSTVertex* u, * v;
 	float weigth;
 };
+
+struct MSTGraph {
+	struct WLList* vertices;
+	struct WLList* edges;
+};
+
+struct MSTGraph* initializeMSTGraphContainer(struct WLList*);
+void DeleteMSTGraph(struct MSTGraph*);
 
 #endif // ROUTER_DEFS_H

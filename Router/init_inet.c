@@ -3,7 +3,7 @@
 #define ROUTER_TOKEN	"Router:"
 
 
-int RouterCmp(const struct Router* R1, const struct Router* R2)
+int32_t RouterCmp(const struct Router* R1, const struct Router* R2)
 {
 	if (R1->Id > R2->Id)
 		return 1;

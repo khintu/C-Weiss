@@ -137,6 +137,7 @@
     <ClCompile Include="DisjointSetLL.c" />
     <ClCompile Include="init_inet.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="MSTGraph.c" />
     <ClCompile Include="network_lib.c" />
     <ClCompile Include="routing_table.c" />
   </ItemGroup>

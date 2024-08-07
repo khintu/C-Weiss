@@ -28,14 +28,22 @@ int main(int argc, char* argv[])
 	//return 0;
 	printf("*** Internet Routing Algorithms Simulator ***\n\n");
 	inetList = initializeInternetMap();
+#if 0
+	/* OSPF using Dijkstras algo on Directed Graph */
 	grphList = initializeGraphContainer(inetList);
 	printf("Single Source Shortest Path:\n");
 	graphDijikstraCalcDistance2(grphList, inetList, 1);
 	WIteratorList(grphList, (void (*)(void*))printDistance);
 	graphTraceShortstPathFrmSrc2Trgt(grphList, inetList, 7);
-	//resetEverythingInIntrnt(inetList);
-	
 	WDeleteList(grphList);
+#endif
+#if 1
+	/* Minimum Spanning Tree, using disjoint sets on Undirected weighted graph */
+	struct MSTGraph* G;
+	G = initializeMSTGraphContainer(inetList);
+	DeleteMSTGraph(G);
+#endif	
+	resetEverythingInIntrnt(inetList);
 	WDeleteList(inetList);
 	return 0;
 }

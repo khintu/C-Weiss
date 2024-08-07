@@ -31,7 +31,7 @@ void GrphDtr(struct GVertex* v)
 	return;
 }
 
-extern int RouterCmp(const struct Router* R1, const struct Router* R2);
+extern int32_t RouterCmp(const struct Router* R1, const struct Router* R2);
 
 int32_t GrphCmp(struct GVertex* x, struct GVertex* y)
 {

@@ -48,7 +48,7 @@ struct DJSet* DJSMakeSet(struct DJSCollection* collctn, void* object)
 /* Returns representative from the set found in */
 void* DJSFindSet(void* vertex)
 {
-	return ((struct MSTVertex*)vertex)->object->set->head->object;
+	return ((struct MSTVertex*)vertex)->setNode->set->head->object;
 }
 
 void DJSUnion(struct DJSCollection** collctn, struct DJSet* x, struct DJSet* y)
@@ -56,9 +56,9 @@ void DJSUnion(struct DJSCollection** collctn, struct DJSet* x, struct DJSet* y)
 	struct DJSet* max = x, *min = y;
 	struct DJSetNode* n;
 	struct DJSCollection* p, *prev;
-	if (x->length != y->length) {
-		max = (x->length > y->length) ? x : y;
-		min = (x->length < y->length) ? x : y;
+	if (x->length < y->length) {
+		max = y;
+		min = x;
 	}
 	max->tail->next = min->head;
 	max->tail = min->tail;
