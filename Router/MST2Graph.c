@@ -1,9 +1,9 @@
 #include <router_defs.h>
 
-static struct MSTEdge* MSTEdgeCtr(struct MSTEdge* x)
+static struct MST2Edge* MSTEdgeCtr(struct MST2Edge* x)
 {
-	struct MSTEdge* y;
-	if ((y = (struct MSTEdge*)calloc(1, sizeof * y)) != NULL) {
+	struct MST2Edge* y;
+	if ((y = (struct MST2Edge*)calloc(1, sizeof * y)) != NULL) {
 		y->u = x->u;
 		y->v = x->v;
 		y->weigth = x->weigth;
@@ -11,13 +11,13 @@ static struct MSTEdge* MSTEdgeCtr(struct MSTEdge* x)
 	return y;
 }
 
-static void MSTEdgeDtr(struct MSTEdge* x)
+static void MSTEdgeDtr(struct MST2Edge* x)
 {
 	free(x);
 	return;
 }
 
-static int32_t MSTEdgeCmp(struct MSTEdge* x, struct MSTEdge* y)
+static int32_t MSTEdgeCmp(struct MST2Edge* x, struct MST2Edge* y)
 {
 	if (x->weigth > y->weigth)
 		return 1;
@@ -27,23 +27,23 @@ static int32_t MSTEdgeCmp(struct MSTEdge* x, struct MSTEdge* y)
 		return 0;
 }
 
-static struct MSTVertex* MSTVertexCtr(struct MSTVertex* x)
+static struct MST2Vertex* MSTVertexCtr(struct MST2Vertex* x)
 {
-	struct MSTVertex* y;
-	if ((y = (struct MSTVertex*)calloc(1, sizeof * y)) != NULL) {
+	struct MST2Vertex* y;
+	if ((y = (struct MST2Vertex*)calloc(1, sizeof * y)) != NULL) {
 		y->setNode = x->setNode;
 		y->vrtxId = x->vrtxId;
 	}
 	return y;
 }
 
-static void MSTVertexDtr(struct MSTVertex* x)
+static void MSTVertexDtr(struct MST2Vertex* x)
 {
 	free(x);
 	return;
 }
 
-static int32_t MSTVertexCmp(struct MSTVertex* x, struct MSTVertex* y)
+static int32_t MSTVertexCmp(struct MST2Vertex* x, struct MST2Vertex* y)
 {
 	if (x->vrtxId > y->vrtxId)
 		return 1;
@@ -55,7 +55,7 @@ static int32_t MSTVertexCmp(struct MSTVertex* x, struct MSTVertex* y)
 
 static void createMSTVertexItr(struct Router* Rtr, struct WLList* vertices)
 {
-	struct MSTVertex v = { 0 };
+	struct MST2Vertex v = { 0 };
 	v.vrtxId = Rtr->Id;
 	WAppendToList(vertices, &v);
 	return;
@@ -64,8 +64,8 @@ static void createMSTVertexItr(struct Router* Rtr, struct WLList* vertices)
 static void createMSTEdgeItr(struct Router* Rtr, struct WLList* vertices, struct WLList* edges)
 {
 	int32_t i;
-	struct MSTEdge e = { 0 };
-	struct MSTVertex* x, xKey = { 0 };
+	struct MST2Edge e = { 0 };
+	struct MST2Vertex* x, xKey = { 0 };
 
 	for (i = 0; Rtr->FwdgTbl[i] && i < MAX_FWDGTBL_ENTRIES; ++i) {
 		xKey.vrtxId = Rtr->Id;
@@ -80,23 +80,23 @@ static void createMSTEdgeItr(struct Router* Rtr, struct WLList* vertices, struct
 	return;
 }
 
-struct MSTGraph* initializeMSTGraphContainer(struct WLList* inetList)
+struct MST2Graph* initializeMST2GraphContainer(struct WLList* inetList)
 {
-	struct MSTGraph* G;
+	struct MST2Graph* G;
 
-	if ((G = (struct MSTGraph*)calloc(1, sizeof * G)) == NULL)
+	if ((G = (struct MST2Graph*)calloc(1, sizeof * G)) == NULL)
 		return NULL;
 
 	G->vertices = WCreateList((WCMPFP)MSTVertexCmp, (WCTRFP)MSTVertexCtr, (WDTRFP)MSTVertexDtr);
 	G->edges = WCreateList((WCMPFP)MSTEdgeCmp, (WCTRFP)MSTEdgeCtr, (WDTRFP)MSTEdgeDtr);
-	
+
 	WIteratorList3(inetList, (void*)G->vertices, (void(*)(void*, void*))createMSTVertexItr);
-	WIteratorList4(inetList, (void*)G->vertices, (void*)G->edges,\
+	WIteratorList4(inetList, (void*)G->vertices, (void*)G->edges, \
 								(void(*)(void*, void*, void*))createMSTEdgeItr);
 	return G;
 }
 
-void DeleteMSTGraph(struct MSTGraph* G)
+void DeleteMST2Graph(struct MST2Graph* G)
 {
 	WDeleteList(G->vertices);
 	WDeleteList(G->edges);
@@ -104,49 +104,53 @@ void DeleteMSTGraph(struct MSTGraph* G)
 	return;
 }
 
-static void addVertex2DJSet(struct MSTVertex* x, struct DJSCollection* S)
+static void addVertex2DJSet(struct MST2Vertex* v, struct DJSRtCollctn** S)
 {
-	DJSMakeSet(S, x);
+	struct DJSRtNode* x;
+	x = (struct DJSRtNode*)calloc(1, sizeof * x);
+	DJSRtAdd2Collctn(S, x);
+	DJSRtMakeSet(x, v);
 	return;
 }
 
-static void addEdges2DJSet(struct MSTEdge* x, struct DJSCollection* S)
+static void addEdges2DJSet(struct MST2Edge* x, struct DJSRtCollctn** S)
 {
-	if (DJSFindSet(x->u) != DJSFindSet(x->v))
-		DJSUnion(&S, ((struct DJSetNode*)DJSFindSet(x->u))->set, ((struct DJSetNode*)DJSFindSet(x->v))->set);
+	if (DJSRtFindSet(x->u->setNode) != DJSRtFindSet(x->v->setNode))
+		DJSRtUnion(S, DJSRtFindSet(x->u->setNode), DJSRtFindSet(x->v->setNode));
 	return;
 }
 
-void ConnectedComponentsGraph(struct MSTGraph* G, struct DJSCollection* S)
+
+void ConnectedComponentsGraph2(struct MST2Graph* G, struct DJSRtCollctn** S)
 {
 	WIteratorList3(G->vertices, (void*)S, (void(*)(void*, void*))addVertex2DJSet);
 	WIteratorList3(G->edges, (void*)S, (void(*)(void*, void*))addEdges2DJSet);
 	return;
 }
 
-int32_t isSameConnectedComponent(struct MSTVertex* x, struct MSTVertex* y)
+int32_t isSameConnectedComponent2(struct MST2Vertex* x, struct MST2Vertex* y)
 {
-	if (DJSFindSet((void*)x) == DJSFindSet((void*)y))
+	if (DJSRtFindSet(x->setNode) == DJSRtFindSet(y->setNode))
 		return TRUE;
 	return FALSE;
 }
 
-static void printComponentsItr(struct MSTVertex* x, struct MSTVertex* y)
+static void printComponentsItr(struct MST2Vertex* x, struct MST2Vertex* y)
 {
-	if (isSameConnectedComponent(x, y) == TRUE)
+	if (isSameConnectedComponent2(x, y) == TRUE)
 		printf("%d and %d in same component\n", y->vrtxId, x->vrtxId);
 	else
 		printf("%d and %d NOT in same component\n", y->vrtxId, x->vrtxId);
 	return;
 }
 
-static void printComponents(struct MSTVertex* x, struct WLList* vertices)
+static void printComponents(struct MST2Vertex* x, struct WLList* vertices)
 {
 	WIteratorList3(vertices, (void*)x, (void(*)(void*, void*))printComponentsItr);
 	return;
 }
 
-void printConnectedComponents(struct MSTGraph* G)
+void printConnectedComponents2(struct MST2Graph* G)
 {
 	WIteratorList2(G->vertices, (void(*)(void*, void*))printComponents);
 	return;

@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
 	WIteratorList(grphList, (void (*)(void*))printDistance);
 	graphTraceShortstPathFrmSrc2Trgt(grphList, inetList, 7);
 	WDeleteList(grphList);
-#elif 1
+#elif 0
 	/* Minimum Spanning Tree, using disjoint sets on Undirected weighted graph */
 	struct MSTGraph* G;
 	struct DJSCollection* S;
@@ -46,6 +46,15 @@ int main(int argc, char* argv[])
 	printConnectedComponents(G);
 	DJSDestroyCollection(S);
 	DeleteMSTGraph(G);
+#elif 1
+	/* Minimum Spanning Tree, using Rooted disjoint sets on Undirected weighted graph */
+	struct MST2Graph* G;
+	struct DJSRtCollctn* S = NULL;
+	G = initializeMST2GraphContainer(inetList);
+	ConnectedComponentsGraph2(G, &S);
+	printConnectedComponents2(G);
+	DJSRtDestroyCollctn(S, G);
+	DeleteMST2Graph(G);
 #endif
 	resetEverythingInIntrnt(inetList);
 	WDeleteList(inetList);

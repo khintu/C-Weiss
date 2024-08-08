@@ -79,7 +79,6 @@ void graphTraceShortstPathFrmSrc2Trgt(struct WLList*, struct WLList*, uint32_t);
 void graphDijikstraCalcDistance2(struct WLList*, struct WLList*, uint32_t);
 
 /* Disjoint Sets, using Linked List, Amortized weigthed-union Heuristic O(m + nlgn) */
-
 struct DJSetNode {
 	void* object;
 	struct DJSetNode* next;
@@ -103,8 +102,7 @@ void* DJSFindSet(void*);
 void DJSUnion(struct DJSCollection**, struct DJSet*, struct DJSet*);
 struct DJSet* FindSetInCollctn(struct DJSCollection*, struct MSTVertex*);
 
-/* Minimum Spanning Tree, using Disjoint Sets */
-
+/* Minimum Spanning Tree, using Disjoint Sets LL */
 struct MSTVertex {
 	uint32_t vrtxId;
 	struct DJSetNode* setNode;
@@ -125,5 +123,45 @@ void DeleteMSTGraph(struct MSTGraph*);
 void ConnectedComponentsGraph(struct MSTGraph*, struct DJSCollection*);
 int32_t isSameConnectedComponent(struct MSTVertex*, struct MSTVertex*);
 void printConnectedComponents(struct MSTGraph*);
+
+/* Disjoint Sets, using Rooted Trees, Amortized 2*Heuristics O(m), super linear */
+struct DJSRtNode {
+	uint32_t rank;				/* height from root to leaf of a node for union-by-rank */
+	struct DJSRtNode* p; /* parent node for path-compression */
+	struct MST2Vertex* vertex; /* reference to Graph */
+};
+
+struct DJSRtCollctn {
+	struct DJSRtNode* root;	/* root node or representative of DJSRt */
+	struct DJSRtCollctn* next;
+};
+
+void DJSRtAdd2Collctn(struct DJSRtCollctn**, struct DJSRtNode*);
+void DJSRtDestroyCollctn(struct DJSRtCollctn*, struct MST2Graph*);
+void DJSRtMakeSet(struct DJSRtNode*, struct MST2Vertex*);
+struct DJSRtNode* DJSRtFindSet(struct DJSRtNode*);
+void DJSRtUnion(struct DJSRtCollctn**, struct DJSRtNode*, struct DJSRtNode*);
+
+/* Minimum Spanning Tree, using DJS-Rooted Trees */
+struct MST2Vertex {
+	uint32_t vrtxId;
+	struct DJSRtNode* setNode;	/* reference to DJSets */
+};
+
+struct MST2Edge {
+	struct MST2Vertex* u, * v;
+	float weigth;
+};
+
+struct MST2Graph {
+	struct WLList* vertices;
+	struct WLList* edges;
+};
+
+struct MST2Graph* initializeMST2GraphContainer(struct WLList*);
+void DeleteMST2Graph(struct MST2Graph*);
+void ConnectedComponentsGraph2(struct MST2Graph*, struct DJSRtCollctn**);
+int32_t isSameConnectedComponent2(struct MST2Vertex*, struct MST2Vertex*);
+void printConnectedComponents2(struct MST2Graph*);
 
 #endif // ROUTER_DEFS_H
