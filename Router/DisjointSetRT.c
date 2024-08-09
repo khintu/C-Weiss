@@ -31,11 +31,23 @@ void DJSRtDestroyCollctn(struct DJSRtCollctn* cln, struct MST2Graph *G)
 	return;
 }
 
-void DSJRtNodeDestroy(struct DJSRtNode* x, struct WLList* vertices)
+static void DestroyNodeItr(struct MST2Vertex* v, struct DJSRtNode* rt)
 {
-	/* TBD: Find vertices in the Graph which have parent as 'x', delete their DJSRtNode reference */
-	x->vertex;
-	free(x);
+	struct DJSRtNode* x;
+	if (v->setNode && v->setNode != rt && (x = DJSRtFindSet(v->setNode)) == rt) {
+		free(v->setNode);
+		v->setNode = NULL;
+	}
+	else if (v->setNode == rt)
+		v->setNode = NULL;
+	return;
+}
+
+void DSJRtNodeDestroy(struct DJSRtNode* rt, struct WLList* vertices)
+{
+	/* Find vertices in the Graph which have parent as 'x', delete their DJSRtNode reference */
+	WIteratorList3(vertices, (void*)rt, DestroyNodeItr);
+	free(rt);
 	return;
 }
 
@@ -79,7 +91,8 @@ void DJSRtUnion(struct DJSRtCollctn** cln, struct DJSRtNode* x, struct DJSRtNode
 	if (p != NULL) {
 		if (p == *cln)
 			*cln = p->next;
-		prev->next = p->next;
+		else
+			prev->next = p->next;
 		free(p);
 	}
 	return;
