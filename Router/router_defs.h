@@ -164,4 +164,10 @@ void ConnectedComponentsGraph2(struct MST2Graph*, struct DJSRtCollctn**);
 int32_t isSameConnectedComponent2(struct MST2Vertex*, struct MST2Vertex*);
 void printConnectedComponents2(struct MST2Graph*);
 
+/* Kruskals algo */
+struct MST2Graph* initializeMST2GraphContainer2(struct WLList* inetList);
+void InitializeVerticsFrMST(struct MST2Graph*, struct DJSRtCollctn**, struct WLList**);
+void FindSafeEdgesAdBuildMST(struct MST2Graph* G, struct DJSRtCollctn** S, struct WLList*);
+void printSafeEdgesMST(struct WLList*);
+
 #endif // ROUTER_DEFS_H

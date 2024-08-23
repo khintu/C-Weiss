@@ -17,6 +17,16 @@ static void MSTEdgeDtr(struct MST2Edge* x)
 	return;
 }
 
+static struct MST2Edge* MSTEdgeCtrEmpty(struct MST2Edge* x)
+{
+	return x;
+}
+
+static void MSTEdgeDtrEmpty(struct MST2Edge* x)
+{
+	return;
+}
+
 static int32_t MSTEdgeCmp(struct MST2Edge* x, struct MST2Edge* y)
 {
 	if (x->weigth > y->weigth)
@@ -120,7 +130,6 @@ static void addEdges2DJSet(struct MST2Edge* x, struct DJSRtCollctn** S)
 	return;
 }
 
-
 void ConnectedComponentsGraph2(struct MST2Graph* G, struct DJSRtCollctn** S)
 {
 	WIteratorList3(G->vertices, (void*)S, (void(*)(void*, void*))addVertex2DJSet);
@@ -153,5 +162,75 @@ static void printComponents(struct MST2Vertex* x, struct WLList* vertices)
 void printConnectedComponents2(struct MST2Graph* G)
 {
 	WIteratorList2(G->vertices, (void(*)(void*, void*))printComponents);
+	return;
+}
+
+/* Kruskals MST Algorithm */
+static void createMSTEdgeItr2(struct Router* Rtr, struct WLList* vertices, struct WLList* edges)
+{
+	int32_t i;
+	struct MST2Edge e = { 0 };
+	struct MST2Vertex* x, xKey = { 0 };
+
+	for (i = 0; Rtr->FwdgTbl[i] && i < MAX_FWDGTBL_ENTRIES; ++i) {
+		xKey.vrtxId = Rtr->Id;
+		if (x = WFindInList(vertices, &xKey))
+			e.u = x;
+		xKey.vrtxId = Rtr->FwdgTbl[i]->I;
+		if (x = WFindInList(vertices, &xKey))
+			e.v = x;
+		e.weigth = Rtr->FwdgTbl[i]->Metric;
+		WInsertToSortdList(edges, &e);
+	}
+	return;
+}
+
+struct MST2Graph* initializeMST2GraphContainer2(struct WLList* inetList)
+{
+	struct MST2Graph* G;
+
+	if ((G = (struct MST2Graph*)calloc(1, sizeof * G)) == NULL)
+		return NULL;
+
+	G->vertices = WCreateList((WCMPFP)MSTVertexCmp, (WCTRFP)MSTVertexCtr, (WDTRFP)MSTVertexDtr);
+	G->edges = WCreateList((WCMPFP)MSTEdgeCmp, (WCTRFP)MSTEdgeCtr, (WDTRFP)MSTEdgeDtr);
+
+	WIteratorList3(inetList, (void*)G->vertices, (void(*)(void*, void*))createMSTVertexItr);
+	WIteratorList4(inetList, (void*)G->vertices, (void*)G->edges, \
+		(void(*)(void*, void*, void*))createMSTEdgeItr2);
+	return G;
+}
+
+void InitializeVerticsFrMST(struct MST2Graph* G, struct DJSRtCollctn** S, struct WLList** A)
+{
+	WIteratorList3(G->vertices, (void*)S, (void(*)(void*, void*))addVertex2DJSet);
+	*A = WCreateList((WCMPFP)MSTEdgeCmp, (WCTRFP)MSTEdgeCtrEmpty, (WDTRFP)MSTEdgeDtrEmpty);
+	return;
+}
+
+static void addEdges2MST(struct MST2Edge* x, struct DJSRtCollctn** S, struct WLList* A)
+{
+	if (DJSRtFindSet(x->u->setNode) != DJSRtFindSet(x->v->setNode)) {
+		DJSRtUnion(S, DJSRtFindSet(x->u->setNode), DJSRtFindSet(x->v->setNode));
+		WAppendToList(A, x);
+	}
+	return;
+}
+
+void FindSafeEdgesAdBuildMST(struct MST2Graph* G, struct DJSRtCollctn** S, struct WLList* A)
+{
+	WIteratorList4(G->edges, (void*)S, (void*)A, (void(*)(void*, void*, void*))addEdges2MST);
+	return;
+}
+
+static void printMSTSafeEdge(struct MST2Edge* x)
+{
+	printf("Vertices u(%d)-v(%d), Edge %f\n", x->u->vrtxId, x->v->vrtxId, x->weigth);
+	return;
+}
+
+void printSafeEdgesMST(struct WLList* A)
+{
+	WIteratorList(A, (void (*)(void*))printMSTSafeEdge);
 	return;
 }

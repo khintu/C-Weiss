@@ -5,6 +5,7 @@ void unit_test_network_lib(void);
 void runDijkstrasOSPFAlgo(struct WLList* inetList);
 void runConnectedComponentsAlgo(struct WLList* inetList);
 void runConnectedComponents2Algo(struct WLList* inetList);
+void runKruskalsMSTAlgo(struct WLList* inetList);
 
 /* 
 	In our implementation the Router Interface Id is a unique
@@ -32,7 +33,7 @@ int main(int argc, char* argv[])
 	inetList = initializeInternetMap();
 	
 	// Put your code here
-	runConnectedComponents2Algo(inetList);
+	runKruskalsMSTAlgo(inetList);
 
 	// Delete internet graph
 	resetEverythingInIntrnt(inetList);
@@ -89,6 +90,23 @@ void runConnectedComponents2Algo(struct WLList* inetList)
 	ConnectedComponentsGraph2(G, &S);
 	printConnectedComponents2(G);
 	DJSRtDestroyCollctn(S, G);
+	DeleteMST2Graph(G);
+	return;
+}
+
+/* Kruskals MST, using Rooted disjoint sets on Undirected weighted graph */
+void runKruskalsMSTAlgo(struct WLList* inetList)
+{
+	struct WLList* A = NULL;
+	struct MST2Graph* G;
+	struct DJSRtCollctn* S = NULL;
+
+	G = initializeMST2GraphContainer2(inetList);
+	InitializeVerticsFrMST(G, &S, &A);
+	FindSafeEdgesAdBuildMST(G, &S, A);
+	printSafeEdgesMST(A);
+	DJSRtDestroyCollctn(S, G);
+	WDeleteList(A);
 	DeleteMST2Graph(G);
 	return;
 }
