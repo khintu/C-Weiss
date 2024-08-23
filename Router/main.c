@@ -2,6 +2,9 @@
 
 extern int insert_in_main_unittestsuit(int argc, char* argv[]);
 void unit_test_network_lib(void);
+void runDijkstrasOSPFAlgo(struct WLList* inetList);
+void runConnectedComponentsAlgo(struct WLList* inetList);
+void runConnectedComponents2Algo(struct WLList* inetList);
 
 /* 
 	In our implementation the Router Interface Id is a unique
@@ -22,40 +25,16 @@ void printDistance(struct GVertex* v)
 
 int main(int argc, char* argv[])
 {
-	struct WLList* inetList, *grphList;
-	//unit_test_network_lib();
+	struct WLList* inetList;
 	//insert_in_main_unittestsuit(argc, argv);
-	//return 0;
+
 	printf("*** Internet Routing Algorithms Simulator ***\n\n");
 	inetList = initializeInternetMap();
-#if 0
-	/* OSPF using Dijkstras algo on Directed weighted Graph */
-	grphList = initializeGraphContainer(inetList);
-	printf("Single Source Shortest Path:\n");
-	graphDijikstraCalcDistance2(grphList, inetList, 1);
-	WIteratorList(grphList, (void (*)(void*))printDistance);
-	graphTraceShortstPathFrmSrc2Trgt(grphList, inetList, 7);
-	WDeleteList(grphList);
-#elif 0
-	/* Minimum Spanning Tree, using disjoint sets on Undirected weighted graph */
-	struct MSTGraph* G;
-	struct DJSCollection* S;
-	S = DJSCreateCollection();
-	G = initializeMSTGraphContainer(inetList);
-	ConnectedComponentsGraph(G, S);
-	printConnectedComponents(G);
-	DJSDestroyCollection(S);
-	DeleteMSTGraph(G);
-#elif 1
-	/* Minimum Spanning Tree, using Rooted disjoint sets on Undirected weighted graph */
-	struct MST2Graph* G;
-	struct DJSRtCollctn* S = NULL;
-	G = initializeMST2GraphContainer(inetList);
-	ConnectedComponentsGraph2(G, &S);
-	printConnectedComponents2(G);
-	DJSRtDestroyCollctn(S, G);
-	DeleteMST2Graph(G);
-#endif
+	
+	// Put your code here
+	runConnectedComponents2Algo(inetList);
+
+	// Delete internet graph
 	resetEverythingInIntrnt(inetList);
 	WDeleteList(inetList);
 	return 0;
@@ -71,5 +50,45 @@ void unit_test_network_lib(void)
 	printf("%x to %x\n", host2network16(dummy16), network2host16(host2network16(dummy16)));
 	printf("%s\n", decimal2dotted32(dummy32));
 	printf("%s\n", decimal2dotted32(0));
+	return;
+}
+
+/* OSPF using Dijkstras algo on Directed weighted Graph */
+void runDijkstrasOSPFAlgo(struct WLList *inetList)
+{
+	struct WLList *grphList;
+	grphList = initializeGraphContainer(inetList);
+	printf("Single Source Shortest Path:\n");
+	graphDijikstraCalcDistance2(grphList, inetList, 1);
+	WIteratorList(grphList, (void (*)(void*))printDistance);
+	graphTraceShortstPathFrmSrc2Trgt(grphList, inetList, 7);
+	WDeleteList(grphList);
+	return;
+}
+
+/* Connected Components, using disjoint sets on Undirected weighted graph */
+void runConnectedComponentsAlgo(struct WLList* inetList)
+{
+	struct MSTGraph* G;
+	struct DJSCollection* S;
+	S = DJSCreateCollection();
+	G = initializeMSTGraphContainer(inetList);
+	ConnectedComponentsGraph(G, S);
+	printConnectedComponents(G);
+	DJSDestroyCollection(S);
+	DeleteMSTGraph(G);
+	return;
+}
+
+/* Connected Components, using Rooted disjoint sets on Undirected weighted graph */
+void runConnectedComponents2Algo(struct WLList* inetList)
+{
+	struct MST2Graph* G;
+	struct DJSRtCollctn* S = NULL;
+	G = initializeMST2GraphContainer(inetList);
+	ConnectedComponentsGraph2(G, &S);
+	printConnectedComponents2(G);
+	DJSRtDestroyCollctn(S, G);
+	DeleteMST2Graph(G);
 	return;
 }
