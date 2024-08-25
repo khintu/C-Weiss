@@ -142,7 +142,7 @@ void DJSRtMakeSet(struct DJSRtNode*, struct MST2Vertex*);
 struct DJSRtNode* DJSRtFindSet(struct DJSRtNode*);
 void DJSRtUnion(struct DJSRtCollctn**, struct DJSRtNode*, struct DJSRtNode*);
 
-/* Minimum Spanning Tree, using DJS-Rooted Trees */
+/* Minimum Spanning Tree/Forest, using DJS-Rooted Trees */
 struct MST2Vertex {
 	uint32_t vrtxId;
 	struct DJSRtNode* setNode;	/* reference to DJSets */
@@ -158,16 +158,34 @@ struct MST2Graph {
 	struct WLList* edges;
 };
 
+/* Connected Components algo */
 struct MST2Graph* initializeMST2GraphContainer(struct WLList*);
 void DeleteMST2Graph(struct MST2Graph*);
 void ConnectedComponentsGraph2(struct MST2Graph*, struct DJSRtCollctn**);
 int32_t isSameConnectedComponent2(struct MST2Vertex*, struct MST2Vertex*);
 void printConnectedComponents2(struct MST2Graph*);
 
-/* Kruskals algo */
+/* Kruskals Minimum Spanning Forest algo */
 struct MST2Graph* initializeMST2GraphContainer2(struct WLList* inetList);
 void InitializeVerticsFrMST(struct MST2Graph*, struct DJSRtCollctn**, struct WLList**);
 void FindSafeEdgesAdBuildMST(struct MST2Graph* G, struct DJSRtCollctn** S, struct WLList*);
 void printSafeEdgesMST(struct WLList*);
+
+/* Prims Minimum Spanning Tree algo */
+struct PMSTVertex {
+	uint32_t vrtxId; /* Vertex/Router Id */
+	float key; /* minimum edge over a cut connecting to a parent tree(A) vertex */
+	struct PMSTVertex* p; /* reference to parent vertex */
+	struct WLList* Adj; /* Edges u(this)-v */
+};
+
+struct PMSTEdge {
+	float weigth;
+	struct PMSTVertex* v; /* Reference to adjacent vertex v of vertex u */
+};
+
+struct WLList* initializePMSTGraphContainer(struct WLList* inetList);
+void DeletePMSTGraph(struct WLList *Graph);
+void FindLightEdgesOnGraphCuts(uint32_t idx, struct WLList* Graph);
 
 #endif // ROUTER_DEFS_H

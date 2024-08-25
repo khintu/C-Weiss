@@ -42,6 +42,9 @@
     <ClCompile Include="MST2Graph.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PMSTGraph.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="router_defs.h">

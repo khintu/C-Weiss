@@ -278,6 +278,15 @@ void* WHeapExtractMaxPAQueue(struct WPAQueue* pQ)
 	return max;
 }
 
+int WHeapFindKeyIndex(struct WPAQueue* pQ, void* key)
+{
+	int i;
+	for (i = 0; i < pQ->heapSize; ++i)
+		if (pQ->CMP(pQ->array[i], key) == 0)
+			return i;
+	return -2; /* Key not found */
+}
+
 int WHeapIncKeyPAQueue(struct WPAQueue* pQ, int idx, void* key)
 {
 	void* tmp;

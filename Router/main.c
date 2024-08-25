@@ -6,6 +6,7 @@ void runDijkstrasOSPFAlgo(struct WLList* inetList);
 void runConnectedComponentsAlgo(struct WLList* inetList);
 void runConnectedComponents2Algo(struct WLList* inetList);
 void runKruskalsMSTAlgo(struct WLList* inetList);
+void runPrimsMSTAlgo(struct WLList* inetList);
 
 /* 
 	In our implementation the Router Interface Id is a unique
@@ -33,7 +34,7 @@ int main(int argc, char* argv[])
 	inetList = initializeInternetMap();
 	
 	// Put your code here
-	runKruskalsMSTAlgo(inetList);
+	runPrimsMSTAlgo(inetList);
 
 	// Delete internet graph
 	resetEverythingInIntrnt(inetList);
@@ -108,5 +109,16 @@ void runKruskalsMSTAlgo(struct WLList* inetList)
 	DJSRtDestroyCollctn(S, G);
 	WDeleteList(A);
 	DeleteMST2Graph(G);
+	return;
+}
+
+/* Prims MST using  min binanry heap */
+void runPrimsMSTAlgo(struct WLList* inetList)
+{
+	struct WLList* G;
+
+	G = initializePMSTGraphContainer(inetList);
+	FindLightEdgesOnGraphCuts(1, G);
+	DeletePMSTGraph(G);
 	return;
 }

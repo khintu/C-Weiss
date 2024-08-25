@@ -225,7 +225,7 @@ void FindSafeEdgesAdBuildMST(struct MST2Graph* G, struct DJSRtCollctn** S, struc
 
 static void printMSTSafeEdge(struct MST2Edge* x)
 {
-	printf("Vertices u(%d)-v(%d), Edge %f\n", x->u->vrtxId, x->v->vrtxId, x->weigth);
+	printf("Vertices u(%d)-v(%d), Edge %g\n", x->u->vrtxId, x->v->vrtxId, x->weigth);
 	return;
 }
 

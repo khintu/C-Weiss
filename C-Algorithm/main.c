@@ -123,6 +123,18 @@ void dtor(char* s)
 	return;
 }
 
+int strcmpInv(const char* x, const char* y)
+{
+	int cc;
+	cc = strcmp(x, y);
+	if (cc > 0)
+		return -1;
+	else if (cc < 0)
+		return 1;
+	else
+		return 0;
+}
+
 struct UnitRec* ctorRec(struct UnitRec* ur)
 {
 	struct UnitRec* r;
@@ -572,7 +584,7 @@ int UnitTestWPAQueue(int argc, char* argv[])
 	printf("PAQ Max: %s\n", (char*)WMaximumPAQueue(pQ));
 	WMaxHeapInsertPAQueue(pQ, "XYZ2");
 	printf("PAQ Max: %s\n", (char*)WMaximumPAQueue(pQ));
-	WHeapIncKeyPAQueue(pQ, 1, "XYZ0");
+	WHeapIncKeyPAQueue(pQ, 1, "XYZ0"); /* Failed */
 	printf("PAQ IncKey: %s\n", (char*)WMaximumPAQueue(pQ));
 	WHeapIncKeyPAQueue(pQ, 1, "XYZ3");
 	printf("PAQ IncKey: %s\n", (char*)WMaximumPAQueue(pQ));
@@ -590,6 +602,42 @@ int UnitTestWPAQueue(int argc, char* argv[])
 	WMaxHeapInsertPAQueue(pQ, "XYZ4");
 	WMaxHeapInsertPAQueue(pQ, "XYZ5");
 	printf("PAQ Max: %s\n", (char*)WMaximumPAQueue(pQ));
+	WDeletePAQueue(pQ);
+	return 0;
+}
+
+/* A Inverted MaxHeap PQ by reversing the CMP function = MinHeap */
+int UnitTestWPAQueueInv(int argc, char* argv[])
+{
+	printf("Unit Test MinHeap Priority Array Queue\n");
+
+	struct WPAQueue* pQ;
+	char* tmp;
+	int i;
+	pQ = WCreatePAQueue(5, (WCMPFP)strcmpInv, (WCTRFP)ctor, (WDTRFP)dtor);
+	WMaxHeapInsertPAQueue(pQ, "XYZ1");
+	printf("PAQ Min: %s\n", (char*)WMaximumPAQueue(pQ));
+	WMaxHeapInsertPAQueue(pQ, "XYZ2");
+	printf("PAQ Min: %s\n", (char*)WMaximumPAQueue(pQ));
+	WHeapIncKeyPAQueue(pQ, 1, "XYZ0");
+	printf("PAQ DecKey: %s\n", (char*)WMaximumPAQueue(pQ));
+	if ((i = WHeapFindKeyIndex(pQ, "XYZ1")) >= 0)
+		WHeapIncKeyPAQueue(pQ, i, "XYZ3"); /* Failed */
+	printf("PAQ DecKey: %s\n", (char*)WMaximumPAQueue(pQ));
+	tmp = WHeapExtractMaxPAQueue(pQ);
+	printf("PAQ Extract: %s\n", tmp);
+	free(tmp);
+	tmp = WHeapExtractMaxPAQueue(pQ);
+	printf("PAQ Extract: %s\n", tmp);
+	free(tmp);
+	printf("PAQ Min: %s\n", (char*)WMaximumPAQueue(pQ));
+	WMaxHeapInsertPAQueue(pQ, "XYZ0");
+	WMaxHeapInsertPAQueue(pQ, "XYZ1");
+	WMaxHeapInsertPAQueue(pQ, "XYZ2");
+	WMaxHeapInsertPAQueue(pQ, "XYZ3");
+	WMaxHeapInsertPAQueue(pQ, "XYZ4");
+	WMaxHeapInsertPAQueue(pQ, "XYZ5");
+	printf("PAQ Min: %s\n", (char*)WMaximumPAQueue(pQ));
 	WDeletePAQueue(pQ);
 	return 0;
 }
@@ -1179,7 +1227,7 @@ int insert_in_main_unittestsuit(int argc, char* argv[])
 	internet_simulator_main(argc, argv);
 #else
 	/* ---Put your Algo here to test--- */
-	UnitTestWFibHeap(argc, argv);
+	UnitTestWPAQueueInv(argc, argv);
 #endif /* UNIT_TEST_ALGO */
 	// ---Runtime Analysis ---
 	t2 = clock();
