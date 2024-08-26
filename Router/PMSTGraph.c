@@ -133,7 +133,7 @@ static void decreaseMinPQKey(struct WPAQueue* Q, struct PMSTVertex* key, float w
 {
 	int32_t i;
 	
-	if ((i = WHeapFindKeyIndex(Q, key)) >= 0) {
+	if ((i = WHeapFindKeyIndex2(Q, key, (WCMPFP)vertexCmp)) >= 0) {
 		((struct PMSTVertex*)Q->array[i])->key = weigth;
 		WHeapIncKeyPAQueue(Q, i, key);
 	}

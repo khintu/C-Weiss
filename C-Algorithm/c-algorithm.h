@@ -209,6 +209,7 @@ void* WHeapExtractMaxPAQueue(struct WPAQueue* pQ);
 int WHeapIncKeyPAQueue(struct WPAQueue* pQ, int idx, void* key);
 int WMaxHeapInsertPAQueue(struct WPAQueue* pQ, void* key);
 int WHeapFindKeyIndex(struct WPAQueue* pQ, void* key);
+int WHeapFindKeyIndex2(struct WPAQueue* pQ, void* key, int (*CMP)(const void*, const void*));
 
 /* ---Hash Map/Dictionary ADT--- */
 
