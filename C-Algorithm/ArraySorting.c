@@ -260,7 +260,10 @@ void WDeletePAQueue(struct WPAQueue* pQ)
 
 void* WMaximumPAQueue(struct WPAQueue* pQ)
 {
-	return pQ->array[0];
+	if (pQ->heapSize > 0)
+		return pQ->array[0];
+	else
+		return NULL;
 }
 
 void* WHeapExtractMaxPAQueue(struct WPAQueue* pQ)

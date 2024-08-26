@@ -113,6 +113,7 @@ static void vertexMinPQDtr(struct PMSTVertex* x)
 	return;
 }
 
+/* Inverted MaxPQ now acts as MinPQ */
 static int32_t vertexMinPQCmp(struct PMSTVertex* x, struct PMSTVertex* y)
 {
 	if (x->key > y->key)
@@ -143,6 +144,7 @@ static void decreaseMinPQKey(struct WPAQueue* Q, struct PMSTVertex* key, float w
 static void calcLightEdgesItr(struct PMSTEdge* e, struct WPAQueue* Q, struct PMSTVertex *u)
 {
 	if (WHeapFindKeyIndex(Q, (void*)e->v) >= 0) {
+		printf("\tEdge [%u - %u], weigth %g\n", u->vrtxId, e->v->vrtxId, e->weigth);
 		if (e->weigth < e->v->key) {
 			e->v->p = u;
 			decreaseMinPQKey(Q, e->v, e->weigth);
@@ -158,9 +160,15 @@ static void PrimsMSTMain(struct WLList* G)
 
 	Q = WCreatePAQueue(G->count, (WCMPFP)vertexMinPQCmp, (WCTRFP)vertexMinPQCtr, (WDTRFP)vertexMinPQDtr);
 	WIteratorList3(G, (void*)Q, populateMinPQItr);
-	while (u = WHeapExtractMaxPAQueue(Q)) {
-		if (u->Adj)
+	while (u = WHeapExtractMaxPAQueue(Q)) { /* Read as extract from MinPQ or InvertedMaxPQ */
+		printf("MST Vertex %u\n", u->vrtxId);
+		if (u->Adj) {
 			WIteratorList4(u->Adj, (void*)Q, (void*)u, calcLightEdgesItr);
+			if (WMaximumPAQueue(Q))
+				printf("\tEdge chosen [%u-%u], weight %g\n", ((struct PMSTVertex*)WMaximumPAQueue(Q))->p->vrtxId,\
+																									((struct PMSTVertex*)WMaximumPAQueue(Q))->vrtxId,\
+																									((struct PMSTVertex*)WMaximumPAQueue(Q))->key);
+		}
 	}
 	WDeletePAQueue(Q);
 	return;
@@ -176,6 +184,7 @@ static void printTreeItr(struct PMSTVertex* v)
 
 static void printMST(struct WLList* G)
 {
+	printf("--- Printing Prims MST: ---\n");
 	WIteratorList(G, printTreeItr);
 	return;
 }
