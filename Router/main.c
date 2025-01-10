@@ -35,6 +35,7 @@ int main(int argc, char* argv[])
 	inetList = initializeInternetMap();
 	
 	// Put your code here
+	printf("Single Source Shortest Path:\n");
 	runBellmanFordAlgo(inetList);
 
 	// Delete internet graph
@@ -61,7 +62,6 @@ void runDijkstrasOSPFAlgo(struct WLList *inetList)
 {
 	struct WLList *grphList;
 	grphList = initializeDjGraphContainer(inetList);
-	printf("Single Source Shortest Path:\n");
 	graphDijikstraCalcDistance2(grphList, inetList, 1);
 	WIteratorList(grphList, (void (*)(void*))printDistance);
 	graphTraceShortstPathFrmSrc2Trgt(grphList, inetList, 7);
@@ -129,7 +129,71 @@ void runBellmanFordAlgo(struct WLList* inetList)
 {
 	struct BFGraph* G;
 	G = initializeBFGraphContainer(inetList);
-	// Bellman-Ford algo
+	graphBellmnFrdCalcDistance(G, 1);
+	graphPrintSrc2AllVtxPaths(G, 1);
 	DeleteBFGraph(G);
 	return;
+}
+
+/* --- Misc Algorithms --- */
+
+void* WAppendToList2(struct WLList* l, void* data)
+{
+	struct LNode* tmp;
+	if ((tmp = (struct LNode*)calloc(1, sizeof(struct LNode))) == NULL)
+		return NULL;
+	tmp->data = (*l->CTOR)(data);
+	if (l->head == NULL)
+		l->head = tmp;
+	if (l->tail != NULL)
+		l->tail->next = tmp;
+	l->tail = tmp;
+	l->count++;
+	return tmp->data;
+}
+
+/* Self join with input list */
+void WIteratorList2(struct WLList* l, void (*ITR)(void*, void*))
+{
+	struct LNode* p;
+
+	for (p = l->head; p; p = p->next)
+		(*ITR)(p->data, l);
+	return;
+}
+
+void WIteratorList2Arg(struct WLList* l, void* arg, void (*ITR)(void*, void*, void*))
+{
+	struct LNode* p;
+
+	for (p = l->head; p; p = p->next)
+		(*ITR)(p->data, l, arg);
+	return;
+}
+
+void WIteratorList3(struct WLList* l, void* arg, void (*ITR)(void*, void*))
+{
+	struct LNode* p;
+
+	for (p = l->head; p; p = p->next)
+		(*ITR)(p->data, arg);
+	return;
+}
+
+void WIteratorList4(struct WLList* l, void* arg1, void* arg2, void (*ITR)(void*, void*, void*))
+{
+	struct LNode* p;
+
+	for (p = l->head; p; p = p->next)
+		(*ITR)(p->data, arg1, arg2);
+	return;
+}
+
+void* WGetNthData(struct WLList* l, uint32_t n)
+{
+	struct LNode* p;
+	uint32_t i;
+	for (i = 0, p = l->head; p && i < n; p = p->next, i++)
+		;
+	return p ? p->data : NULL;
 }

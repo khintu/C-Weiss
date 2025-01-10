@@ -1,13 +1,5 @@
 #include <router_defs.h>
 
-/* Shortest paths in Directed Graph are cycle-free or simple paths only,
-	 V-1 length edges
-	feclearexcept(FE_OVERFLOW);
-	if (fetestexcept(FE_OVERFLOW)) {
-		printf("Overflow occurred!\n");
-	}
-	 */
-
 static struct BFVertex* GrphVtxCtr(struct BFVertex* v)
 {
 	struct BFVertex* rv;
@@ -62,24 +54,9 @@ static int32_t BFEdgeCmp(struct BFEdge* x, struct BFEdge* y)
 		return 0;
 }
 
-void* WAppendToList2(struct WLList* l, void* data)
-{
-	struct LNode* tmp;
-	if ((tmp = (struct LNode*)calloc(1, sizeof(struct LNode))) == NULL)
-		return NULL;
-	tmp->data = (*l->CTOR)(data);
-	if (l->head == NULL)
-		l->head = tmp;
-	if (l->tail != NULL)
-		l->tail->next = tmp;
-	l->tail = tmp;
-	l->count++;
-	return tmp->data;
-}
-
 static void createBFVertexItr(struct Router* Rtr, struct WLList* vertices)
 {
-	struct BFVertex v = { 0 };
+	struct BFVertex v = { 0, FLT_MAX};
 	v.vrtxId = Rtr->Id;
 	v.router = Rtr;
 	Rtr->super = (void*)WAppendToList2(vertices, &v);
@@ -126,5 +103,80 @@ void DeleteBFGraph(struct BFGraph* G)
 	WDeleteList(G->vertices);
 	WDeleteList(G->edges);
 	free(G);
+	return;
+}
+
+#define CHK_OVRFLW(id) {\
+	feclearexcept(FE_OVERFLOW);\
+	expTrm = e->u->distance + e->weigth;\
+	if (fetestexcept(FE_OVERFLOW)) {\
+		printf("Overflow occurred!"#id);\
+		printf("\n");\
+		expTrm = FLT_MAX;\
+	}\
+}
+
+/* Shortest paths in Directed Graph are cycle-free or simple paths only,
+	 V-1 length edges */
+void graphBellmnFrdCalcDistance(struct BFGraph* G, uint32_t srcRtrId)
+{
+	struct BFVertex srcKey = { 0 }, * src;
+	struct BFEdge* e;
+	uint32_t i, j;
+	float expTrm = 0.0f;
+
+	srcKey.vrtxId = srcRtrId;
+	srcKey.router = gIntfTbl[srcRtrId];
+	src = WFindInList(G->vertices, &srcKey);
+	if (!src) {
+		printf("Source RouterId %u, not found\n", srcRtrId);
+		return;
+	}
+	src->distance = 0.0f;
+	for (i = 0; i < G->vertices->count - 1; ++i) {
+		for (j = 0; j < G->edges->count; ++j) {
+			e = (struct BFEdge*)WGetNthData(G->edges, j);
+			CHK_OVRFLW(1)
+			if (e->v->distance > expTrm) {
+				e->v->distance = expTrm;
+				e->v->pred = e->u;
+			}
+		}
+	}
+
+	for (j = 0; j < G->edges->count; ++j) {
+		e = (struct BFEdge*)WGetNthData(G->edges, j);
+		CHK_OVRFLW(2)
+		if (e->v->distance > expTrm) {
+			printf("Negative edge cycle detected\n");
+			break;
+		}
+	}
+	return;
+}
+
+void graphPrintSrc2AllVtxPaths(struct BFGraph* G, uint32_t srcRtrId)
+{
+	struct BFVertex srcKey = { 0 }, * src, * v;
+	uint32_t i;
+
+	srcKey.vrtxId = srcRtrId;
+	srcKey.router = gIntfTbl[srcRtrId];
+	src = WFindInList(G->vertices, &srcKey);
+	if (!src) {
+		printf("Source RouterId %u, not found\n", srcRtrId);
+		return;
+	}
+
+	for (i = 0; i < G->vertices->count; ++i) {
+		v = (struct BFVertex*)WGetNthData(G->vertices, i);
+		if (v == src)
+			continue;
+		printf("Path from vertex(AS): %u to source %u, distance: %g\n", v->vrtxId, srcRtrId, v->distance);
+		while (v != NULL) {
+			printf("\tVertex(AS): %u\n", v->vrtxId);
+			v = v->pred;
+		}
+	}
 	return;
 }

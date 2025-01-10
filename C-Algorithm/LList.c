@@ -138,42 +138,6 @@ void WIteratorList(struct WLList* l, void (*ITR)(void*))
 	return;
 }
 
-void WIteratorList2(struct WLList* l, void (*ITR)(void*, void*))
-{
-	struct LNode* p;
-
-	for (p = l->head; p; p = p->next)
-		(*ITR)(p->data, l);
-	return;
-}
-
-void WIteratorList2Arg(struct WLList* l, void* arg, void (*ITR)(void*, void*, void*))
-{
-	struct LNode* p;
-
-	for (p = l->head; p; p = p->next)
-		(*ITR)(p->data, l, arg);
-	return;
-}
-
-void WIteratorList3(struct WLList* l, void* arg, void (*ITR)(void*, void*))
-{
-	struct LNode* p;
-
-	for (p = l->head; p; p = p->next)
-		(*ITR)(p->data, arg);
-	return;
-}
-
-void WIteratorList4(struct WLList* l, void* arg1, void* arg2, void (*ITR)(void*, void*, void*))
-{
-	struct LNode* p;
-
-	for (p = l->head; p; p = p->next)
-		(*ITR)(p->data, arg1, arg2);
-	return;
-}
-
 void WSortList(struct WLList* l)
 {
 	struct LNode* p;
