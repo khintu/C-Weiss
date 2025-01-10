@@ -1,12 +1,13 @@
 #include <router_defs.h>
 
-extern int insert_in_main_unittestsuit(int argc, char* argv[]);
+extern int insert_in_main_algolib_unittestsuit(int argc, char* argv[]);
 void unit_test_network_lib(void);
 void runDijkstrasOSPFAlgo(struct WLList* inetList);
 void runConnectedComponentsAlgo(struct WLList* inetList);
 void runConnectedComponents2Algo(struct WLList* inetList);
 void runKruskalsMSTAlgo(struct WLList* inetList);
 void runPrimsMSTAlgo(struct WLList* inetList);
+void runBellmanFordAlgo(struct WLList* inetList);
 
 /* 
 	In our implementation the Router Interface Id is a unique
@@ -28,13 +29,13 @@ void printDistance(struct GVertex* v)
 int main(int argc, char* argv[])
 {
 	struct WLList* inetList;
-	//insert_in_main_unittestsuit(argc, argv);
+	//insert_in_main_algolib_unittestsuit(argc, argv);
 
 	printf("*** Internet Routing Algorithms Simulator ***\n\n");
 	inetList = initializeInternetMap();
 	
 	// Put your code here
-	runPrimsMSTAlgo(inetList);
+	runBellmanFordAlgo(inetList);
 
 	// Delete internet graph
 	resetEverythingInIntrnt(inetList);
@@ -59,7 +60,7 @@ void unit_test_network_lib(void)
 void runDijkstrasOSPFAlgo(struct WLList *inetList)
 {
 	struct WLList *grphList;
-	grphList = initializeGraphContainer(inetList);
+	grphList = initializeDjGraphContainer(inetList);
 	printf("Single Source Shortest Path:\n");
 	graphDijikstraCalcDistance2(grphList, inetList, 1);
 	WIteratorList(grphList, (void (*)(void*))printDistance);
@@ -120,5 +121,15 @@ void runPrimsMSTAlgo(struct WLList* inetList)
 	G = initializePMSTGraphContainer(inetList);
 	FindLightEdgesOnGraphCuts(1, G);
 	DeletePMSTGraph(G);
+	return;
+}
+
+/* Bellman-Ford single source shortest path */
+void runBellmanFordAlgo(struct WLList* inetList)
+{
+	struct BFGraph* G;
+	G = initializeBFGraphContainer(inetList);
+	// Bellman-Ford algo
+	DeleteBFGraph(G);
 	return;
 }

@@ -45,6 +45,9 @@
     <ClCompile Include="PMSTGraph.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BellmnFrd.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="router_defs.h">
@@ -53,6 +56,24 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="route_init.ini">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="route_init.ini.1">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="route_init.ini.2">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="route_init.ini.3">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="route_init.ini.djs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="route_init.ini.wiki">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="route_init.ini.pmst">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

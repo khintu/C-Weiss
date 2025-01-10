@@ -1202,7 +1202,7 @@ int UnitTestWFibHeap(int argc, char* argv[])
 	return 0;
 }
 
-int insert_in_main_unittestsuit(int argc, char* argv[])
+int insert_in_main_algolib_unittestsuit(int argc, char* argv[])
 {
 	clock_t t1, t2;
 	t1 = clock();

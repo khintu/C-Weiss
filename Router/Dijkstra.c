@@ -2,17 +2,17 @@
 #include <float.h>
 
 
-struct GVertex* GrphCtrEmpty(struct GVertex* v)
+static struct GVertex* GrphCtrEmpty(struct GVertex* v)
 {
 	return v;
 }
 
-void GrphDtrEmpty(struct GVertex* v)
+static void GrphDtrEmpty(struct GVertex* v)
 {
 	return;
 }
 
-struct GVertex* GrphCtr(struct GVertex* v)
+static struct GVertex* GrphCtr(struct GVertex* v)
 {
 	struct GVertex* rv;
 	rv = (struct GVertex*)malloc(sizeof * rv);
@@ -25,7 +25,7 @@ struct GVertex* GrphCtr(struct GVertex* v)
 	return rv;
 }
 
-void GrphDtr(struct GVertex* v)
+static void GrphDtr(struct GVertex* v)
 {
 	free(v);
 	return;
@@ -33,12 +33,12 @@ void GrphDtr(struct GVertex* v)
 
 extern int32_t RouterCmp(const struct Router* R1, const struct Router* R2);
 
-int32_t GrphCmp(struct GVertex* x, struct GVertex* y)
+static int32_t GrphCmp(struct GVertex* x, struct GVertex* y)
 {
 	return RouterCmp(x->router, y->router);
 }
 
-void GrphInitItr(struct Router* Rtr, struct WLList* grph)
+static void GrphInitItr(struct Router* Rtr, struct WLList* grph)
 {
 	struct GVertex v = { TRUE, FLT_MAX, NULL, NULL };
 	v.router = Rtr;
@@ -47,7 +47,7 @@ void GrphInitItr(struct Router* Rtr, struct WLList* grph)
 	return;
 }
 
-struct WLList* initializeGraphContainer(struct WLList* inetList)
+struct WLList* initializeDjGraphContainer(struct WLList* inetList)
 {
 	struct WLList* grph;
 	grph = WCreateList((WCMPFP)GrphCmp, (WCTRFP)GrphCtr, (WDTRFP)GrphDtr);
@@ -56,7 +56,7 @@ struct WLList* initializeGraphContainer(struct WLList* inetList)
 	return grph;
 }
 
-struct GVertex* getVertexFrmNextEdge(struct GVertex* src, int32_t *RtrIdx, struct WLQueue *negbhrQ)
+static struct GVertex* getVertexFrmNextEdge(struct GVertex* src, int32_t *RtrIdx, struct WLQueue *negbhrQ)
 {
 	struct GVertex *dst = NULL;
 	if (src->router->FwdgTbl[*RtrIdx] == NULL || *RtrIdx >= MAX_FWDGTBL_ENTRIES) {
@@ -82,7 +82,7 @@ struct GVertex* getVertexFrmNextEdge(struct GVertex* src, int32_t *RtrIdx, struc
 	return dst;
 }
 
-void EachVertexDijikstra(struct GVertex* src)
+static void EachVertexDijikstra(struct GVertex* src)
 {
 	struct WLQueue* negbhrQ;
 	struct GVertex* dst;
@@ -138,7 +138,7 @@ void graphTraceShortstPathFrmSrc2Trgt(struct WLList* grph, struct WLList* inet, 
 
 /* --- Dijkstra's Algorithm with MinPriorityQueue optimization --- */
 
-int32_t GrphCmpDist(struct GVertex* x, struct GVertex* y)
+static int32_t GrphCmpDist(struct GVertex* x, struct GVertex* y)
 {
 	if (x->distance > y->distance)
 		return 1;
@@ -148,13 +148,13 @@ int32_t GrphCmpDist(struct GVertex* x, struct GVertex* y)
 		return 0;
 }
 
-void GrphDistUpdt(struct GVertex* target, struct GVertex* src)
+static void GrphDistUpdt(struct GVertex* target, struct GVertex* src)
 {
 	target->distance = src->distance;
 	return;
 }
 
-struct GVertex* getVertexFrmNextEdge2(struct GVertex* src, int32_t* RtrIdx, struct WFibHeap* unvisitedSet)
+static struct GVertex* getVertexFrmNextEdge2(struct GVertex* src, int32_t* RtrIdx, struct WFibHeap* unvisitedSet)
 {
 	struct GVertex* dst = NULL;
 	struct GVertex newKey = { 0 };
@@ -183,7 +183,7 @@ struct GVertex* getVertexFrmNextEdge2(struct GVertex* src, int32_t* RtrIdx, stru
 	return dst;
 }
 
-void EachVertexDijikstra2(struct GVertex* src, struct WFibHeap* unvisitedSet)
+static void EachVertexDijikstra2(struct GVertex* src, struct WFibHeap* unvisitedSet)
 {
 	struct GVertex* dst;
 	int32_t RtrIdx;
@@ -200,7 +200,7 @@ void EachVertexDijikstra2(struct GVertex* src, struct WFibHeap* unvisitedSet)
 	return;
 }
 
-void GrphInitItrDist(struct GVertex* v, struct WFibHeap* unvisitedSet)
+static void GrphInitItrDist(struct GVertex* v, struct WFibHeap* unvisitedSet)
 {
 	WInsertKeyFibHeap(unvisitedSet, (void*)v);
 	return;

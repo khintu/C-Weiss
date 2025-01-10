@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BellmnFrd.c" />
     <ClCompile Include="Dijkstra.c" />
     <ClCompile Include="DisjointSetLL.c" />
     <ClCompile Include="DisjointSetRT.c" />
@@ -149,6 +150,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="route_init.ini" />
+    <None Include="route_init.ini.1" />
+    <None Include="route_init.ini.2" />
+    <None Include="route_init.ini.3" />
+    <None Include="route_init.ini.djs" />
+    <None Include="route_init.ini.pmst" />
+    <None Include="route_init.ini.wiki" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -8,6 +8,11 @@
 #include <stdint.h>
 #include <c-algorithm.h>
 
+/* Floating point overflow checking */
+#include <math.h>
+#include <errno.h>
+#include <fenv.h>
+
 #define MAX_GRAPH_VERTICES	128
 
 #define MAX_FWDGTBL_ENTRIES	MAX_GRAPH_VERTICES
@@ -65,6 +70,9 @@ void generateLinksBwRouters(struct WLList*);
 void resetAdPurgeEntsFrmRouter(struct Router*);
 void resetEverythingInIntrnt(struct WLList*);
 
+/* Misc Algorithms */
+void* WAppendToList2(struct WLList* l, void* data);
+
 /* Graph Algorithms (Dijkstra, Shortest paths, etc.) */
 struct GVertex {
 	uint32_t unvisited; /* boolean flag */
@@ -73,7 +81,7 @@ struct GVertex {
 	struct GVertex* prev; /* previous vertex on shortest path trace to source */
 };
 
-struct WLList* initializeGraphContainer(struct WLList*);
+struct WLList* initializeDjGraphContainer(struct WLList*);
 void graphDijikstraCalcDistance(struct WLList*, struct WLList*, uint32_t);
 void graphTraceShortstPathFrmSrc2Trgt(struct WLList*, struct WLList*, uint32_t);
 void graphDijikstraCalcDistance2(struct WLList*, struct WLList*, uint32_t);
@@ -166,9 +174,9 @@ int32_t isSameConnectedComponent2(struct MST2Vertex*, struct MST2Vertex*);
 void printConnectedComponents2(struct MST2Graph*);
 
 /* Kruskals Minimum Spanning Forest algo */
-struct MST2Graph* initializeMST2GraphContainer2(struct WLList* inetList);
+struct MST2Graph* initializeMST2GraphContainer2(struct WLList*);
 void InitializeVerticsFrMST(struct MST2Graph*, struct DJSRtCollctn**, struct WLList**);
-void FindSafeEdgesAdBuildMST(struct MST2Graph* G, struct DJSRtCollctn** S, struct WLList*);
+void FindSafeEdgesAdBuildMST(struct MST2Graph*, struct DJSRtCollctn**, struct WLList*);
 void printSafeEdgesMST(struct WLList*);
 
 /* Prims Minimum Spanning Tree algo */
@@ -184,8 +192,29 @@ struct PMSTEdge {
 	struct PMSTVertex* v; /* Reference to adjacent vertex v of vertex u */
 };
 
-struct WLList* initializePMSTGraphContainer(struct WLList* inetList);
-void DeletePMSTGraph(struct WLList *Graph);
-void FindLightEdgesOnGraphCuts(uint32_t idx, struct WLList* Graph);
+struct WLList* initializePMSTGraphContainer(struct WLList*);
+void DeletePMSTGraph(struct WLList *);
+void FindLightEdgesOnGraphCuts(uint32_t idx, struct WLList*);
+
+/* Bellman-Ford shortest path graph algorithm, with -ve edge cycle, (RIP) */
+struct BFVertex {
+	uint32_t vrtxId;
+	float distance;
+	struct Router* router;
+	struct BFVertex* pred;
+};
+
+struct BFEdge {
+	float weigth;
+	struct BFVertex	*u, *v;
+};
+
+struct BFGraph {
+	struct WLList* vertices;
+	struct WLList* edges;
+};
+
+struct BFGraph* initializeBFGraphContainer(struct WLList*);
+void DeleteBFGraph(struct BFGraph*);
 
 #endif // ROUTER_DEFS_H
