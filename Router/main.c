@@ -10,6 +10,12 @@ void runKruskalsMSTAlgo(struct WLList* inetList);
 void runPrimsMSTAlgo(struct WLList* inetList);
 void runBellmanFordAlgo(struct WLList* inetList);
 void testSkipList(void);
+void testSkipListRev(void);
+void testSkipListRnd(void);
+void testSkipListSame(void);
+void testSkipListRevCmp(void);
+void testSkipListSuite(void);
+
 
 /* 
 	In our implementation the Router Interface Id is a unique
@@ -37,9 +43,9 @@ int main(int argc, char* argv[])
 	inetList = initializeInternetMap();
 	
 	// Put your code here
-	//printf("Single Source Shortest Path:\n");
-	//runBellmanFordAlgo(inetList);
-	testSkipList();
+	printf("Single Source Shortest Path:\n");
+	runBellmanFordAlgo(inetList);
+	//testSkipListSuite();
 
 	// Delete internet graph
 	resetEverythingInIntrnt(inetList);
@@ -203,15 +209,33 @@ void* WGetNthData(struct WLList* l, uint32_t n)
 
 /* Skip List Test function */
 
-static void* strCtor(void* data)
+static char* strCtor(char* data)
 {
 	return (data == NULL) ? NULL : _strdup((char*)data);
 }
 
-static void strDtor(void* data)
+static void strDtor(char* data)
 {
 	if (data)
 		free(data);
+	return;
+}
+
+static int32_t strcmprev(char* x, char* y)
+{
+	int32_t result;
+	result = strcmp(x, y);
+	if (result > 0)
+		return -1;
+	else if (result < 0)
+		return 1;
+	else
+		return 0;
+}
+
+static void printList(char* str)
+{
+	printf("%s, ", str);
 	return;
 }
 
@@ -219,26 +243,183 @@ void testSkipList(void)
 {
 	struct WSkipList* sklist;
 	int i;
+
 	sklist = WCreateSkipList(0.5, 10, (WCTRFP)strCtor, (WDTRFP)strDtor, (WCMPFP)strcmp);
+	printf("SkipList: Testing seq. items\n");
+
 	for (i = 0; i < 10; i++) {
-		char* str = (char*)calloc(1, 10);
+		char* str = (char*)malloc(10);
 		sprintf(str, "%d", i);
 		WInsertSkipList(sklist, str);
 		free(str);
 	}
+	WIterateSkipList(sklist, (void (*)(void*))printList);
+	printf("\nLen = %d\n", sklist->len);
 	for (i = 0; i < 10; i++) {
-		char* str = (char*)calloc(1, 10);
+		char* str = (char*)malloc(10);
 		sprintf(str, "%d", i);
 		if (WSearchSkipList(sklist, str) != NULL)
 			printf("Found %s\n", str);
 		free(str);
 	}
+	WIterateSkipList(sklist, (void (*)(void*))printList);
+	printf("\nLen = %d\n", sklist->len);
 	for (i = 0; i < 10; i++) {
-		char* str = (char*)calloc(1, 10);
+		char* str = (char*)malloc(10);
 		sprintf(str, "%d", i);
 		printf("Deleted key %s = %d\n", str, WDeleteFrmSkipList(sklist, str));
 		free(str);
 	}
+	WIterateSkipList(sklist, (void (*)(void*))printList);
+	printf("\nLen = %d\n", sklist->len);
 	WDeleteSkipList(sklist);
+	return;
+}
+
+void testSkipListRevCmp(void)
+{
+	struct WSkipList* sklist;
+	int i;
+
+	sklist = WCreateSkipList(0.5, 10, (WCTRFP)strCtor, (WDTRFP)strDtor, (WCMPFP)strcmprev);
+	printf("SkipList: Testing seq. items with revcmp\n");
+
+	for (i = 0; i < 10; i++) {
+		char* str = (char*)malloc(10);
+		sprintf(str, "%d", i);
+		WInsertSkipList(sklist, str);
+		free(str);
+	}
+	WIterateSkipList(sklist, (void (*)(void*))printList);
+	printf("\nLen = %d\n", sklist->len);
+	for (i = 0; i < 10; i++) {
+		char* str = (char*)malloc(10);
+		sprintf(str, "%d", i);
+		if (WSearchSkipList(sklist, str) != NULL)
+			printf("Found %s\n", str);
+		free(str);
+	}
+	WIterateSkipList(sklist, (void (*)(void*))printList);
+	printf("\nLen = %d\n", sklist->len);
+	for (i = 0; i < 10; i++) {
+		char* str = (char*)malloc(10);
+		sprintf(str, "%d", i);
+		printf("Deleted key %s = %d\n", str, WDeleteFrmSkipList(sklist, str));
+		free(str);
+	}
+	WIterateSkipList(sklist, (void (*)(void*))printList);
+	printf("\nLen = %d\n", sklist->len);
+	WDeleteSkipList(sklist);
+	return;
+}
+
+void testSkipListRev(void)
+{
+	struct WSkipList* sklist;
+	int i;
+
+	sklist = WCreateSkipList(0.5, 10, (WCTRFP)strCtor, (WDTRFP)strDtor, (WCMPFP)strcmp);
+	printf("SkipList: Testing reverse seq. items\n");
+
+	for (i = 9; i >= 0; i--) {
+		char* str = (char*)malloc(10);
+		sprintf(str, "%d", i);
+		WInsertSkipList(sklist, str);
+		free(str);
+	}
+	WIterateSkipList(sklist, (void (*)(void*))printList);
+	printf("\nLen = %d\n", sklist->len);
+	for (i = 9; i >= 0; i--) {
+		char* str = (char*)malloc(10);
+		sprintf(str, "%d", i);
+		if (WSearchSkipList(sklist, str) != NULL)
+			printf("Found %s\n", str);
+		free(str);
+	}
+	WIterateSkipList(sklist, (void (*)(void*))printList);
+	printf("\nLen = %d\n", sklist->len);
+	for (i = 9; i >= 0; i--) {
+		char* str = (char*)malloc(10);
+		sprintf(str, "%d", i);
+		printf("Deleted key %s = %d\n", str, WDeleteFrmSkipList(sklist, str));
+		free(str);
+	}
+	WIterateSkipList(sklist, (void (*)(void*))printList);
+	printf("\nLen = %d\n", sklist->len);
+	WDeleteSkipList(sklist);
+	return;
+}
+
+void testSkipListRnd(void)
+{
+	struct WSkipList* sklist;
+	int i;
+	char* Arr[10] = { "5", "3", "6", "9", "1", "0", "4", "2", "7", "8" };
+
+	sklist = WCreateSkipList(0.5, 10, (WCTRFP)strCtor, (WDTRFP)strDtor, (WCMPFP)strcmp);
+	printf("SkipList: Testing random items\n");
+
+	for (i = 0; i < 10; i++) {
+		WInsertSkipList(sklist, Arr[i]);
+	}
+	WIterateSkipList(sklist, (void (*)(void*))printList);
+	printf("\nLen = %d\n", sklist->len);
+	
+	for (i = 0; i < 10; i++) {
+		if (WSearchSkipList(sklist, Arr[i]) != NULL)
+			printf("Found %s\n", Arr[i]);
+	}
+	WIterateSkipList(sklist, (void (*)(void*))printList);
+	printf("\nLen = %d\n", sklist->len);
+	
+	for (i = 0; i < 10; i++) {
+		printf("Deleted key %s = %d\n", Arr[i], WDeleteFrmSkipList(sklist, Arr[i]));
+	}
+	WIterateSkipList(sklist, (void (*)(void*))printList);
+	printf("\nLen = %d\n", sklist->len);
+
+	WDeleteSkipList(sklist);
+	return;
+}
+
+void testSkipListSame(void)
+{
+	struct WSkipList* sklist;
+	int i;
+	char* Arr[10] = { "5", "3", "6", "6", "0", "0", "4", "2", "8", "8" };
+
+	sklist = WCreateSkipList(0.5, 10, (WCTRFP)strCtor, (WDTRFP)strDtor, (WCMPFP)strcmp);
+	printf("SkipList: Testing same items\n");
+
+	for (i = 0; i < 10; i++) {
+		WInsertSkipList(sklist, Arr[i]);
+	}
+	WIterateSkipList(sklist, (void (*)(void*))printList);
+	printf("\nLen = %d\n", sklist->len);
+
+	for (i = 0; i < 10; i++) {
+		if (WSearchSkipList(sklist, Arr[i]) != NULL)
+			printf("Found %s\n", Arr[i]);
+	}
+	WIterateSkipList(sklist, (void (*)(void*))printList);
+	printf("\nLen = %d\n", sklist->len);
+
+	for (i = 0; i < 10; i++) {
+		printf("Deleted key %s = %d\n", Arr[i], WDeleteFrmSkipList(sklist, Arr[i]));
+	}
+	WIterateSkipList(sklist, (void (*)(void*))printList);
+	printf("\nLen = %d\n", sklist->len);
+
+	WDeleteSkipList(sklist);
+	return;
+}
+
+void testSkipListSuite(void)
+{
+	testSkipList();
+	testSkipListRevCmp();
+	testSkipListRev();
+	testSkipListRnd();
+	testSkipListSame();
 	return;
 }

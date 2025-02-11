@@ -34,7 +34,7 @@ int WInsertSkipList(struct WSkipList* sklist, void* usrData)
 		}
 		if (i <= level) {
 			pPrev->pSet[i].pNext = &pNewNode->pSet[i];
-			pNewNode->pSet[i].pNext = (pItr && pItr->pSet[i].pNext)?&pItr->pSet[i]:NULL;
+			pNewNode->pSet[i].pNext = (pItr) ? &pItr->pSet[i] : NULL;
 			pNewNode->pSet[i].pBase = pNewNode;
 		}
 	}
@@ -51,11 +51,11 @@ void* WSearchSkipList(struct WSkipList* sklist, void* key)
 
 	for (i = sklist->maxLevel - 1, pPrev = sklist->pHead; i >= 0; i--) {
 		pItr = (pPrev->pSet[i].pNext) ? (pPrev->pSet[i].pNext)->pBase : NULL;
-		while (pItr != NULL && sklist->CMP(key, pItr->pData) != 0) {
+		while (pItr != NULL && sklist->CMP(key, pItr->pData) > 0) {
 			pPrev = pItr;
 			pItr = (pItr->pSet[i].pNext) ? (pItr->pSet[i].pNext)->pBase : NULL;
 		}
-		if (pItr != NULL)
+		if (pItr != NULL && sklist->CMP(key, pItr->pData) == 0)
 			return pItr->pData;
 	}
 	return NULL;
@@ -68,14 +68,14 @@ int WDeleteFrmSkipList(struct WSkipList* sklist, void* key)
 
 	for (i = sklist->maxLevel - 1, pPrev = sklist->pHead; i >= 0; i--) {
 		pItr = (pPrev->pSet[i].pNext) ? (pPrev->pSet[i].pNext)->pBase : NULL;
-		while (pItr != NULL && sklist->CMP(key, pItr->pData) != 0) {
+		while (pItr != NULL && sklist->CMP(key, pItr->pData) > 0) {
 			pPrev = pItr;
 			pItr = (pItr->pSet[i].pNext) ? (pItr->pSet[i].pNext)->pBase : NULL;
 		}
-		if (pItr != NULL)
+		if (pItr != NULL && sklist->CMP(key, pItr->pData) == 0)
 			pPrev->pSet[i].pNext = pItr->pSet[i].pNext;
 	}
-	if (pItr) {
+	if (pItr && sklist->CMP(key, pItr->pData) == 0) {
 		free(pItr->pSet);
 		sklist->DTR(pItr->pData);
 		free(pItr);
@@ -99,5 +99,16 @@ void WDeleteSkipList(struct WSkipList* sklist)
 	free(sklist->pHead->pSet);
 	free(sklist->pHead);
 	free(sklist);
+	return;
+}
+
+void WIterateSkipList(struct WSkipList* sklist, void (*ITR)(void*))
+{
+	struct SKLNode* pItr, * pNext;
+	for (pItr = (sklist->pHead->pSet[0].pNext) ? (sklist->pHead->pSet[0].pNext)->pBase : NULL; \
+		pItr != NULL; pItr = pNext) {
+		pNext = (pItr->pSet[0].pNext) ? (pItr->pSet[0].pNext)->pBase : NULL;
+		(*ITR)(pItr->pData);
+	}
 	return;
 }

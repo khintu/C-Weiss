@@ -33,5 +33,6 @@ int WInsertSkipList(struct WSkipList*, void*);
 void* WSearchSkipList(struct WSkipList*, void*);
 int WDeleteFrmSkipList(struct WSkipList*, void*);
 void WDeleteSkipList(struct WSkipList*);
+void WIterateSkipList(struct WSkipList*, void (*)(void*));
 
 #endif /* RANDOMIZED_H */
