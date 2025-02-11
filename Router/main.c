@@ -1,4 +1,5 @@
 #include <router_defs.h>
+#include <randomized.h>
 
 extern int insert_in_main_algolib_unittestsuit(int argc, char* argv[]);
 void unit_test_network_lib(void);
@@ -8,6 +9,7 @@ void runConnectedComponents2Algo(struct WLList* inetList);
 void runKruskalsMSTAlgo(struct WLList* inetList);
 void runPrimsMSTAlgo(struct WLList* inetList);
 void runBellmanFordAlgo(struct WLList* inetList);
+void testSkipList(void);
 
 /* 
 	In our implementation the Router Interface Id is a unique
@@ -35,8 +37,9 @@ int main(int argc, char* argv[])
 	inetList = initializeInternetMap();
 	
 	// Put your code here
-	printf("Single Source Shortest Path:\n");
-	runBellmanFordAlgo(inetList);
+	//printf("Single Source Shortest Path:\n");
+	//runBellmanFordAlgo(inetList);
+	testSkipList();
 
 	// Delete internet graph
 	resetEverythingInIntrnt(inetList);
@@ -196,4 +199,46 @@ void* WGetNthData(struct WLList* l, uint32_t n)
 	for (i = 0, p = l->head; p && i < n; p = p->next, i++)
 		;
 	return p ? p->data : NULL;
+}
+
+/* Skip List Test function */
+
+static void* strCtor(void* data)
+{
+	return (data == NULL) ? NULL : _strdup((char*)data);
+}
+
+static void strDtor(void* data)
+{
+	if (data)
+		free(data);
+	return;
+}
+
+void testSkipList(void)
+{
+	struct WSkipList* sklist;
+	int i;
+	sklist = WCreateSkipList(0.5, 10, (WCTRFP)strCtor, (WDTRFP)strDtor, (WCMPFP)strcmp);
+	for (i = 0; i < 10; i++) {
+		char* str = (char*)calloc(1, 10);
+		sprintf(str, "%d", i);
+		WInsertSkipList(sklist, str);
+		free(str);
+	}
+	for (i = 0; i < 10; i++) {
+		char* str = (char*)calloc(1, 10);
+		sprintf(str, "%d", i);
+		if (WSearchSkipList(sklist, str) != NULL)
+			printf("Found %s\n", str);
+		free(str);
+	}
+	for (i = 0; i < 10; i++) {
+		char* str = (char*)calloc(1, 10);
+		sprintf(str, "%d", i);
+		printf("Deleted key %s = %d\n", str, WDeleteFrmSkipList(sklist, str));
+		free(str);
+	}
+	WDeleteSkipList(sklist);
+	return;
 }

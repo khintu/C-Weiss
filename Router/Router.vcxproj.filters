@@ -48,9 +48,15 @@
     <ClCompile Include="BellmnFrd.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SkipList.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="router_defs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="randomized.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
