@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{cfc9f18e-6ca0-409f-8af3-9434aa299cc4}</ProjectGuid>
-    <RootNamespace>Router</RootNamespace>
+    <ProjectGuid>{76237bb6-6133-4260-acb3-61bffac4ca73}</ProjectGuid>
+    <RootNamespace>NetworkSimulator</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -40,13 +40,13 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -102,15 +102,13 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>UNIT_TEST_ALGO;__WINDOWS__;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>.;..\C-Algorithm</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\C-Algorithm;..\Router</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\x64\Debug</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);C-Algorithm.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -119,45 +117,22 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>__WINDOWS__;_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>.;..\C-Algorithm</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\C-Algorithm;..\Router</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\x64\Release</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);C-Algorithm.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BellmnFrd.c" />
-    <ClCompile Include="Dijkstra.c" />
-    <ClCompile Include="DisjointSetLL.c" />
-    <ClCompile Include="DisjointSetRT.c" />
-    <ClCompile Include="init_inet.c" />
-    <ClCompile Include="main.c" />
-    <ClCompile Include="MST2Graph.c" />
-    <ClCompile Include="MSTGraph.c" />
-    <ClCompile Include="network_lib.c" />
-    <ClCompile Include="PMSTGraph.c" />
-    <ClCompile Include="routing_table.c" />
-    <ClCompile Include="SkipList.c" />
+    <ClCompile Include="des_sim_main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="randomized.h" />
-    <ClInclude Include="router_defs.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="route_init.ini" />
-    <None Include="route_init.ini.1" />
-    <None Include="route_init.ini.2" />
-    <None Include="route_init.ini.3" />
-    <None Include="route_init.ini.djs" />
-    <None Include="route_init.ini.pmst" />
-    <None Include="route_init.ini.wiki" />
+    <ClInclude Include="des_sim_defs.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

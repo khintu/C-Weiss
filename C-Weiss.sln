@@ -10,6 +10,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Router", "Router\Router.vcx
 		{6EFEF91F-1E9E-479E-A0F6-237CB36B018B} = {6EFEF91F-1E9E-479E-A0F6-237CB36B018B}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NetworkSimulator", "NetworkSimulator\NetworkSimulator.vcxproj", "{76237BB6-6133-4260-ACB3-61BFFAC4CA73}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CFC9F18E-6CA0-409F-8AF3-9434AA299CC4} = {CFC9F18E-6CA0-409F-8AF3-9434AA299CC4}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -34,6 +39,14 @@ Global
 		{CFC9F18E-6CA0-409F-8AF3-9434AA299CC4}.Release|x64.Build.0 = Release|x64
 		{CFC9F18E-6CA0-409F-8AF3-9434AA299CC4}.Release|x86.ActiveCfg = Release|Win32
 		{CFC9F18E-6CA0-409F-8AF3-9434AA299CC4}.Release|x86.Build.0 = Release|Win32
+		{76237BB6-6133-4260-ACB3-61BFFAC4CA73}.Debug|x64.ActiveCfg = Debug|x64
+		{76237BB6-6133-4260-ACB3-61BFFAC4CA73}.Debug|x64.Build.0 = Debug|x64
+		{76237BB6-6133-4260-ACB3-61BFFAC4CA73}.Debug|x86.ActiveCfg = Debug|Win32
+		{76237BB6-6133-4260-ACB3-61BFFAC4CA73}.Debug|x86.Build.0 = Debug|Win32
+		{76237BB6-6133-4260-ACB3-61BFFAC4CA73}.Release|x64.ActiveCfg = Release|x64
+		{76237BB6-6133-4260-ACB3-61BFFAC4CA73}.Release|x64.Build.0 = Release|x64
+		{76237BB6-6133-4260-ACB3-61BFFAC4CA73}.Release|x86.ActiveCfg = Release|Win32
+		{76237BB6-6133-4260-ACB3-61BFFAC4CA73}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

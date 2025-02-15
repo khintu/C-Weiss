@@ -34,12 +34,13 @@ void printDistance(struct GVertex* v)
 	return;
 }
 
-int main(int argc, char* argv[])
+#ifdef UNIT_TEST_ALGO
+int insert_in_main_router_unittestsuit(int argc, char* argv[])
 {
 	struct WLList* inetList;
 	//insert_in_main_algolib_unittestsuit(argc, argv);
 
-	printf("*** Internet Routing Algorithms Simulator ***\n\n");
+	printf("*** Internet Routing Algorithms Testing App ***\n\n");
 	inetList = initializeInternetMap();
 	
 	// Put your code here
@@ -52,6 +53,7 @@ int main(int argc, char* argv[])
 	WDeleteList(inetList);
 	return 0;
 }
+#endif /* UNIT_TEST_ALGO */
 
 void unit_test_network_lib(void)
 {
