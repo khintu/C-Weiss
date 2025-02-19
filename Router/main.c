@@ -35,7 +35,8 @@ void printDistance(struct GVertex* v)
 }
 
 #ifdef UNIT_TEST_ALGO
-int insert_in_main_router_unittestsuit(int argc, char* argv[])
+//int insert_in_main_router_unittestsuit(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
 	struct WLList* inetList;
 	//insert_in_main_algolib_unittestsuit(argc, argv);
