@@ -134,6 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BellmnFrd.c" />
+    <ClCompile Include="BinomialHeap.c" />
     <ClCompile Include="Dijkstra.c" />
     <ClCompile Include="DisjointSetLL.c" />
     <ClCompile Include="DisjointSetRT.c" />
@@ -147,6 +148,7 @@
     <ClCompile Include="SkipList.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="advncd_algo.h" />
     <ClInclude Include="randomized.h" />
     <ClInclude Include="router_defs.h" />
   </ItemGroup>

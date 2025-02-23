@@ -51,12 +51,18 @@
     <ClCompile Include="SkipList.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BinomialHeap.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="router_defs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="randomized.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="advncd_algo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

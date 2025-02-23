@@ -7,6 +7,8 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <c-algorithm.h>
+#include <randomized.h>
+#include <advncd_algo.h>
 
 /* Floating point overflow checking */
 #include <math.h>
@@ -69,14 +71,6 @@ struct WLList* initializeInternetMap(void);
 void generateLinksBwRouters(struct WLList*);
 void resetAdPurgeEntsFrmRouter(struct Router*);
 void resetEverythingInIntrnt(struct WLList*);
-
-/* Misc Algorithms */
-void* WAppendToList2(struct WLList*, void*);
-void WIteratorList2(struct WLList*, void (*)(void*, void*));
-void WIteratorList2Arg(struct WLList*, void*, void (*)(void*, void*, void*));
-void WIteratorList3(struct WLList*, void*, void (*)(void*, void*));
-void WIteratorList4(struct WLList*, void*, void*, void (*)(void*, void*, void*));
-void* WGetNthData(struct WLList*, uint32_t);
 
 /* Graph Algorithms (Dijkstra, Shortest paths, etc.) */
 struct GVertex {

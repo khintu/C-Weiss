@@ -1,5 +1,4 @@
 #include <router_defs.h>
-#include <randomized.h>
 
 extern int insert_in_main_algolib_unittestsuit(int argc, char* argv[]);
 void unit_test_network_lib(void);
@@ -9,11 +8,6 @@ void runConnectedComponents2Algo(struct WLList* inetList);
 void runKruskalsMSTAlgo(struct WLList* inetList);
 void runPrimsMSTAlgo(struct WLList* inetList);
 void runBellmanFordAlgo(struct WLList* inetList);
-void testSkipList(void);
-void testSkipListRev(void);
-void testSkipListRnd(void);
-void testSkipListSame(void);
-void testSkipListRevCmp(void);
 void testSkipListSuite(void);
 
 
@@ -242,7 +236,7 @@ static void printList(char* str)
 	return;
 }
 
-void testSkipList(void)
+static void testSkipList(void)
 {
 	struct WSkipList* sklist;
 	int i;
@@ -279,7 +273,7 @@ void testSkipList(void)
 	return;
 }
 
-void testSkipListRevCmp(void)
+static void testSkipListRevCmp(void)
 {
 	struct WSkipList* sklist;
 	int i;
@@ -316,7 +310,7 @@ void testSkipListRevCmp(void)
 	return;
 }
 
-void testSkipListRev(void)
+static void testSkipListRev(void)
 {
 	struct WSkipList* sklist;
 	int i;
@@ -353,7 +347,7 @@ void testSkipListRev(void)
 	return;
 }
 
-void testSkipListRnd(void)
+static void testSkipListRnd(void)
 {
 	struct WSkipList* sklist;
 	int i;
@@ -385,7 +379,7 @@ void testSkipListRnd(void)
 	return;
 }
 
-void testSkipListSame(void)
+static void testSkipListSame(void)
 {
 	struct WSkipList* sklist;
 	int i;
