@@ -9,7 +9,7 @@ void runKruskalsMSTAlgo(struct WLList* inetList);
 void runPrimsMSTAlgo(struct WLList* inetList);
 void runBellmanFordAlgo(struct WLList* inetList);
 void testSkipListSuite(void);
-
+void testBinomialHeapSuite(void);
 
 /* 
 	In our implementation the Router Interface Id is a unique
@@ -39,9 +39,10 @@ int main(int argc, char* argv[])
 	inetList = initializeInternetMap();
 	
 	// Put your code here
-	printf("Single Source Shortest Path:\n");
-	runBellmanFordAlgo(inetList);
+	//printf("Single Source Shortest Path:\n");
+	//runBellmanFordAlgo(inetList);
 	//testSkipListSuite();
+	testBinomialHeapSuite();
 
 	// Delete internet graph
 	resetEverythingInIntrnt(inetList);
@@ -418,5 +419,19 @@ void testSkipListSuite(void)
 	testSkipListRev();
 	testSkipListRnd();
 	testSkipListSame();
+	return;
+}
+
+void testBinomialHeapSuite(void)
+{
+	struct WBnmHeap* hp;
+	int i;
+	char* Arr[10] = { "5", "3", "6", "6", "0", "0", "4", "2", "8", "8" };
+
+	hp = WCreateBnmHeap((WCTRFP)strCtor, (WDTRFP)strDtor, (WCMPFP)strcmp);
+	for (i = 0; i < 2; ++i)
+		WInsertKeyBnmHeap(hp, (void*)Arr[i]);
+
+	WDeleteBnmHeap(hp);
 	return;
 }

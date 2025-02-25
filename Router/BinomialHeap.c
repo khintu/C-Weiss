@@ -9,6 +9,7 @@
 												else\
 													(y)->chldNxt = (x);\
 												(y)->korder++;\
+												(x)->sblgNxt = (y)->sblgNxt = NULL;\
 											}
 
 /* Both Bi's must be of the same order in their respective Fn (MinHeap) */
@@ -77,7 +78,7 @@ static struct BnmTree* couplingBnmTreeComponent(struct WBnmHeap* hp,
 	}
 }
 
-static void attachToForest(struct BnmForest* F, struct BnmTree* B)
+static void attachToForest(struct WBnmHeap* hp, struct BnmForest* F, struct BnmTree* B)
 {
 	struct BnmTree* Bx;
 	for (Bx = F->trNxt; Bx && Bx->sblgNxt != NULL; Bx = Bx->sblgNxt)
@@ -86,13 +87,21 @@ static void attachToForest(struct BnmForest* F, struct BnmTree* B)
 		F->trNxt = B;
 	else
 		Bx->sblgNxt = B;
+	
+	/* Top (Min/Max) of Forest assignment */
+	if (F->top == NULL)
+		F->top = B;
+	else {
+		if (hp->CMP(F->top->data, B->data) > 0) /* MinHeap */
+			F->top = B;
+	}
 	return;
 }
 
 /* Union of Fi to Fj, using coupling of binary components, return new F, delete Fi&Fj */
 static struct BnmForest* UnionFiToFj(struct WBnmHeap* hp, struct BnmForest* Fi, struct BnmForest* Fj)
 {
-	struct BnmTree* Bx, *Bxi, *Bxj, *Bcarry;
+	struct BnmTree* Bx, * Bxi, * Bxj, * Bcarry, *BxiNxt, *BxjNxt;
 	struct BnmForest* Fnew;
 	uint32_t maxOrder, i;
 
@@ -102,34 +111,71 @@ static struct BnmForest* UnionFiToFj(struct WBnmHeap* hp, struct BnmForest* Fi, 
 		maxOrder = MAX(maxOrder, Bx->korder);
 
 	Fnew = (struct BnmForest*)calloc(1, sizeof * Fnew);
-	
-	for (Bcarry = NULL, Bxi = Fi->trNxt, Bxj = Fj->trNxt, i = 0; i <= maxOrder ; ++i) {
-		if (Bxi->korder == i && Bxj->korder == i) {
-			Bx = couplingBnmTreeComponent(hp, Bxi, Bxj, &Bcarry);
-			if (Bx != NULL)
-				attachToForest(Fnew, Bx);
-			Bxi = Bxi->sblgNxt, Bxj = Bxj->sblgNxt;
+
+	for (Bcarry = NULL, Bxi = Fi->trNxt, Bxj = Fj->trNxt, i = 0; i <= maxOrder; ++i) {
+		if (Bxi && Bxj) {
+			if (Bxi->korder == i && Bxj->korder == i) {
+				BxiNxt = Bxi->sblgNxt, BxjNxt = Bxj->sblgNxt;
+				Bx = couplingBnmTreeComponent(hp, Bxi, Bxj, &Bcarry);
+				if (Bx != NULL)
+					attachToForest(hp, Fnew, Bx);
+				Bxi = BxiNxt, Bxj = BxjNxt;
+			}
+			else if (Bxi->korder == i && Bxj->korder != i) {
+				BxiNxt = Bxi->sblgNxt;
+				Bx = couplingBnmTreeComponent(hp, Bxi, NULL, &Bcarry);
+				if (Bx != NULL)
+					attachToForest(hp, Fnew, Bx);
+				Bxi = BxiNxt;
+			}
+			else if (Bxj->korder == i && Bxi->korder != i) {
+				BxjNxt = Bxj->sblgNxt;
+				Bx = couplingBnmTreeComponent(hp, NULL, Bxj, &Bcarry);
+				if (Bx != NULL)
+					attachToForest(hp, Fnew, Bx);
+				Bxj = BxjNxt;
+			}
+			else {
+				if (Bcarry) /* Intermediate carry but both Bxi&Bxj not of i order */
+					attachToForest(hp, Fnew, Bcarry);
+				Bcarry = NULL;
+			}
 		}
-		else if (Bxi->korder == i && Bxj->korder != i) {
-			Bx = couplingBnmTreeComponent(hp, Bxi, NULL, &Bcarry);
-			if (Bx != NULL)
-				attachToForest(Fnew, Bx);
-			Bxi = Bxi->sblgNxt;
-		}
-		else if (Bxj->korder == i && Bxi->korder != i) {
-			Bx = couplingBnmTreeComponent(hp, NULL, Bxj, &Bcarry);
-			if (Bx != NULL)
-				attachToForest(Fnew, Bx);
-			Bxj = Bxj->sblgNxt;
+		else if (Bxi) {
+			if (Bxi->korder == i) {
+				BxiNxt = Bxi->sblgNxt;
+				Bx = couplingBnmTreeComponent(hp, Bxi, NULL, &Bcarry);
+				if (Bx != NULL)
+					attachToForest(hp, Fnew, Bx);
+				Bxi = BxiNxt;
+			}
+			else {
+				if (Bcarry) /* Intermediate carry, if any */
+					attachToForest(hp, Fnew, Bcarry);
+				Bcarry = NULL;
+			}
 		}
 		else {
-			if (Bcarry) /* Intermediate carry but both Bxi&Bxj not of i order */
-				attachToForest(Fnew, Bcarry);
-			Bcarry = NULL;
+			if (Bxj->korder == i) {
+				BxjNxt = Bxj->sblgNxt;
+				Bx = couplingBnmTreeComponent(hp, NULL, Bxj, &Bcarry);
+				if (Bx != NULL)
+					attachToForest(hp, Fnew, Bx);
+				Bxj = BxjNxt;
+			}
+			else {
+				if (Bcarry) /* Intermediate carry, if any */
+					attachToForest(hp, Fnew, Bcarry);
+				Bcarry = NULL;
+			}
 		}
 	}
 	if (Bcarry) /* Last Carry */
-		attachToForest(Fnew, Bcarry);
+		attachToForest(hp, Fnew, Bcarry);
+	
+	/* Update n of Fnew */
+	Fnew->nOfFn = Fi->nOfFn + Fj->nOfFn;
+	
 	free(Fi); free(Fj);
 	return Fnew;
 }
@@ -171,5 +217,31 @@ void WDeleteBnmHeap(struct WBnmHeap* hp)
 		Bi = deleteBiComponent(hp, Bi);
 	}
 	free(hp);
+	return;
+}
+
+void WInsertKeyBnmHeap(struct WBnmHeap* hp, void* key)
+{
+	struct BnmTree* Bx;
+	struct BnmForest* Fx;
+
+	if (hp->Fn == NULL) {
+		hp->Fn = (struct BnmForest*)calloc(1, sizeof * (hp->Fn));
+		Bx = (struct BnmTree*)calloc(1, sizeof * Bx);
+		Bx->data = hp->CTR(key);
+		hp->Fn->trNxt = Bx;
+		hp->Fn->top = Bx;
+		hp->Fn->nOfFn++;
+	}
+	else {
+		Fx = (struct BnmForest*)calloc(1, sizeof * Fx);
+		Bx = (struct BnmTree*)calloc(1, sizeof * Bx);
+		Bx->data = hp->CTR(key);
+		Fx->trNxt = Bx;
+		Fx->top = Bx;
+		Fx->nOfFn++;
+
+		hp->Fn = UnionFiToFj(hp, Fx, hp->Fn);
+	}
 	return;
 }
