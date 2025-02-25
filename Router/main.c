@@ -429,8 +429,11 @@ void testBinomialHeapSuite(void)
 	char* Arr[10] = { "5", "3", "6", "6", "0", "0", "4", "2", "8", "8" };
 
 	hp = WCreateBnmHeap((WCTRFP)strCtor, (WDTRFP)strDtor, (WCMPFP)strcmp);
-	for (i = 0; i < 2; ++i)
+	for (i = 0; i < 10; ++i) {
 		WInsertKeyBnmHeap(hp, (void*)Arr[i]);
+		printf("Inserted item %d, heap record count = %d, Min = %s\n", \
+						i+1, hp->Fn->nOfFn, (char*)WFindRootBnmHeap(hp));
+	}
 
 	WDeleteBnmHeap(hp);
 	return;

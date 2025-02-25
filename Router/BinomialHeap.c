@@ -51,6 +51,7 @@ static struct BnmTree* couplingBnmTreeComponent(struct WBnmHeap* hp,
 			else {
 				COUPLING(b1, *carry);
 			}
+			b2->sblgNxt = NULL;
 			return b2;
 		}
 		else {
@@ -71,10 +72,14 @@ static struct BnmTree* couplingBnmTreeComponent(struct WBnmHeap* hp,
 			}
 			return NULL;
 		}
-		else if (b1)
+		else if (b1) {
+			b1->sblgNxt = NULL;
 			return b1;
-		else
+		}
+		else {
+			b2->sblgNxt = NULL;
 			return b2;
+		}
 	}
 }
 
@@ -244,4 +249,11 @@ void WInsertKeyBnmHeap(struct WBnmHeap* hp, void* key)
 		hp->Fn = UnionFiToFj(hp, Fx, hp->Fn);
 	}
 	return;
+}
+
+void* WFindRootBnmHeap(struct WBnmHeap* hp)
+{
+	if (hp->Fn && hp->Fn->top)
+		return hp->Fn->top->data;
+	return NULL;
 }
