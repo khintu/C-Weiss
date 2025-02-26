@@ -1,4 +1,5 @@
 #include <advncd_algo.h>
+#include <math.h>
 
 /* Make x child of y, increment y order */
 #define COUPLING(x, y) {\
@@ -110,9 +111,10 @@ static struct BnmForest* UnionFiToFj(struct WBnmHeap* hp, struct BnmForest* Fi, 
 	struct BnmForest* Fnew;
 	uint32_t maxOrder, i;
 
-	for (maxOrder = 0, Bx = Fi->trNxt; Bx != NULL; Bx = Bx->sblgNxt)
+	maxOrder = 0;
+	for (Bx = Fi->trNxt; Bx != NULL; Bx = Bx->sblgNxt)
 		maxOrder = MAX(maxOrder, Bx->korder);
-	for (maxOrder = 0, Bx = Fj->trNxt; Bx != NULL; Bx = Bx->sblgNxt)
+	for (Bx = Fj->trNxt; Bx != NULL; Bx = Bx->sblgNxt)
 		maxOrder = MAX(maxOrder, Bx->korder);
 
 	Fnew = (struct BnmForest*)calloc(1, sizeof * Fnew);
@@ -256,4 +258,106 @@ void* WFindRootBnmHeap(struct WBnmHeap* hp)
 	if (hp->Fn && hp->Fn->top)
 		return hp->Fn->top->data;
 	return NULL;
+}
+
+static struct BnmForest* FrstCtr(struct BnmForest* x)
+{
+	return x;
+}
+
+static void FrstDtr(struct BnmForest* x)
+{
+	return;
+}
+
+static int32_t FrstCmp(struct BnmForest* x, struct BnmForest* y)
+{
+	if (x == y)
+		return 0;
+	else
+		return -1;
+}
+
+static void decomposeBmToFm(struct BnmTree* Bm, struct WLQueue* frstQ)
+{
+	struct BnmForest* Fx;
+	struct BnmTree* Bx, *BxNxt;
+
+	for (Bx = Bm->chldNxt; Bx != NULL; Bx = BxNxt) {
+		Fx = (struct BnmForest*)calloc(1, sizeof * Fx);
+		Fx->top = Bx;
+		Fx->nOfFn = ((int)pow(2.0, (double)Bx->korder));
+		Fx->trNxt = Bx;
+		BxNxt = Bx->sblgNxt;
+		Bx->sblgNxt = NULL;
+		WEnqueueLQueue(frstQ, Fx);
+	}
+	return;
+}
+
+static void assignTop2Forest(struct WBnmHeap* hp, struct BnmForest* Fn)
+{
+	struct BnmTree* Bx;
+	for (Bx = Fn->trNxt; Bx != NULL; Bx = Bx->sblgNxt) {
+		if (Fn->top == NULL)
+			Fn->top = Bx;
+		else {
+			if (hp->CMP(Fn->top->data, Bx->data) > 0)
+				Fn->top = Bx;
+		}
+	}
+	return;
+}
+
+static struct BnmTree* recreateFrstFrmFrstQ(struct WBnmHeap* hp,
+																						struct BnmForest* Fn,
+																						struct BnmTree* Bm,
+																						struct WLQueue* frstQ)
+{
+	struct BnmForest* Fx;
+	struct BnmTree* Bx, *BxPrvSblg;
+	
+	/* First remove Bm from Forest Fn */
+	for (Bx = Fn->trNxt, BxPrvSblg = Bx; Bx != Bm; BxPrvSblg = Bx, Bx = Bx->sblgNxt)
+		;
+	if (Bx == Fn->trNxt)
+		Fn->trNxt = Bx->sblgNxt;
+	else
+		BxPrvSblg->sblgNxt = Bx->sblgNxt;
+	Fn->nOfFn -= ((int)pow(2.0, (double)Bm->korder));
+	Fn->top = NULL;
+
+	/* Decompose Bm to Fm-1, ie. exclude Bm from Fm */
+	decomposeBmToFm(Bm, frstQ);
+
+	/* Compose Fn from each Fx in frstQ incremental Union with Fn */
+	if (WIsEmptyLQueue(frstQ)) {
+		assignTop2Forest(hp, Fn);
+	}
+	else {
+		while (Fx = WDequeueLQueue(frstQ))
+			Fn = UnionFiToFj(hp, Fx, Fn);
+		hp->Fn = Fn;
+	}
+
+	/* return Bm to ExtractRoot or UpdateRoot */
+	return Bm;
+}
+
+void* WExtractRootBnmHeap(struct WBnmHeap* hp)
+{
+	struct WLQueue* frstQ;
+	struct BnmTree* Bm;
+	void* retval;
+	
+	if (hp->Fn == NULL || hp->Fn->nOfFn == 0)
+		return NULL;
+
+	frstQ = WCreateLQueue((WCMPFP)FrstCmp, (WCTRFP)FrstCtr, (WDTRFP)FrstDtr);
+	Bm = recreateFrstFrmFrstQ(hp, hp->Fn, hp->Fn->top, frstQ);
+	retval = hp->CTR(Bm->data);
+	hp->DTR(Bm->data);
+	free(Bm);
+	WDeleteLQueue(frstQ);
+	return retval;
 }
