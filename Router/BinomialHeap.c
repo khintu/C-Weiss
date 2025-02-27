@@ -444,7 +444,7 @@ int32_t WUpdateKeyBnmHeap(struct WBnmHeap* hp, void* key, void* newKey)
 	Fx->nOfFn = 1;
 	Fx->trNxt = (struct BnmTree*)calloc(1, sizeof * Fx->trNxt);
 	Fx->top = Fx->trNxt;
-	Fx->trNxt->korder = 1;
+	Fx->trNxt->korder = 0;
 	Fx->trNxt->data = hp->CTR(newKey);
 	hp->Fn = UnionFiToFj(hp, Fx, hp->Fn);
 

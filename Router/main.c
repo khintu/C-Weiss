@@ -438,9 +438,8 @@ void testBinomialHeapSuite(void)
 	}
 
 	printf("---BnmHeap: Testing Update Key---\n");
-	printf("Key to search = %s, Deleted = %s\n", Arr[4], (WDeleteKeyBnmHeap(hp, (void*)Arr[4]) == WESUCCESS)?"Yes":"No");
-	//printf("Key to search = %s, Found = %d\n", "55", WUpdateKeyBnmHeap(hp, (void*)"55", NULL));
-	printf("Key to search = %s, Found = %d\n", Arr[2], WUpdateKeyBnmHeap(hp, (void*)Arr[2], (void*)"66"));
+	//printf("Key to search = %s, Deleted = %s\n", Arr[4], (WDeleteKeyBnmHeap(hp, (void*)Arr[4]) == WESUCCESS)?"Yes":"No");
+	printf("Key to search = %s, Updated = %s\n", Arr[2], (WUpdateKeyBnmHeap(hp, (void*)Arr[2], (void*)"66") == WESUCCESS)?"Yes":"No");
 
 	for (i = 0; i < 10; ++i) {
 		printf("heap record count = %d, ExtractMin = %s\n", hp->Fn->nOfFn, p = (char*)WExtractRootBnmHeap(hp));
