@@ -426,7 +426,7 @@ void testBinomialHeapSuite(void)
 {
 	struct WBnmHeap* hp;
 	int i;
-	char* Arr[10] = { "5", "3", "6", "7", "0", "1", "4", "2", "8", "9" };
+	char* Arr[10] = { "5", "3", "6", "7", "0", "1", "4", "2", "8", "9" }, *p;
 
 	hp = WCreateBnmHeap((WCTRFP)strCtor, (WDTRFP)strDtor, (WCMPFP)strcmp);
 	for (i = 0; i < 10; ++i) {
@@ -434,9 +434,15 @@ void testBinomialHeapSuite(void)
 		printf("Inserted item %d, heap record count = %d, Min = %s\n", \
 						i+1, hp->Fn->nOfFn, (char*)WFindRootBnmHeap(hp));
 	}
+	//printf("Key to search = %s, Found = %d\n", Arr[2], WUpdateKeyBnmHeap(hp, (void*)Arr[2], NULL));
+	//printf("Key to search = %s, Found = %d\n", "55", WUpdateKeyBnmHeap(hp, (void*)"55", NULL));
+	printf("Key to search = %s, Found = %d\n", Arr[2], WUpdateKeyBnmHeap(hp, (void*)Arr[2], (void*)"66"));
+
 	for (i = 0; i < 10; ++i) {
-		printf("heap record count = %d, ExtractMin = %s\n", hp->Fn->nOfFn, (char*)WExtractRootBnmHeap(hp));
+		printf("heap record count = %d, ExtractMin = %s\n", hp->Fn->nOfFn, p = (char*)WExtractRootBnmHeap(hp));
+		free(p);
 	}
+	
 	WDeleteBnmHeap(hp);
 	return;
 }
