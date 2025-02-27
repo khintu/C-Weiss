@@ -424,17 +424,21 @@ void testSkipListSuite(void)
 
 void testBinomialHeapSuite(void)
 {
-	struct WBnmHeap* hp;
+	struct WBnmHeap* hp, *hp1;
 	int i;
 	char* Arr[10] = { "5", "3", "6", "7", "0", "1", "4", "2", "8", "9" }, *p;
 
 	hp = WCreateBnmHeap((WCTRFP)strCtor, (WDTRFP)strDtor, (WCMPFP)strcmp);
+	
+	printf("---BnmHeap: Testing Insert Key---\n");
 	for (i = 0; i < 10; ++i) {
 		WInsertKeyBnmHeap(hp, (void*)Arr[i]);
 		printf("Inserted item %d, heap record count = %d, Min = %s\n", \
 						i+1, hp->Fn->nOfFn, (char*)WFindRootBnmHeap(hp));
 	}
-	//printf("Key to search = %s, Found = %d\n", Arr[2], WUpdateKeyBnmHeap(hp, (void*)Arr[2], NULL));
+
+	printf("---BnmHeap: Testing Update Key---\n");
+	printf("Key to search = %s, Deleted = %s\n", Arr[4], (WDeleteKeyBnmHeap(hp, (void*)Arr[4]) == WESUCCESS)?"Yes":"No");
 	//printf("Key to search = %s, Found = %d\n", "55", WUpdateKeyBnmHeap(hp, (void*)"55", NULL));
 	printf("Key to search = %s, Found = %d\n", Arr[2], WUpdateKeyBnmHeap(hp, (void*)Arr[2], (void*)"66"));
 
@@ -443,6 +447,16 @@ void testBinomialHeapSuite(void)
 		free(p);
 	}
 	
+	printf("---BnmHeap: Testing Union---\n");
+	hp1 = WCreateBnmHeap((WCTRFP)strCtor, (WDTRFP)strDtor, (WCMPFP)strcmp);
+	WInsertKeyBnmHeap(hp, "199");
+	WInsertKeyBnmHeap(hp1, "99");
+	hp1 = WUnionBnmHeap(hp, hp1); hp = NULL;
+	for (i = 0; i < 2; ++i) {
+		printf("heap record count = %d, ExtractMin = %s\n", hp1->Fn->nOfFn, p = (char*)WExtractRootBnmHeap(hp1));
+		free(p);
+	}
 	WDeleteBnmHeap(hp);
+	WDeleteBnmHeap(hp1);
 	return;
 }

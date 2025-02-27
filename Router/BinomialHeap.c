@@ -219,11 +219,14 @@ void WDeleteBnmHeap(struct WBnmHeap* hp)
 {
 	struct BnmTree* Bi;
 	
-	Bi = hp->Fn->trNxt; /* Start from LSB to MSB in list */
-	while (Bi != NULL) {
-		Bi = deleteBiComponent(hp, Bi);
+	if (hp) {
+		Bi = hp->Fn->trNxt; /* Start from LSB to MSB in list */
+		while (Bi != NULL) {
+			Bi = deleteBiComponent(hp, Bi);
+		}
+		free(hp->Fn);
+		free(hp);
 	}
-	free(hp);
 	return;
 }
 
@@ -487,6 +490,12 @@ int32_t WDeleteKeyBnmHeap(struct WBnmHeap* hp, void* key)
 
 struct WBnmHeap* WUnionBnmHeap(struct WBnmHeap* hp1, struct WBnmHeap* hp2)
 {
-	hp1->Fn = UnionFiToFj(hp1, hp1->Fn, hp2->Fn);
-	return hp1;
+	struct WBnmHeap* hp;
+	
+	hp = WCreateBnmHeap(hp1->CTR, hp1->DTR, hp1->CMP);
+	hp->Fn = UnionFiToFj(hp, hp1->Fn, hp2->Fn);
+	free(hp1);
+	free(hp2);
+	
+	return hp;
 }
