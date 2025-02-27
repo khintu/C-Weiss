@@ -431,36 +431,11 @@ static struct BnmTree* disassociateBrootCompletely(struct WBnmHeap* hp,
 
 int32_t WUpdateKeyBnmHeap(struct WBnmHeap* hp, void* key, void* newKey)
 {
-	struct WLQueue* frstQ;
-	struct BnmTree* Bm, *Broot, *Bx, *Bprev;
 	struct BnmForest *Fx;
 
-	/* Find existing keys Broot & Bm */
-	if (FALSE == findKeyRootAndNode(hp, key, &Broot, &Bm))
+	if (WESUCCESS != WDeleteKeyBnmHeap(hp, key))
 		return WEKEYNOTFND;
 
-	frstQ = WCreateLQueue((WCMPFP)FrstCmp, (WCTRFP)FrstCtr, (WDTRFP)FrstDtr);
-	
-	/* Remove Broot from Fn */
-	for (Bx = hp->Fn->trNxt, Bprev = Bx; Bx != Broot; Bprev = Bx, Bx = Bx->sblgNxt)
-		;
-	if (Bprev == Bx)
-		hp->Fn->trNxt = Bx->sblgNxt;
-	else
-		Bprev->sblgNxt = Bx->sblgNxt;
-	hp->Fn->nOfFn -= (int)pow(2.0, Broot->korder);
-	
-	/* Create sinlge node Bx, Fx(s) out of every node in Broot, delete Bm */
-	disassociateBrootCompletely(hp, Broot, Bm, frstQ);
-	
-	if (WIsEmptyLQueue(frstQ)) {
-		assignTop2Forest(hp, hp->Fn);
-	}
-	else {
-		while (Fx = WDequeueLQueue(frstQ))
-			hp->Fn = UnionFiToFj(hp, Fx, hp->Fn);
-	}
-	
 	/* Insert new key */
 	Fx = (struct BnmForest*)calloc(1, sizeof * Fx);
 	Fx->nOfFn = 1;
@@ -470,6 +445,48 @@ int32_t WUpdateKeyBnmHeap(struct WBnmHeap* hp, void* key, void* newKey)
 	Fx->trNxt->data = hp->CTR(newKey);
 	hp->Fn = UnionFiToFj(hp, Fx, hp->Fn);
 
+	return WESUCCESS;
+}
+
+int32_t WDeleteKeyBnmHeap(struct WBnmHeap* hp, void* key)
+{
+	struct WLQueue* frstQ;
+	struct BnmTree* Bm, * Broot, * Bx, * Bprev;
+	struct BnmForest* Fx;
+
+	/* Find existing keys Broot & Bm */
+	if (FALSE == findKeyRootAndNode(hp, key, &Broot, &Bm))
+		return WEKEYNOTFND;
+
+	frstQ = WCreateLQueue((WCMPFP)FrstCmp, (WCTRFP)FrstCtr, (WDTRFP)FrstDtr);
+
+	/* Remove Broot from Fn */
+	for (Bx = hp->Fn->trNxt, Bprev = Bx; Bx != Broot; Bprev = Bx, Bx = Bx->sblgNxt)
+		;
+	if (Bprev == Bx)
+		hp->Fn->trNxt = Bx->sblgNxt;
+	else
+		Bprev->sblgNxt = Bx->sblgNxt;
+	hp->Fn->nOfFn -= (int)pow(2.0, Broot->korder);
+
+	/* Create sinlge node Bx, Fx(s) out of every node in Broot, delete Bm */
+	disassociateBrootCompletely(hp, Broot, Bm, frstQ);
+
+	/* Reassemble hp->Fn out of frstQ Fx(s) */
+	if (WIsEmptyLQueue(frstQ)) {
+		assignTop2Forest(hp, hp->Fn);
+	}
+	else {
+		while (Fx = WDequeueLQueue(frstQ))
+			hp->Fn = UnionFiToFj(hp, Fx, hp->Fn);
+	}
+
 	WDeleteLQueue(frstQ);
 	return WESUCCESS;
+}
+
+struct WBnmHeap* WUnionBnmHeap(struct WBnmHeap* hp1, struct WBnmHeap* hp2)
+{
+	hp1->Fn = UnionFiToFj(hp1, hp1->Fn, hp2->Fn);
+	return hp1;
 }
