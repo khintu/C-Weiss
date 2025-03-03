@@ -29,8 +29,8 @@ void printDistance(struct GVertex* v)
 }
 
 #ifdef UNIT_TEST_ALGO
-//int insert_in_main_router_unittestsuit(int argc, char* argv[])
-int main(int argc, char* argv[])
+int insert_in_main_router_unittestsuit(int argc, char* argv[])
+//int main(int argc, char* argv[])
 {
 	struct WLList* inetList;
 	//insert_in_main_algolib_unittestsuit(argc, argv);
@@ -39,10 +39,10 @@ int main(int argc, char* argv[])
 	inetList = initializeInternetMap();
 	
 	// Put your code here
-	//printf("Single Source Shortest Path:\n");
-	//runBellmanFordAlgo(inetList);
+	printf("Single Source Shortest Path:\n");
+	runBellmanFordAlgo(inetList);
 	//testSkipListSuite();
-	testBinomialHeapSuite();
+	//testBinomialHeapSuite();
 
 	// Delete internet graph
 	resetEverythingInIntrnt(inetList);

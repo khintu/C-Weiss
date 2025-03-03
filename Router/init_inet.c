@@ -81,7 +81,7 @@ struct WLList* initializeInternetMap(void)
 {
 	struct WLList* inetList;
 	inetList = WCreateList((WCMPFP)RouterCmp, (WCTRFP)RouterCtor, (WDTRFP)RouterDtor);
-	readInitFile("route_init.ini", inetList);
+	readInitFile("..\\Router\\route_init.ini", inetList);
 	WIteratorList(inetList, (void (*)(void*))PrintRoutgTbls);
 	generateLinksBwRouters(inetList);
 	return inetList;
