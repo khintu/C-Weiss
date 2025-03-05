@@ -18,9 +18,15 @@
     <ClCompile Include="des_sim_main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="des_sim_defs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

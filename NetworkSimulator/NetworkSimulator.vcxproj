@@ -134,9 +134,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CEvent.cpp" />
     <ClCompile Include="des_sim_main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CEvent.h" />
     <ClInclude Include="des_sim_defs.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

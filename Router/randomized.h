@@ -6,7 +6,7 @@
 #include <math.h>
 #include <c-algorithm.h>
 
-
+/* Skip List, ordered fast search datastructure */
 struct SKLArry {
 	struct SKLArry* pNext; // Pointer to next node in the i'th list
 	struct SKLNode* pBase; // Pointer to user data of a node
@@ -34,5 +34,8 @@ void* WSearchSkipList(struct WSkipList*, void*);
 int WDeleteFrmSkipList(struct WSkipList*, void*);
 void WDeleteSkipList(struct WSkipList*);
 void WIterateSkipList(struct WSkipList*, void (*)(void*));
+
+/* Randomized Binary Search Tree, Treaps ordered fast search ds */
+
 
 #endif /* RANDOMIZED_H */

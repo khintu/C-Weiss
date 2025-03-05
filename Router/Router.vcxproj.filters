@@ -54,6 +54,9 @@
     <ClCompile Include="BinomialHeap.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Treap.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="router_defs.h">

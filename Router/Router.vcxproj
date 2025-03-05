@@ -146,6 +146,7 @@
     <ClCompile Include="PMSTGraph.c" />
     <ClCompile Include="routing_table.c" />
     <ClCompile Include="SkipList.c" />
+    <ClCompile Include="Treap.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="advncd_algo.h" />
