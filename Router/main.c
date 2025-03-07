@@ -468,6 +468,12 @@ void testBinomialHeapSuite(void)
 	return;
 }
 
+static void printList2(char* str, uint32_t priority)
+{
+	printf("%s (%d), ", str, priority);
+	return;
+}
+
 void testTreapSuite(void)
 {
 	char* Arr[10] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
@@ -478,15 +484,18 @@ void testTreapSuite(void)
 	tree = WCreateTreap((WCTRFP)strCtor, (WDTRFP)strDtor, (WCMPFP)strcmp);
 	for (i = 0; i < 10; ++i)
 		WInsertInTreap(tree, Arr[i]);
-
+	WIterateTreap(tree, (void (*)(void*, uint32_t))printList2);
+	putchar('\n');
 	printf("Search for %s = %s\n", Arr[9], WSearchInTreap(tree, Arr[9]) ? "Found" : "Not Found");
 	printf("Search for %s = %s\n", "R", WSearchInTreap(tree, "R") ? "Found" : "Not Found");
 	printf("Deleteing R from tree = %s\n", WDeleteFrmTreap(tree, "R") == WESUCCESS ? "DELETED" : "Not Found");
-	printf("Deleteing 5 from tree = %s\n", WDeleteFrmTreap(tree, Arr[5]) == WESUCCESS ? "DELETED" : "Not Found");
+	printf("Deleteing 3 from tree = %s\n", WDeleteFrmTreap(tree, Arr[3]) == WESUCCESS ? "DELETED" : "Not Found");
 	for (i = 0; i < 10; ++i)
 		printf("Deleteing %s from tree = %s\n", \
 						Arr[i], WDeleteFrmTreap(tree, Arr[i]) == WESUCCESS ? "DELETED" : "Not Found");
-	WIterateTreap(tree, (void (*)(void*))printList);
+	for (i = 0; i < 10; ++i)
+		WInsertInTreap(tree, Arr[i]);
+	WIterateTreap(tree, (void (*)(void*, uint32_t))printList2);
 	WDeleteTreap(tree);
 	return;
 }

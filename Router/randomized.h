@@ -59,6 +59,6 @@ int32_t WInsertInTreap(struct WTreap*, void*);
 void* WSearchInTreap(struct WTreap*, void*);
 int32_t WDeleteFrmTreap(struct WTreap*, void*);
 void WDeleteTreap(struct WTreap*);
-void WIterateTreap(struct WTreap*, void (*)(void*));
+void WIterateTreap(struct WTreap*, void (*)(void*, uint32_t));
 
 #endif /* RANDOMIZED_H */

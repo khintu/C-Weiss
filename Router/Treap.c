@@ -144,24 +144,17 @@ static void deleteNodeFrmTreap(struct WTreap* tree, struct TreapNode* node)
 
 void WDeleteTreap(struct WTreap* tree)
 {
-	struct TreapNode* node = tree->root;
-	if (node != NULL) {
-		deleteNodeFrmTreap(tree, node->left);
-		deleteNodeFrmTreap(tree, node->right);
-		tree->DTR(node->data);
-		tree->count--;
-		free(node);
-	}
+	deleteNodeFrmTreap(tree, tree->root);
 	free(tree);
 	return;
 }
 
-static void iterateTreapNode(struct TreapNode* node, void (*ITR)(void*))
+static void iterateTreapNode(struct TreapNode* node, void (*ITR)(void*, uint32_t))
 {
 	if (node == NULL)
 		return;
 	iterateTreapNode(node->left, ITR);
-	ITR(node->data);
+	ITR(node->data, node->priority);
 	iterateTreapNode(node->right, ITR);
 	return;
 }
