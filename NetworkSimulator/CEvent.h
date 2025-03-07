@@ -41,9 +41,9 @@ namespace WDS {
 			return;
 		}
 		static int32_t eventCmp(CEvent* e1, CEvent* e2) {
-			if (e1 > e2)
+			if (*e1 > *e2)
 				return 1;
-			else if (e1 < e2)
+			else if (*e1 < *e2)
 				return -1;
 			else
 				return 0;

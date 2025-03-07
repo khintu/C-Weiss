@@ -10,6 +10,7 @@ void runPrimsMSTAlgo(struct WLList* inetList);
 void runBellmanFordAlgo(struct WLList* inetList);
 void testSkipListSuite(void);
 void testBinomialHeapSuite(void);
+void testTreapSuite(void);
 
 /* 
 	In our implementation the Router Interface Id is a unique
@@ -40,9 +41,10 @@ int insert_in_main_router_unittestsuit(int argc, char* argv[])
 	
 	// Put your code here
 	printf("Single Source Shortest Path:\n");
-	runBellmanFordAlgo(inetList);
+	//runBellmanFordAlgo(inetList);
 	//testSkipListSuite();
 	//testBinomialHeapSuite();
+	testTreapSuite();
 
 	// Delete internet graph
 	resetEverythingInIntrnt(inetList);
@@ -205,8 +207,14 @@ void* WGetNthData(struct WLList* l, uint32_t n)
 	return p ? p->data : NULL;
 }
 
-/* Skip List Test function */
+uint32_t WRandom(void)
+{
+	static uint32_t seed = 0;
+	seed = seed * 1103515245 + 12345;
+	return (seed / 65536) % 32768;
+}
 
+/* Skip List Test function */
 static char* strCtor(char* data)
 {
 	return (data == NULL) ? NULL : _strdup((char*)data);
@@ -457,5 +465,28 @@ void testBinomialHeapSuite(void)
 	}
 	WDeleteBnmHeap(hp);
 	WDeleteBnmHeap(hp1);
+	return;
+}
+
+void testTreapSuite(void)
+{
+	char* Arr[10] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
+	int32_t i;
+	struct WTreap* tree;
+
+	printf("---Treap test suite---\n");
+	tree = WCreateTreap((WCTRFP)strCtor, (WDTRFP)strDtor, (WCMPFP)strcmp);
+	for (i = 0; i < 10; ++i)
+		WInsertInTreap(tree, Arr[i]);
+
+	printf("Search for %s = %s\n", Arr[9], WSearchInTreap(tree, Arr[9]) ? "Found" : "Not Found");
+	printf("Search for %s = %s\n", "R", WSearchInTreap(tree, "R") ? "Found" : "Not Found");
+	printf("Deleteing R from tree = %s\n", WDeleteFrmTreap(tree, "R") == WESUCCESS ? "DELETED" : "Not Found");
+	printf("Deleteing 5 from tree = %s\n", WDeleteFrmTreap(tree, Arr[5]) == WESUCCESS ? "DELETED" : "Not Found");
+	for (i = 0; i < 10; ++i)
+		printf("Deleteing %s from tree = %s\n", \
+						Arr[i], WDeleteFrmTreap(tree, Arr[i]) == WESUCCESS ? "DELETED" : "Not Found");
+	WIterateTreap(tree, (void (*)(void*))printList);
+	WDeleteTreap(tree);
 	return;
 }

@@ -17,9 +17,9 @@ struct WSkipList* WCreateSkipList(double Pr, int32_t approxLen, WCTRFP CTR, WDTR
 	return sklist;
 }
 
-int WInsertSkipList(struct WSkipList* sklist, void* usrData)
+int32_t WInsertSkipList(struct WSkipList* sklist, void* usrData)
 {
-	int i, level;
+	int32_t i, level;
 	struct SKLNode* pNewNode, *pItr, *pPrev;
 
 	pNewNode = (struct SKLNode*)calloc(1, sizeof * pNewNode);
@@ -46,7 +46,7 @@ int WInsertSkipList(struct WSkipList* sklist, void* usrData)
 
 void* WSearchSkipList(struct WSkipList* sklist, void* key)
 {
-	int i;
+	int32_t i;
 	struct SKLNode* pItr, *pPrev;
 
 	for (i = sklist->maxLevel - 1, pPrev = sklist->pHead; i >= 0; i--) {
@@ -61,9 +61,9 @@ void* WSearchSkipList(struct WSkipList* sklist, void* key)
 	return NULL;
 }
 
-int WDeleteFrmSkipList(struct WSkipList* sklist, void* key)
+int32_t WDeleteFrmSkipList(struct WSkipList* sklist, void* key)
 {
-	int i;
+	int32_t i;
 	struct SKLNode* pItr = NULL, * pPrev;
 
 	for (i = sklist->maxLevel - 1, pPrev = sklist->pHead; i >= 0; i--) {

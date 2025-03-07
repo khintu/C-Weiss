@@ -29,3 +29,8 @@ namespace WDS {
 		}
 	};
 }
+
+/* Router Algorithm Extensions for WDS */
+extern "C" {
+	void* WExtractHeadFrmDList(struct WDLList* l);
+}
