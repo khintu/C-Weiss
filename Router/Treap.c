@@ -159,7 +159,7 @@ static void iterateTreapNode(struct TreapNode* node, void (*ITR)(void*, uint32_t
 	return;
 }
 
-void WIterateTreap(struct WTreap* tree, void (*ITR)(void*))
+void WIterateTreap(struct WTreap* tree, void (*ITR)(void*, uint32_t))
 {
 	iterateTreapNode(tree->root, ITR);
 	return;

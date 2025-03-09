@@ -28,6 +28,13 @@ namespace WDS {
 			cout << err << '\n';
 		}
 	};
+
+	class CEntity {
+	public:
+		CEntity() {}
+		virtual void handleEvent(CEvent* e) = 0;
+		virtual ~CEntity() {}
+	};
 }
 
 /* Router Algorithm Extensions for WDS */

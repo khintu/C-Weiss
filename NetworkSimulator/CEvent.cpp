@@ -1,5 +1,6 @@
 #include <des_sim_defs.h>
-#include <CEvent.h>
+
+using namespace WDS;
 
 void* WExtractHeadFrmDList(struct WDLList* l)
 {
@@ -19,8 +20,6 @@ void* WExtractHeadFrmDList(struct WDLList* l)
 	l->count--;
 	return re;
 }
-
-using namespace WDS;
 
 bool CEventQ::enQueue(CEvent& e)
 {
