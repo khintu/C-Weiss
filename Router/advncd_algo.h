@@ -43,4 +43,35 @@ int32_t WDeleteKeyBnmHeap(struct WBnmHeap* hp, void *key);
 int32_t WUpdateKeyBnmHeap(struct WBnmHeap* hp, void* key, void* newKey);
 struct WBnmHeap* WUnionBnmHeap(struct WBnmHeap* hp1, struct WBnmHeap* hp2);
 
+/* ---Hash Map2(Open Addressing) Dictionary ADT--- */
+
+struct KeyNode
+{
+	void* key;
+	void* value;
+};
+
+struct WHashMap2
+{
+	struct KeyNode** table; /* dynamically allocated array of chains */
+	uint32_t tabSize;						/* Size of universal key set */
+	int (*KEYCMP)(const void*, const void*);
+	void* (*CTORK)(void* x); /* Constructor/Destructor for key/value */
+	void (*DTORK)(void* x);
+	void* (*CTORV)(void* x);
+	void (*DTORV)(void* x);
+	uint32_t (*HASHFN)(const void*); /* Hash value from a hash function */
+};
+
+struct WHashMap2* WCreateHashMap2(uint32_t tabSize, uint32_t (*HASHFN)(const void*), \
+																int32_t (*KCMP)(const void*, const void*), \
+																void* (*CTORK)(void*), \
+																void (*DTORK)(void*), \
+																void* (*CTORV)(void*), \
+																void (*DTORV)(void*));
+void WDeleteHashMap2(struct WHashMap2*);
+void* WSearchKeyHashMap2(struct WHashMap2*, void* key);
+int32_t WInsertKeyValHashMap2(struct WHashMap2* hmap, void* key, void* val);
+int32_t WDeleteKeyHashMap2(struct WHashMap2* hmap, void* key);
+
 #endif /* ADVNCD_ALGO_H */
