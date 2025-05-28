@@ -538,6 +538,20 @@ void testHashMap2(void)
 	WDeleteKeyHashMap2(hmap, "psingh1");
 	printf("MultiMap: Size = %d\n", WGetSizeHashMap2(hmap));
 
+	// Insert/Delete/Search Error handling
+	if (WESUCCESS != WDeleteKeyHashMap2(hmap, "psingh1"))
+		printf("MultiMap: Error deleteing key psingh1\n");
+	printf("MultiMap: %s\n", (char*)WSearchKeyHashMap2(hmap, "psingh1"));
+
+	WInsertKeyValHashMap2(hmap, "Praveen", "Masters of the Universe");
+	WInsertKeyValHashMap2(hmap, "Anastasi", "Zero of the Universe");
+	WInsertKeyValHashMap2(hmap, "Maddy", "One of the Universe");
+	WInsertKeyValHashMap2(hmap, "psingh1", "Masters of the Universe 2.0");
+	WInsertKeyValHashMap2(hmap, "psingh1", "Zero of the Universe 2.0");
+	WInsertKeyValHashMap2(hmap, "psingh1", "One of the Universe 2.0");
+	if (WESUCCESS != WInsertKeyValHashMap2(hmap, "prsingh", "Masters of the Universe 3.0"))
+		printf("MultiMap: Error inserting key prsingh\n");
+
 	WDeleteHashMap2(hmap);
 	return;
 }
