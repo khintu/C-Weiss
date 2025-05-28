@@ -43,18 +43,24 @@ void* WSearchKeyHashMap2(struct WHashMap2* hmap, void* key)
 {
 	uint32_t i, idx;
 	idx = hmap->HASHFN(key) % hmap->tabSize;
-	if (!hmap->table[idx]) 
-		return NULL;
-	if (hmap->KEYCMP(hmap->table[idx]->key, key) == 0) 
-		return hmap->table[idx]->value;
-	// Collision resolution by linear probing
-	for (i = idx + 1; i >= 0 && i != idx ; ++i) {
-		if (i >= hmap->tabSize) {
-			i = 0; // wrap around
-			continue;
+	if (hmap->table[idx]) {
+		if (hmap->KEYCMP(hmap->table[idx]->key, key) != 0) {
+PROBE:
+			// Collision resolution by linear probing
+			for (i = idx + 1; i >= 0 && i != idx; ++i) {
+				if (i >= hmap->tabSize) {
+					i = 0; // wrap around
+					continue;
+				}
+				if (hmap->table[i] && hmap->KEYCMP(hmap->table[i]->key, key) == 0)
+					return hmap->table[i]->value;
+			}
 		}
-		if (hmap->KEYCMP(hmap->table[i]->key, key) == 0)
-			return hmap->table[i]->value;
+		else
+			return hmap->table[idx]->value;
+	}
+	else {
+		goto PROBE;
 	}
 	return NULL;
 }
@@ -90,25 +96,39 @@ int32_t WDeleteKeyHashMap2(struct WHashMap2* hmap, void* key)
 	uint32_t i, idx;
 
 	idx = hmap->HASHFN(key) % hmap->tabSize;
-	if (!hmap->table[idx])
-		return WEKEYNOTFND;
-	if (hmap->KEYCMP(hmap->table[idx]->key, key) != 0) {
-		// Collision resolution by linear probing
-		for (i = idx + 1; i >= 0 && i != idx; ++i) {
-			if (i >= hmap->tabSize) {
-				i = 0; // wrap around
-				continue;
+	if (hmap->table[idx]) {
+		if (hmap->KEYCMP(hmap->table[idx]->key, key) != 0) {
+PROBE:
+			// Collision resolution by linear probing
+			for (i = idx + 1; i >= 0 && i != idx; ++i) {
+				if (i >= hmap->tabSize) {
+					i = 0; // wrap around
+					continue;
+				}
+				if (hmap->table[i] && hmap->KEYCMP(hmap->table[i]->key, key) == 0)
+					break;
 			}
-			if (hmap->KEYCMP(hmap->table[idx]->key, key) == 0)
-				break;
+			if (i == idx)
+				return WEKEYNOTFND;
+			idx = i;
 		}
-		if (i == idx)
-			return WEKEYNOTFND;
-		idx = i;
+	}
+	else {
+		goto PROBE;
 	}
 	hmap->DTORK(hmap->table[idx]->key);
 	hmap->DTORV(hmap->table[idx]->value);
 	free(hmap->table[idx]);
 	hmap->table[idx] = NULL;
 	return WESUCCESS;
+}
+
+uint32_t WGetSizeHashMap2(struct WHashMap2* hmap)
+{
+	uint32_t i, size = 0;
+	for (i = 0; i < hmap->tabSize; i++) {
+		if (hmap->table[i])
+			size++;
+	}
+	return size;
 }

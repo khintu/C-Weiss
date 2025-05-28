@@ -11,6 +11,7 @@ void runBellmanFordAlgo(struct WLList* inetList);
 void testSkipListSuite(void);
 void testBinomialHeapSuite(void);
 void testTreapSuite(void);
+void testHashMap2(void);
 
 /* 
 	In our implementation the Router Interface Id is a unique
@@ -44,12 +45,14 @@ int insert_in_main_router_unittestsuit(int argc, char* argv[])
 	//runBellmanFordAlgo(inetList);
 	//testSkipListSuite();
 	//testBinomialHeapSuite();
-	testTreapSuite();
+	//testTreapSuite();
+	testHashMap2();
 
 	// Delete internet graph
 	resetEverythingInIntrnt(inetList);
 	WDeleteList(inetList);
-	return 0;
+	//return 0;
+	exit(0);
 }
 #endif /* UNIT_TEST_ALGO */
 
@@ -497,5 +500,44 @@ void testTreapSuite(void)
 		WInsertInTreap(tree, Arr[i]);
 	WIterateTreap(tree, (void (*)(void*, uint32_t))printList2);
 	WDeleteTreap(tree);
+	return;
+}
+
+extern int hashFn(const char* key);
+
+void testHashMap2(void)
+{
+	struct WHashMap2* hmap;
+
+	printf("---Multimap/HashMap2 test suite---\n");
+	hmap = WCreateHashMap2(6, (int (*)(const void*))hashFn, (WCMPFP)strcmp, \
+				(WCTRFP)strCtor, (WDTRFP)strDtor, (WCTRFP)strCtor, (WDTRFP)strDtor);
+	
+	// Simple insert and search
+	WInsertKeyValHashMap2(hmap, "Praveen", "Masters of the Universe");
+	WInsertKeyValHashMap2(hmap, "Anastasi", "Zero of the Universe");
+	WInsertKeyValHashMap2(hmap, "Maddy", "One of the Universe");
+	printf("MultiMap: %s\n", (char*)WSearchKeyHashMap2(hmap, "Praveen"));
+	printf("MultiMap: %s\n", (char*)WSearchKeyHashMap2(hmap, "Anastasi"));
+	printf("MultiMap: %s\n", (char*)WSearchKeyHashMap2(hmap, "Maddy"));
+	printf("MultiMap: Size = %d\n", WGetSizeHashMap2(hmap));
+	WDeleteKeyHashMap2(hmap, "Praveen");
+	WDeleteKeyHashMap2(hmap, "Anastasi");
+	WDeleteKeyHashMap2(hmap, "Maddy");
+	printf("MultiMap: Size = %d\n", WGetSizeHashMap2(hmap));
+
+	// Insert same key with different values (Collison Detection)
+	WInsertKeyValHashMap2(hmap, "psingh1", "Masters of the Universe 2.0");
+	WInsertKeyValHashMap2(hmap, "psingh1", "Zero of the Universe 2.0");
+	WInsertKeyValHashMap2(hmap, "psingh1", "One of the Universe 2.0");
+	printf("MultiMap: %s\n", (char*)WSearchKeyHashMap2(hmap, "psingh1"));
+	WDeleteKeyHashMap2(hmap, "psingh1");
+	printf("MultiMap: %s\n", (char*)WSearchKeyHashMap2(hmap, "psingh1"));
+	WDeleteKeyHashMap2(hmap, "psingh1");
+	printf("MultiMap: %s\n", (char*)WSearchKeyHashMap2(hmap, "psingh1"));
+	WDeleteKeyHashMap2(hmap, "psingh1");
+	printf("MultiMap: Size = %d\n", WGetSizeHashMap2(hmap));
+
+	WDeleteHashMap2(hmap);
 	return;
 }

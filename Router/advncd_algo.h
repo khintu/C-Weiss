@@ -43,7 +43,7 @@ int32_t WDeleteKeyBnmHeap(struct WBnmHeap* hp, void *key);
 int32_t WUpdateKeyBnmHeap(struct WBnmHeap* hp, void* key, void* newKey);
 struct WBnmHeap* WUnionBnmHeap(struct WBnmHeap* hp1, struct WBnmHeap* hp2);
 
-/* ---Hash Map2(Open Addressing) Dictionary ADT--- */
+/* ---Hash Map2(Open Addressing with linear probing) Dictionary ADT--- */
 
 struct KeyNode
 {
@@ -51,6 +51,7 @@ struct KeyNode
 	void* value;
 };
 
+// This ADT allows duplicate keys so user must clean up all keys (multimap)
 struct WHashMap2
 {
 	struct KeyNode** table; /* dynamically allocated array of chains */
@@ -73,5 +74,6 @@ void WDeleteHashMap2(struct WHashMap2*);
 void* WSearchKeyHashMap2(struct WHashMap2*, void* key);
 int32_t WInsertKeyValHashMap2(struct WHashMap2* hmap, void* key, void* val);
 int32_t WDeleteKeyHashMap2(struct WHashMap2* hmap, void* key);
+uint32_t WGetSizeHashMap2(struct WHashMap2* hmap);
 
 #endif /* ADVNCD_ALGO_H */

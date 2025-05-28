@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
 {
 	cout << "*** DES/Network Simulator App ***" << endl;
 	//insert_in_main_algolib_unittestsuit(int argc, char* argv[]);
-	//insert_in_main_router_unittestsuit(argc, argv);
+	insert_in_main_router_unittestsuit(argc, argv);
 	
 	try {
 
