@@ -11,6 +11,7 @@ void WIteratorList2(struct WLList*, void (*)(void*, void*));
 void WIteratorList2Arg(struct WLList*, void*, void (*)(void*, void*, void*));
 void WIteratorList3(struct WLList*, void*, void (*)(void*, void*));
 void WIteratorList4(struct WLList*, void*, void*, void (*)(void*, void*, void*));
+void WIteratorDList2(struct WDLList*, void*, void*, void (*)(void*, void*, void*));
 void* WGetNthData(struct WLList*, uint32_t);
 
 /* Binomial Heap */
@@ -75,5 +76,9 @@ void* WSearchKeyHashMap2(struct WHashMap2*, void* key);
 int32_t WInsertKeyValHashMap2(struct WHashMap2* hmap, void* key, void* val);
 int32_t WDeleteKeyHashMap2(struct WHashMap2* hmap, void* key);
 uint32_t WGetSizeHashMap2(struct WHashMap2* hmap);
+// void WIteratorHashMap2(struct WHashMap2* hmap, void* key, void (*fn)(void*, void*));
+
+/* ---Bucket Sorting Algorithm for integers, O(n)--- */
+void WBucketSort(int32_t arr[], uint32_t N, uint32_t K);
 
 #endif /* ADVNCD_ALGO_H */

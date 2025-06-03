@@ -1,4 +1,5 @@
 #include <router_defs.h>
+#include <malloc.h>
 
 extern int insert_in_main_algolib_unittestsuit(int argc, char* argv[]);
 void unit_test_network_lib(void);
@@ -12,6 +13,7 @@ void testSkipListSuite(void);
 void testBinomialHeapSuite(void);
 void testTreapSuite(void);
 void testHashMap2(void);
+void testBucketSort(void);
 
 /* 
 	In our implementation the Router Interface Id is a unique
@@ -41,12 +43,9 @@ int insert_in_main_router_unittestsuit(int argc, char* argv[])
 	inetList = initializeInternetMap();
 	
 	// Put your code here
-	printf("Single Source Shortest Path:\n");
+	//printf("Single Source Shortest Path:\n");
 	//runBellmanFordAlgo(inetList);
-	//testSkipListSuite();
-	//testBinomialHeapSuite();
-	//testTreapSuite();
-	testHashMap2();
+	testBucketSort();
 
 	// Delete internet graph
 	resetEverythingInIntrnt(inetList);
@@ -208,6 +207,15 @@ void* WGetNthData(struct WLList* l, uint32_t n)
 	for (i = 0, p = l->head; p && i < n; p = p->next, i++)
 		;
 	return p ? p->data : NULL;
+}
+
+void WIteratorDList2(struct WDLList* l, void* arg1, void* arg2, void (*ITR)(void*, void*, void*))
+{
+	struct DLNode* p;
+
+	for (p = l->head; p; p = p->next)
+		(*ITR)(p->data, arg1, arg2);
+	return;
 }
 
 uint32_t WRandom(void)
@@ -553,5 +561,80 @@ void testHashMap2(void)
 		printf("MultiMap: Error inserting key prsingh\n");
 
 	WDeleteHashMap2(hmap);
+	return;
+}
+
+static int32_t* intCtor(int32_t* data)
+{
+	return data;
+}
+
+static void intDtor(int32_t* data)
+{
+	data;
+	return;
+}
+
+static int32_t intCmp(const int32_t* x, const int32_t* y)
+{
+	if ((int32_t)x > (int32_t)y)
+		return 1;
+	else if (((int32_t)x < (int32_t)y))
+		return -1;
+	else
+		return 0;
+}
+
+static void intItr(int32_t* i, int32_t arr[], int32_t* idx)
+{
+	arr[*idx] = (int32_t)i;
+	++*idx;
+	return;
+}
+
+void WBucketSort(int32_t arr[], uint32_t N, uint32_t K)
+{
+	int32_t min, max;
+	uint32_t i, j, bcktIdx;
+	struct WDLList **buckets;
+
+	for (i = 0, min = 0x7FFFFFFF; i < N; ++i)
+		min = (arr[i] < min) ? arr[i] : min;
+	for (i = 0, max = 0x10000000; i < N; ++i)
+		max = (arr[i] > max) ? arr[i] : max;
+	max += 1, min -= 1;
+
+	buckets = (struct WDLList**)_malloca(sizeof **buckets);
+	for (i = 0; i < K; ++i)
+		buckets[i] = WCreateDList((WCMPFP)intCmp, (WCTRFP)intCtor, (WDTRFP)intDtor);
+	
+	for (i = 0; i < N; ++i) {
+		if (arr[i] >= 0)
+			bcktIdx = (uint32_t)(K / 2 + (floor(K / 2 * (arr[i] / max))));
+		else
+			bcktIdx = (uint32_t)(K / 2 - (floor(K / 2 * (arr[i] / min))));
+		WAppendToDList(buckets[bcktIdx], (void*)arr[i]);
+	}
+
+	for (i = 0; i < K; ++i)
+		WSortDList(buckets[i]);
+	for (i = 0, j = 0; i < K; ++i)
+		WIteratorDList2(buckets[i], (void*)arr, (void*) &j, (void (*)(void*,void*,void*))intItr);
+	for (i = 0; i < K; ++i)
+		WDeleteDList(buckets[i]);
+	return;
+}
+
+void testBucketSort(void)
+{
+	uint32_t i;
+	int32_t arr[10] = { 5, 3, 6, 7, 0, -1, 4, 2, 8, 9 };
+
+	printf("---testing Bucket Sort---\n");
+
+	WBucketSort(arr, 10, 3);
+	for (i = 0; i < 10; ++i)
+		printf(((i+1) % 10) ? "%d, " : "%d\n", arr[i]);
+
 	return;
 }
