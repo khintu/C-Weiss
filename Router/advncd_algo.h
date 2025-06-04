@@ -81,4 +81,7 @@ uint32_t WGetSizeHashMap2(struct WHashMap2* hmap);
 /* ---Bucket Sorting Algorithm for integers, O(n)--- */
 void WBucketSort(int32_t arr[], uint32_t N, uint32_t K);
 
+/* ---Selection Sort for integers, O(n^2), space O(1)--- */
+void WSelectionSort(int32_t arr[], uint32_t N);
+
 #endif /* ADVNCD_ALGO_H */

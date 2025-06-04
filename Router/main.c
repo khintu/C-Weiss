@@ -14,6 +14,7 @@ void testBinomialHeapSuite(void);
 void testTreapSuite(void);
 void testHashMap2(void);
 void testBucketSort(void);
+void testSelectionSort(void);
 
 /* 
 	In our implementation the Router Interface Id is a unique
@@ -45,8 +46,9 @@ int insert_in_main_router_unittestsuit(int argc, char* argv[])
 	// Put your code here
 	//printf("Single Source Shortest Path:\n");
 	//runBellmanFordAlgo(inetList);
-	testBucketSort();
-
+	//testBucketSort();
+	testSelectionSort();
+	 
 	// Delete internet graph
 	resetEverythingInIntrnt(inetList);
 	WDeleteList(inetList);
@@ -628,7 +630,10 @@ void WBucketSort(int32_t arr[], uint32_t N, uint32_t K)
 void testBucketSort(void)
 {
 	uint32_t i;
-	int32_t arr[10] = { 5, 3, 6, 7, 0, -1, 4, 2, 8, 9 };
+	//int32_t arr[10] = { 5, 3, 6, 7, 0, -1, 4, 2, 8, 9 };
+	//int32_t arr[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+	//int32_t arr[10] = { 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
+	int32_t arr[10] = { -9, -8, -7, -6, -5, 4, 3, 2, 1, 0 };
 
 	printf("---testing Bucket Sort---\n");
 
@@ -636,5 +641,43 @@ void testBucketSort(void)
 	for (i = 0; i < 10; ++i)
 		printf(((i+1) % 10) ? "%d, " : "%d\n", arr[i]);
 
+	return;
+}
+
+void WSelectionSort(int32_t arr[], uint32_t N)
+{
+	uint32_t i, j, k;
+	int32_t min;
+	
+	i = 0;
+	while (i < N) {
+		for (j = i + 1, min = 0x7FFFFFFF; j < N; ++j) {
+			if (arr[j] < min) {
+				min = arr[j];
+				k = j;
+			}
+		}
+		if (min < arr[i]) {
+			arr[k] = arr[i];
+			arr[i] = min;
+		}
+		++i;
+	}
+	return;
+}
+
+void testSelectionSort(void)
+{
+	uint32_t i;
+	//int32_t arr[10] = { 5, 3, 6, 7, 0, -1, 4, 2, 8, -9 };
+	//int32_t arr[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+	//int32_t arr[10] = { 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
+	int32_t arr[10] = { -9, -8, -7, -6, -5, 4, 3, 2, 1, 0 };
+
+	printf("---testing Selection Sort---\n");
+
+	WSelectionSort(arr, 10);
+	for (i = 0; i < 10; ++i)
+		printf(((i + 1) % 10) ? "%d, " : "%d\n", arr[i]);
 	return;
 }
