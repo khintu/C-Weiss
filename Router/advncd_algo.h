@@ -76,7 +76,7 @@ void* WSearchKeyHashMap2(struct WHashMap2*, void* key);
 int32_t WInsertKeyValHashMap2(struct WHashMap2* hmap, void* key, void* val);
 int32_t WDeleteKeyHashMap2(struct WHashMap2* hmap, void* key);
 uint32_t WGetSizeHashMap2(struct WHashMap2* hmap);
-// void WIteratorHashMap2(struct WHashMap2* hmap, void* key, void (*fn)(void*, void*));
+void WIteratorHashMap2(struct WHashMap2* hmap, void* key, void (*fn)(void*, void*));
 
 /* ---Bucket Sorting Algorithm for integers, O(n)--- */
 void WBucketSort(int32_t arr[], uint32_t N, uint32_t K);

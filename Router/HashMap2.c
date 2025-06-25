@@ -132,3 +132,32 @@ uint32_t WGetSizeHashMap2(struct WHashMap2* hmap)
 	}
 	return size;
 }
+
+void WIteratorHashMap2(struct WHashMap2* hmap, void* key, void (*fn)(void*, void*))
+{
+	uint32_t i, idx;
+
+	idx = hmap->HASHFN(key) % hmap->tabSize;
+	if (hmap->table[idx]) {
+		if (hmap->KEYCMP(hmap->table[idx]->key, key) != 0) {
+		PROBE:
+			// Collision resolution by linear probing
+			for (i = idx + 1; i >= 0 && i != idx; ++i) {
+				if (i >= hmap->tabSize) {
+					i = 0; // wrap around
+					continue;
+				}
+				if (hmap->table[i] && hmap->KEYCMP(hmap->table[i]->key, key) == 0)
+					fn(hmap->table[i]->key, hmap->table[i]->value);
+			}
+		}
+		else {
+			fn(hmap->table[idx]->key, hmap->table[idx]->value);
+			goto PROBE;
+		}
+	}
+	else {
+		goto PROBE;
+	}
+	return;
+}

@@ -47,8 +47,9 @@ int insert_in_main_router_unittestsuit(int argc, char* argv[])
 	//printf("Single Source Shortest Path:\n");
 	//runBellmanFordAlgo(inetList);
 	//testBucketSort();
-	testSelectionSort();
-	 
+	//testSelectionSort();
+	testHashMap2();
+
 	// Delete internet graph
 	resetEverythingInIntrnt(inetList);
 	WDeleteList(inetList);
@@ -515,6 +516,12 @@ void testTreapSuite(void)
 
 extern int hashFn(const char* key);
 
+static void printHashMap2(const char* key, const char* value)
+{
+	printf("Multimap: Itr Key: %s, Value: %s\n", key, value);
+	return;
+}
+
 void testHashMap2(void)
 {
 	struct WHashMap2* hmap;
@@ -556,15 +563,24 @@ void testHashMap2(void)
 	WInsertKeyValHashMap2(hmap, "Praveen", "Masters of the Universe");
 	WInsertKeyValHashMap2(hmap, "Anastasi", "Zero of the Universe");
 	WInsertKeyValHashMap2(hmap, "Maddy", "One of the Universe");
-	WInsertKeyValHashMap2(hmap, "psingh1", "Masters of the Universe 2.0");
-	WInsertKeyValHashMap2(hmap, "psingh1", "Zero of the Universe 2.0");
-	WInsertKeyValHashMap2(hmap, "psingh1", "One of the Universe 2.0");
+	WInsertKeyValHashMap2(hmap, "psingh1", "Masters of the Universe 2.1");
+	WInsertKeyValHashMap2(hmap, "psingh1", "Zero of the Universe 2.2");
+	WInsertKeyValHashMap2(hmap, "psingh1", "One of the Universe 2.3");
 	if (WESUCCESS != WInsertKeyValHashMap2(hmap, "prsingh", "Masters of the Universe 3.0"))
 		printf("MultiMap: Error inserting key prsingh\n");
+
+	// Multimap: Search/Iterator
+	WIteratorHashMap2(hmap, "prsingh", (void (*)(void *, void*))printHashMap2);
+	WIteratorHashMap2(hmap, "Maddy", (void (*)(void*, void*))printHashMap2);
+	WIteratorHashMap2(hmap, "psingh1", (void (*)(void*, void*))printHashMap2);
 
 	WDeleteHashMap2(hmap);
 	return;
 }
+
+#pragma warning( push )
+#pragma warning( disable : 4311 )
+#pragma warning( disable : 4312 )
 
 static int32_t* intCtor(int32_t* data)
 {
@@ -606,7 +622,8 @@ void WBucketSort(int32_t arr[], uint32_t N, uint32_t K)
 		max = (arr[i] > max) ? arr[i] : max;
 	max += 1, min -= 1;
 
-	buckets = (struct WDLList**)_malloca(sizeof **buckets);
+	if ((buckets = (struct WDLList**)_malloca(sizeof * *buckets)) == NULL)
+		return;
 	for (i = 0; i < K; ++i)
 		buckets[i] = WCreateDList((WCMPFP)intCmp, (WCTRFP)intCtor, (WDTRFP)intDtor);
 	
@@ -626,6 +643,8 @@ void WBucketSort(int32_t arr[], uint32_t N, uint32_t K)
 		WDeleteDList(buckets[i]);
 	return;
 }
+
+#pragma warning(pop)
 
 void testBucketSort(void)
 {
