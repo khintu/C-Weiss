@@ -12,10 +12,12 @@ extern "C" {
 #include <iostream>
 #include <fstream>
 
-/* DES Network Routers Classes */
-#include <CEvent.h>
-
 using namespace std;
+
+/* DES Network Simulation Classes */
+#include <CEvent.h>
+#include <CEventQ.h>
+#include <CPacket.h>
 
 namespace WDS {
 	class Exception {
@@ -36,6 +38,8 @@ namespace WDS {
 		virtual ~CEntity() {}
 	};
 }
+
+#include <CRouter.h>
 
 /* Router Algorithm Extensions for WDS */
 extern "C" {

@@ -21,12 +21,30 @@
     <ClCompile Include="CEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CRouter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CEventQ.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CPacket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="des_sim_defs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CRouter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CEventQ.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CPacket.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -136,10 +136,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CEvent.cpp" />
+    <ClCompile Include="CEventQ.cpp" />
+    <ClCompile Include="CPacket.cpp" />
+    <ClCompile Include="CRouter.cpp" />
     <ClCompile Include="des_sim_main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CEvent.h" />
+    <ClInclude Include="CEventQ.h" />
+    <ClInclude Include="CPacket.h" />
+    <ClInclude Include="CRouter.h" />
     <ClInclude Include="des_sim_defs.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -6,17 +6,22 @@ int insert_in_main_algolib_unittestsuit(int argc, char* argv[]);
 };
 
 //using namespace WDS;
-void testRudimentryEventQueue();
+void testRudimentaryEventQueue();
 
 int main(int argc, char* argv[])
 {
 	cout << "*** DES/Network Simulator App ***" << endl;
 	//insert_in_main_algolib_unittestsuit(int argc, char* argv[]);
-	insert_in_main_router_unittestsuit(argc, argv);
+	//insert_in_main_router_unittestsuit(argc, argv);
 	
 	try {
+		struct WLList* inetList;
+		inetList = initializeInternetMap();
 
-		testRudimentryEventQueue();
+		testRudimentaryEventQueue();
+		
+		resetEverythingInIntrnt(inetList);
+		WDeleteList(inetList);
 	}
 	catch (...) {
 		cerr << "Uncaught error! Simulation shutting down\n";
@@ -24,7 +29,7 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-void testRudimentryEventQueue()
+void testRudimentaryEventQueue()
 {
 	try {
 		WDS::CEventQ q;
@@ -32,13 +37,14 @@ void testRudimentryEventQueue()
 		int32_t i;
 
 		for (i = 10; i > 0; i--) {
-			e = new WDS::CEvent(i);
+			e = new WDS::CPacket(i);
 			q.enQueue(*e);
 			delete e;
 		}
 		q.sort();
 		for (e = &(q.deQueue()); e->getId() != 100; e = &(q.deQueue())) {
-			cout << "Event Id: " << e->getId() << '\n';
+			//cout << "Event Id: " << e->getId() << '\n';
+			e->execute();
 			delete e;
 		}
 	}
