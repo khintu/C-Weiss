@@ -135,6 +135,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CEntity.cpp" />
     <ClCompile Include="CEvent.cpp" />
     <ClCompile Include="CEventQ.cpp" />
     <ClCompile Include="CPacket.cpp" />
@@ -142,6 +143,7 @@
     <ClCompile Include="des_sim_main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CEntity.h" />
     <ClInclude Include="CEvent.h" />
     <ClInclude Include="CEventQ.h" />
     <ClInclude Include="CPacket.h" />

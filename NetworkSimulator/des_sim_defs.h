@@ -15,30 +15,23 @@ extern "C" {
 using namespace std;
 
 /* DES Network Simulation Classes */
-#include <CEvent.h>
-#include <CEventQ.h>
-#include <CPacket.h>
-
 namespace WDS {
 	class Exception {
 		string err;
 	public:
 		Exception() {}
-		Exception(const char* e): err(e) {}
-		
+		Exception(const char* e) : err(e) {}
+
 		void printErr() {
 			cout << err << '\n';
 		}
 	};
-
-	class CEntity {
-	public:
-		CEntity() {}
-		virtual void handleEvent(CEvent* e) = 0;
-		virtual ~CEntity() {}
-	};
 }
 
+#include <CEvent.h>
+#include <CEventQ.h>
+#include <CPacket.h>
+#include <CEntity.h>
 #include <CRouter.h>
 
 /* Router Algorithm Extensions for WDS */
