@@ -22,7 +22,7 @@ namespace WDS {
 	public:
 		Exception() {}
 		Exception(const char* e) : err(e) {}
-
+		Exception(string& str) : err(str) {}
 		void printErr() {
 			cerr << err << '\n';
 		}
@@ -31,9 +31,11 @@ namespace WDS {
 
 #include <CEvent.h>
 #include <CEventQ.h>
-#include <CPacket.h>
 #include <CEntity.h>
+#include <CPacketQ.h>
 #include <CRouter.h>
+#include <CRtrContainr.h>
+#include <CPacket.h>
 #include <CGlbData.h>
 
 

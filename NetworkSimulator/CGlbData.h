@@ -9,6 +9,7 @@ namespace WDS {
 		
 		// Global data structures (members)
 		struct WLList* inetList;
+		CRtrContainr* routerCntr;
 		
 		// Private constructor and destructor to prevent instantiation
 		CGlbData();

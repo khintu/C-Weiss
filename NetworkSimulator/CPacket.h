@@ -10,7 +10,7 @@ namespace WDS {
 		CPacket(const CPacket& e):CEvent(e) {}
 		~CPacket() {}
 		
-		CEvent* clone() {
+		virtual CEvent* clone() {
 			CPacket* newPacket = new CPacket(*this);
 			return newPacket;
 		}

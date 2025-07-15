@@ -35,12 +35,15 @@ CGlbData::CGlbData()
 {
 	// Initialize global data structures here
 	inetList = initializeInternetMap();
+	routerCntr = new CRtrContainr();
+	routerCntr->populateObj(inetList);
 	return;
 }
 
 CGlbData::~CGlbData()
 {
 	// Clean up global data structures here
+	delete routerCntr;
 	resetEverythingInIntrnt(inetList);
 	WDeleteList(inetList);
 	return;
