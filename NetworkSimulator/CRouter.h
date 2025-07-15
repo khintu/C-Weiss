@@ -7,7 +7,7 @@ namespace WDS {
 	public:
 		CRouter() {}
 		virtual void handleEvent(CEvent* e) {}
-		virtual ~CRouter() { CEntity::~CEntity(); }
+		virtual ~CRouter() {}
 		
 	};
 }

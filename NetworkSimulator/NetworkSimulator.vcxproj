@@ -138,6 +138,7 @@
     <ClCompile Include="CEntity.cpp" />
     <ClCompile Include="CEvent.cpp" />
     <ClCompile Include="CEventQ.cpp" />
+    <ClCompile Include="CGlbData.cpp" />
     <ClCompile Include="CPacket.cpp" />
     <ClCompile Include="CRouter.cpp" />
     <ClCompile Include="des_sim_main.cpp" />
@@ -146,6 +147,7 @@
     <ClInclude Include="CEntity.h" />
     <ClInclude Include="CEvent.h" />
     <ClInclude Include="CEventQ.h" />
+    <ClInclude Include="CGlbData.h" />
     <ClInclude Include="CPacket.h" />
     <ClInclude Include="CRouter.h" />
     <ClInclude Include="des_sim_defs.h" />

@@ -14,18 +14,14 @@ int main(int argc, char* argv[])
 	//insert_in_main_algolib_unittestsuit(int argc, char* argv[]);
 	//insert_in_main_router_unittestsuit(argc, argv);
 	
+	WDS::CGlbData::InitializeGlbData();
 	try {
-		struct WLList* inetList;
-		inetList = initializeInternetMap();
-
 		testRudimentaryEventQueue();
-		
-		resetEverythingInIntrnt(inetList);
-		WDeleteList(inetList);
 	}
 	catch (...) {
 		cerr << "Uncaught error! Simulation shutting down\n";
 	}
+	WDS::CGlbData::DeleteGlbData();
 	return 0;
 }
 

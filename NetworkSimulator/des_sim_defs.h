@@ -15,6 +15,7 @@ extern "C" {
 using namespace std;
 
 /* DES Network Simulation Classes */
+
 namespace WDS {
 	class Exception {
 		string err;
@@ -23,7 +24,7 @@ namespace WDS {
 		Exception(const char* e) : err(e) {}
 
 		void printErr() {
-			cout << err << '\n';
+			cerr << err << '\n';
 		}
 	};
 }
@@ -33,6 +34,8 @@ namespace WDS {
 #include <CPacket.h>
 #include <CEntity.h>
 #include <CRouter.h>
+#include <CGlbData.h>
+
 
 /* Router Algorithm Extensions for WDS */
 extern "C" {

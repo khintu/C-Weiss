@@ -8,7 +8,7 @@ namespace WDS {
 		CPacket():CEvent() {}
 		CPacket(int32_t id):CEvent(id) {}
 		CPacket(const CPacket& e):CEvent(e) {}
-		~CPacket() { CEvent::~CEvent(); }
+		~CPacket() {}
 		
 		CEvent* clone() {
 			CPacket* newPacket = new CPacket(*this);
