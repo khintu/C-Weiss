@@ -6,7 +6,7 @@ namespace WDS {
 		
 	public:
 		CPacket():CEvent() {}
-		CPacket(int32_t id):CEvent(id) {}
+		CPacket(uint32_t ts):CEvent(ts) {}
 		CPacket(const CPacket& e):CEvent(e) {}
 		~CPacket() {}
 		
@@ -15,8 +15,6 @@ namespace WDS {
 			return newPacket;
 		}
 
-		virtual void execute() {
-			cout << "Executing packet event with ID: " << getId() << endl;
-		}
+		virtual void execute();
 	};
 }

@@ -3,30 +3,29 @@
 namespace WDS {
 
 	class CEvent {
-		int32_t eventId;
 		uint32_t eventTime;
 	public:
-		CEvent() :eventId(0), eventTime(0) {}
-		CEvent(int32_t id) :eventId(id), eventTime(0) {}
-		CEvent(const CEvent& e) :eventId(e.eventId), eventTime(e.eventTime) {}
+		CEvent() :eventTime(0) {}
+		CEvent(uint32_t ts) :eventTime(ts) {}
+		CEvent(const CEvent& e) :eventTime(e.eventTime) {}
 		virtual ~CEvent() {}
 		friend bool operator > (CEvent& e1, CEvent& e2) {
-			if (e1.eventId > e2.eventId)
+			if (e1.eventTime > e2.eventTime)
 				return true;
 			return false;
 		}
 		friend bool operator < (CEvent& e1, CEvent& e2) {
-			if (e1.eventId < e2.eventId)
+			if (e1.eventTime < e2.eventTime)
 				return true;
 			return false;
 		}
 		friend bool operator == (CEvent& e1, CEvent& e2) {
-			if (e1.eventId == e2.eventId)
+			if (e1.eventTime == e2.eventTime)
 				return true;
 			return false;
 		}
-		int32_t getId() {
-			return eventId;
+		uint32_t getTimestamp() const {
+			return eventTime;
 		}
 		virtual void execute() = 0;
 		virtual CEvent* clone() = 0;

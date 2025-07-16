@@ -38,7 +38,7 @@ void testRudimentaryEventQueue()
 			delete e;
 		}
 		q.sort();
-		for (e = &(q.deQueue()); e->getId() != 100; e = &(q.deQueue())) {
+		for (e = &(q.deQueue()); e->getTimestamp() != 100; e = &(q.deQueue())) {
 			//cout << "Event Id: " << e->getId() << '\n';
 			e->execute();
 			delete e;
