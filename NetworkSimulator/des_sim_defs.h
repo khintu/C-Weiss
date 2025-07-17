@@ -38,6 +38,9 @@ namespace WDS {
 #include <CPacket.h>
 #include <CGlbData.h>
 
+extern WDS::CGlbData* gDataRepo;
+
+#define RTR_HOME_IP_ADDR_MASK 0x10100000
 
 /* Router Algorithm Extensions for WDS */
 extern "C" {

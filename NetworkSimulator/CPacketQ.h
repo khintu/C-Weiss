@@ -6,7 +6,7 @@ namespace WDS {
 	{
 		uint32_t src; // source IP
 		uint32_t dst; // destination IP
-		uint8_t data[1496]; // MTU 1500 = 4+4+1496
+		uint8_t data[120]; // MTU 128 = 4+4+120
 	};
 
 	struct WPktQNode

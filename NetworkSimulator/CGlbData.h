@@ -19,6 +19,13 @@ namespace WDS {
 	public:
 		static void InitializeGlbData();
 		static void DeleteGlbData();
+
+		CRtrContainr* getRouterContainer() const {
+			return routerCntr;
+		}
+		struct WLList* getInetList() const {
+			return inetList;
+		}
 	};
 }
 

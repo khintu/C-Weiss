@@ -11,6 +11,10 @@ namespace WDS {
 		~CRtrContainr() {
 			WDeleteRBT(routerList);
 		}
+		uint32_t getCount() const {
+			return routerList->count;
+		}
+		CRouter* getRtrByIp(uint32_t ip);
 		static int32_t RouterCmp(CRouter* r1, CRouter* r2) {
 			return (r1->getId() > r2->getId()) ? 1 : 
 								(r1->getId() < r2->getId()) ? -1 : 0;
