@@ -23,6 +23,7 @@ namespace WDS {
 		Exception() {}
 		Exception(const char* e) : err(e) {}
 		Exception(string& str) : err(str) {}
+		Exception(string str) : err(str) {}
 		void printErr() {
 			cerr << err << '\n';
 		}

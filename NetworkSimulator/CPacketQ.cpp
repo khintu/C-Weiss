@@ -28,7 +28,7 @@ void CPacketQ::enque(struct WPacket& x)
 	WPktQNode* node;
 
 	if (size >= maxSize)
-		throw WDS::Exception("No more space in packet queue");
+		throw Exception("No more space in packet queue");
 	
 	node = new WPktQNode();
 	memcpy(&node->pkt, &x, sizeof(struct WPacket));

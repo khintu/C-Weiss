@@ -94,5 +94,8 @@
     <None Include="route_init.ini.pmst">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="route_init.ini.bfd">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

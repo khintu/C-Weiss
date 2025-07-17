@@ -6,14 +6,12 @@ void CPacket::execute() {
 	CRouter* rtr;
 
 	cout << "Executing packet event with Ts: " << getTimestamp() << endl;
-	rtr = gDataRepo->getRouterContainer()->getRtrByIp(packet.src);
-	if (rtr == NULL)
-		throw Exception("Packet source router not found in container");
 	try {
+		rtr = gDataRepo->getRouterContainer()->getRtrByIp(packet.src);
 		rtr->postPacket(packet);
 	}catch (Exception& e) {
 		e.printErr();
-		cerr << "Packet dropped due to error in postPacket" << endl;
+		cerr << "Packet dropped due to error in router!" << endl;
 	}
 	return;
 }

@@ -16,8 +16,7 @@ namespace WDS {
 		~CRouter() {}
 		virtual void handleEvent(CEvent* e);
 		uint32_t getId() const { return r->Id; }
-		void postPacket(struct WPacket& pkt) {
-			pQ.enque(pkt);
-		}
+		void postPacket(struct WPacket& pkt);
+		void serviceCoolDown();
 	};
 }

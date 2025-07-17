@@ -161,6 +161,7 @@
     <None Include="route_init.ini.1" />
     <None Include="route_init.ini.2" />
     <None Include="route_init.ini.3" />
+    <None Include="route_init.ini.bfd" />
     <None Include="route_init.ini.djs" />
     <None Include="route_init.ini.pmst" />
     <None Include="route_init.ini.wiki" />

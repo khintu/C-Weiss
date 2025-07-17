@@ -21,7 +21,7 @@ namespace WDS {
 		uint32_t size; // Current size of the packet queue
 		uint32_t maxSize; // Maximum size of the packet queue
 	public:
-		CPacketQ(uint32_t maxSize = 100) :maxSize(maxSize), head(NULL), tail(NULL), size(0) {}
+		CPacketQ(uint32_t maxSize = 20) :maxSize(maxSize), head(NULL), tail(NULL), size(0) {}
 		~CPacketQ();
 
 		struct WPacket* deque();
