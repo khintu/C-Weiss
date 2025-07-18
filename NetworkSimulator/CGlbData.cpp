@@ -37,12 +37,14 @@ CGlbData::CGlbData()
 	inetList = initializeInternetMap();
 	routerCntr = new CRtrContainr();
 	routerCntr->populateObj(inetList);
+	eventQ = new CEventQ();
 	return;
 }
 
 CGlbData::~CGlbData()
 {
 	// Clean up global data structures here
+	delete eventQ;
 	delete routerCntr;
 	resetEverythingInIntrnt(inetList);
 	WDeleteList(inetList);

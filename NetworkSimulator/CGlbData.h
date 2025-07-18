@@ -4,12 +4,14 @@ namespace WDS {
 
 	class CGlbData
 	{
+		// Singleton instance
 		static CGlbData* _instance;
 		static CGlbData* getInstance();
 		
 		// Global data structures (members)
 		struct WLList* inetList;
 		CRtrContainr* routerCntr;
+		CEventQ* eventQ;
 		
 		// Private constructor and destructor to prevent instantiation
 		CGlbData();
@@ -25,6 +27,9 @@ namespace WDS {
 		}
 		struct WLList* getInetList() const {
 			return inetList;
+		}
+		CEventQ* getEventQueue() const {
+			return eventQ;
 		}
 	};
 }

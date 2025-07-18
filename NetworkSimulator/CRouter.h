@@ -14,8 +14,10 @@ namespace WDS {
 		CRouter(struct Router* x, uint32_t Ip): r(x), MTU(1500), \
 						isUp(true), temp(0.0), pQ(), homeIp(Ip) {}
 		~CRouter() {}
-		virtual void handleEvent(CEvent* e);
+		void setName(const string& n) { name = n; }
 		uint32_t getId() const { return r->Id; }
+		
+		virtual void handleEvent(CEvent* e);
 		void postPacket(struct WPacket& pkt);
 		void serviceCoolDown();
 	};
