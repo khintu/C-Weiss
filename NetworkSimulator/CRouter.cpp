@@ -13,7 +13,8 @@ void CRouter::handleEvent(CEvent* e)
 
 		if (homeIp == pkt->dst) {
 			/* Packet is destined for this router */
-			cout << "Packet received at dst router: " << name << endl;
+			cout << "Packet [" << hex << pkt->src << ":" << \
+				hex << pkt->dst << "] received at destination router : " << getId() << endl;
 			delete pkt; // No further processing needed
 			return;
 		}

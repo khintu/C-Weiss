@@ -5,7 +5,7 @@ using namespace WDS;
 void CPacket::execute() {
 	CRouter* rtr;
 
-	cout << "Executing packet event with Ts: " << getTimestamp() << endl;
+	cout << "Executing packet event with Ts: " << dec << getTimestamp() << endl;
 	try {
 		rtr = gDataRepo->getRouterContainer()->getRtrByIp(packet.src);
 		rtr->postPacket(packet);

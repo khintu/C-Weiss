@@ -27,6 +27,8 @@ namespace WDS {
 		}
 		static void populateItr(struct Router* Rtr, struct WRBTree* obj);
 		void populateObj(WLList* inetList);
+		static void coolDownItr(CRouter* r);
+		void processCoolDown();
 
 	};
 }

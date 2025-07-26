@@ -33,3 +33,15 @@ CRouter* CRtrContainr::getRtrByIp(uint32_t ip)
 	result = (CRouter*)WSearchKeyRBT(routerList, &srch2);
 	return result;
 }
+
+void CRtrContainr::coolDownItr(CRouter* r) {
+	r->serviceCoolDown();
+	return;
+}
+
+void CRtrContainr::processCoolDown()
+{
+	WIteratorRBT(routerList, (void (*)(void*)) coolDownItr);
+
+	return;
+}
