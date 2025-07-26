@@ -141,6 +141,7 @@
     <ClCompile Include="CGlbData.cpp" />
     <ClCompile Include="CPacket.cpp" />
     <ClCompile Include="CPacketQ.cpp" />
+    <ClCompile Include="CPktFwd.cpp" />
     <ClCompile Include="CRouter.cpp" />
     <ClCompile Include="CRtrContainr.cpp" />
     <ClCompile Include="des_sim_main.cpp" />
@@ -152,6 +153,7 @@
     <ClInclude Include="CGlbData.h" />
     <ClInclude Include="CPacket.h" />
     <ClInclude Include="CPacketQ.h" />
+    <ClInclude Include="CPktFwd.h" />
     <ClInclude Include="CRouter.h" />
     <ClInclude Include="CRtrContainr.h" />
     <ClInclude Include="des_sim_defs.h" />

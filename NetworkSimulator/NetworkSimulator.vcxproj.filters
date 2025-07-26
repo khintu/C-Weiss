@@ -42,6 +42,9 @@
     <ClCompile Include="CRtrContainr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CPktFwd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="des_sim_defs.h">
@@ -69,6 +72,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CRtrContainr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CPktFwd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

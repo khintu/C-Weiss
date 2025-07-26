@@ -9,9 +9,11 @@ void CPacket::execute() {
 	try {
 		rtr = gDataRepo->getRouterContainer()->getRtrByIp(packet.src);
 		rtr->postPacket(packet);
+		CPktFwd newEvt(getTimestamp() + 1, rtr);
+		gDataRepo->getEventQueue()->enQueue(newEvt);
 	}catch (Exception& e) {
 		e.printErr();
-		cerr << "Packet dropped due to error in router!" << endl;
+		cerr << "Packet dropped due to error in posting to router!" << endl;
 	}
 	return;
 }

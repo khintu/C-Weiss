@@ -37,6 +37,7 @@ namespace WDS {
 #include <CRouter.h>
 #include <CRtrContainr.h>
 #include <CPacket.h>
+#include <CPktFwd.h>
 #include <CGlbData.h>
 
 extern WDS::CGlbData* gDataRepo;

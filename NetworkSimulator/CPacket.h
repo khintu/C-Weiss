@@ -12,8 +12,8 @@ namespace WDS {
 		~CPacket() {}
 		
 		virtual CEvent* clone() {
-			CPacket* newPacket = new CPacket(*this);
-			return newPacket;
+			CPacket* newEvt = new CPacket(*this);
+			return newEvt;
 		}
 
 		virtual void execute();

@@ -34,20 +34,20 @@ void testRudimentaryEventQueue()
 		uint32_t j, count = gDataRepo->getRouterContainer()->getCount();
 
 		q = gDataRepo->getEventQueue();
-		for (i = 50, j = 1; i > 0; i--, ++j) {
+		for (i = 1, j = 1; i <= 50; i++, ++j) {
 			if (j >= count)
 				j = 1;
 			e = new WDS::CPacket((uint32_t)i, RTR_HOME_IP_ADDR_MASK | j, RTR_HOME_IP_ADDR_MASK | count);
 			q->enQueue(*e);
 			delete e;
 		}
-		q->sort();
 		for (e = &(q->deQueue()); e->getTimestamp() != 100; e = &(q->deQueue())) {
 			e->execute();
 			delete e;
+			q->sort();
 		}
 	}
-	catch (WDS::Exception e) {
+	catch (WDS::Exception& e) {
 		e.printErr();
 	}
 	return;
